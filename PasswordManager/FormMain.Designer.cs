@@ -34,7 +34,7 @@
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
             this.textBox_ItemDescription = new System.Windows.Forms.TextBox();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
-            this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.ToolStripMenuItem_about = new System.Windows.Forms.ToolStripMenuItem();
             this.listView_PasswordItems = new System.Windows.Forms.ListView();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
@@ -107,7 +107,7 @@
             // 
             this.menuStrip1.BackColor = System.Drawing.SystemColors.ButtonFace;
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.aboutToolStripMenuItem});
+            this.ToolStripMenuItem_about});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
@@ -115,12 +115,12 @@
             this.menuStrip1.TabIndex = 2;
             this.menuStrip1.Text = "menuStrip1";
             // 
-            // aboutToolStripMenuItem
+            // ToolStripMenuItem_about
             // 
-            this.aboutToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Transparent;
-            this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
-            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(53, 20);
-            this.aboutToolStripMenuItem.Text = "About";
+            this.ToolStripMenuItem_about.ImageTransparentColor = System.Drawing.Color.Transparent;
+            this.ToolStripMenuItem_about.Name = "ToolStripMenuItem_about";
+            this.ToolStripMenuItem_about.Size = new System.Drawing.Size(53, 20);
+            this.ToolStripMenuItem_about.Text = "About";
             // 
             // listView_PasswordItems
             // 
@@ -187,7 +187,7 @@
         private System.Windows.Forms.SplitContainer splitContainer2;
         private System.Windows.Forms.TextBox textBox_ItemDescription;
         private System.Windows.Forms.MenuStrip menuStrip1;
-        private System.Windows.Forms.ToolStripMenuItem aboutToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem ToolStripMenuItem_about;
         private System.Windows.Forms.ListView listView_PasswordItems;
         private System.Windows.Forms.ToolStrip toolStrip1;
         private System.Windows.Forms.ToolStripButton toolStripButton1;
