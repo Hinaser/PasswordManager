@@ -1,4 +1,4 @@
-﻿# PasswordManager
+# PasswordManager
 This project creates password management tool for Windows platform. The tool can pickup id/password easily and also provide a new password creation dialogue.
 
 # Pre-Requisition
