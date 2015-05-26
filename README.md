@@ -9,7 +9,7 @@ You can run this app on .NET Framework 3.5 or higher.
 This app will provide you features as follows:  
 
 * Accessibility
- - Easily look around your private password in a list style
+ - Easily look around your private password in a combination with tree/list style
  - Copy id/password to clipboard by left-double click or right-double click
  - Manage Folder/Sub folder for password container
 * Security
