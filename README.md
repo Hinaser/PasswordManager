@@ -1,19 +1,23 @@
 # PasswordManager
-This project creates password management tool for Windows platform. The tool can pickup id/password easily and also provides a new password creation dialogue.
+This project creates password management tool for Windows platform. The tool enables you to pickup id/password easily.
 
 # Pre-Requisition
-You can run this app on .NET Framework 3.5 or higher.  
+You can run this app on .NET Framework 3.5 or higher on Windows platform.  
 (.NET Framework 3.5 is installed Windows7 by default)  
 
 # Feature
 This app will provide you features as follows:  
 
+* Basic
+ - Add/Modify/Delete passwords
+ - Passwords can be stored in custom folder tree structure
+ - Save passwords to encrypted file
 * Accessibility
- - Easily look around your private password in a combination with tree/list style
- - Copy id/password to clipboard by left-double click or right-double click
- - Manage Folder/Sub folder for password container
+ - Look around your private password easily by a combination of tree/list style data structure
+ - Copy id/password to clipboard by left-double-click/right-double-click for easy pasting to input form
+ - Manage Folder/Sub folder for password container. Move password to any folder you want.
 * Security
- - Save those password data into an encrypted private file. Even if password file is stolen, your password is still protected by master password.
+ - Save those password data into an encrypted private file. Even if password file is stolen, your password is still protected by master password. (Be careful to choose master password for better security!)
 * Portability
  - Application itself is seperated to encrypted password file. So you can import/export password data easily. You can also easily make backups by copying the file.
 
