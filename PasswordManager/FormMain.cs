@@ -24,13 +24,96 @@ namespace PasswordManager
 {
     public partial class MainForm_PasswordManager : Form
     {
+        #region Constructor
         public MainForm_PasswordManager()
         {
             InitializeComponent();
 
+            // ListView event
+            this.listView_PasswordItems.SizeChanged += listView_PasswordItems_SizeChanged;
+            this.listView_PasswordItems.ColumnWidthChanged += listView_PasswordItems_ColumnWidthChanged;
+
             // Apply language setting
             SetupLanguage(InternalApplicationConfig.DefaultLocale);
         }
+        #endregion
+
+        #region Event
+        /// <summary>
+        /// Adjust column size when parent listview size is changed
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        void listView_PasswordItems_SizeChanged(object sender, EventArgs e)
+        {
+            this.AdjustColumnSize((ListView)sender, new ColumnWidthChangedEventArgs(0));
+        }
+
+        /// <summary>
+        /// Adjust column size when it is changed
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        void listView_PasswordItems_ColumnWidthChanged(object sender, ColumnWidthChangedEventArgs e)
+        {
+            this.AdjustColumnSize((ListView)sender, e);
+        }
+        #endregion
+
+        #region Utility
+        /// <summary>
+        /// Adjust the size of last column not to make any margin between listview and column
+        /// </summary>
+        /// <param name="lv"></param>
+        private void AdjustColumnSize(ListView lv, ColumnWidthChangedEventArgs e)
+        {
+            // If the changed column is the last index column, do nothing
+            if (e.ColumnIndex == (lv.Columns.Count - 1))
+            {
+                return;
+            }
+
+            // Resize the last column in the listview in order to trim margin
+            int sizeListView = lv.Size.Width;
+            int sizeColumnExceptForTheLastOne = 0;
+            for (int i = 0; i < lv.Columns.Count - 1; i++)
+            {
+                sizeColumnExceptForTheLastOne += lv.Columns[i].Width;
+            }
+
+            if (sizeListView - sizeColumnExceptForTheLastOne <= 0)
+            {
+                return;
+            }
+
+            // When horizontal scroll bar is visible, decrease its size from listview
+            if (IsVScrollbarVisibleOnListView(lv)) // If scroll bar is visible
+            {
+                lv.Columns[lv.Columns.Count - 1].Width = sizeListView - sizeColumnExceptForTheLastOne - (lv.Margin.Right + 1) - SystemInformation.VerticalScrollBarWidth;
+            }
+            else // If scroll bar is not visible
+            {
+                lv.Columns[lv.Columns.Count - 1].Width = sizeListView - sizeColumnExceptForTheLastOne - (lv.Margin.Right + 1);
+            }
+        }
+
+        /// <summary>
+        /// Check the ListView object has a vertical scroll bar visible
+        /// </summary>
+        /// <param name="lv"></param>
+        /// <returns></returns>
+        public bool IsVScrollbarVisibleOnListView(ListView lv)
+        {
+            long wndStyle = PrivateUtility.GetWindowLong(lv.Handle, PrivateUtility.GwlStyle);
+
+            if ((wndStyle & PrivateUtility.WsVScroll) != 0)
+            {
+                return true;
+            }
+
+            return false;
+        }
+        #endregion
 
         #region Language setup
         /// <summary>

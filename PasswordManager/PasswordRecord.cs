@@ -39,7 +39,7 @@ namespace PasswordManager
         private string Descriptioin = String.Empty;
         private int Complexity;
         // Will be implemented in future update
-        // private byte[] UnlockToken = null; // This value is required to get actual secret value from this class. If invalid value is passed when secret values are refered, dummy value will be returned.
+        //private byte[] UnlockToken = null; // This value is required to get actual secret value from this class. If invalid value is passed when secret values are refered, dummy value will be returned.
         #endregion
 
         #region Constructor
@@ -49,7 +49,7 @@ namespace PasswordManager
 
         #region Setter method
         /// <summary>
-        /// Set header values
+        /// Set header values to instance
         /// </summary>
         /// <param name="parentID">Parent container id</param>
         /// <param name="caption">Caption</param>
@@ -64,7 +64,7 @@ namespace PasswordManager
         }
 
         /// <summary>
-        /// 
+        /// Set private values to instance
         /// </summary>
         /// <param name="id"></param>
         /// <param name="password"></param>
@@ -80,13 +80,46 @@ namespace PasswordManager
         #endregion
 
         #region Getter method
+        // Public data
+        public int GetParentID() { return this.ParentID; }
+        public string GetCaption() { return this.Caption; }
+        public DateTime GetCreateDate() { return this.CreateDate; }
+        public DateTime GetLastUpdateDate() { return this.LastUpdateDate; }
+
+        // Private data
+        public string GetID()
+        {
+            return this.ID;
+        }
+
+        public string GetPassword()
+        {
+            return this.Password;
+        }
+
+        public string GetDescription()
+        {
+            return this.Descriptioin;
+        }
+
+        public int GetCompexity()
+        {
+            return this.Complexity;
+        }
         #endregion
 
         #region Override method
+        /// <summary>
+        /// Return string of RealID, which is considered to be unique value
+        /// </summary>
+        /// <returns></returns>
         public override string ToString()
         {
             return this.RealID.ToString();
         }
+        #endregion
+
+        #region Utility method
         #endregion
     }
 }
