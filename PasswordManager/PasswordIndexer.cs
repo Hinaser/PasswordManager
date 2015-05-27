@@ -17,10 +17,18 @@ using System.Text;
 namespace PasswordManager
 {
     /// <summary>
-    /// Representing whole password record relation with folder/subfolder model.
-    /// This class is used to construct password record tree.
+    /// Defining relations between containers and records
     /// </summary>
-    internal class PasswordIndex
+    internal class PasswordRecordIndexer
     {
+
+    }
+
+    /// <summary>
+    /// Defining relations between parent container and child container
+    /// </summary>
+    internal class PasswordContainerIndexer
+    {
+
     }
 }

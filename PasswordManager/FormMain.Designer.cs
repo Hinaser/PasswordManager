@@ -28,28 +28,28 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.TreeNode treeNode1 = new System.Windows.Forms.TreeNode("Software");
-            System.Windows.Forms.TreeNode treeNode2 = new System.Windows.Forms.TreeNode("Service");
-            System.Windows.Forms.TreeNode treeNode3 = new System.Windows.Forms.TreeNode("Development", new System.Windows.Forms.TreeNode[] {
-            treeNode1,
-            treeNode2});
-            System.Windows.Forms.TreeNode treeNode4 = new System.Windows.Forms.TreeNode("FPS");
-            System.Windows.Forms.TreeNode treeNode5 = new System.Windows.Forms.TreeNode("Others");
-            System.Windows.Forms.TreeNode treeNode6 = new System.Windows.Forms.TreeNode("Gaming", new System.Windows.Forms.TreeNode[] {
-            treeNode4,
-            treeNode5});
-            System.Windows.Forms.TreeNode treeNode7 = new System.Windows.Forms.TreeNode("Entertaiment", new System.Windows.Forms.TreeNode[] {
-            treeNode6});
-            System.Windows.Forms.TreeNode treeNode8 = new System.Windows.Forms.TreeNode("Banking");
-            System.Windows.Forms.TreeNode treeNode9 = new System.Windows.Forms.TreeNode("Web service");
-            System.Windows.Forms.TreeNode treeNode10 = new System.Windows.Forms.TreeNode("Finance", new System.Windows.Forms.TreeNode[] {
-            treeNode8,
-            treeNode9});
-            System.Windows.Forms.TreeNode treeNode11 = new System.Windows.Forms.TreeNode("Root", new System.Windows.Forms.TreeNode[] {
-            treeNode3,
-            treeNode7,
-            treeNode10});
-            System.Windows.Forms.ListViewItem listViewItem1 = new System.Windows.Forms.ListViewItem(new string[] {
+            System.Windows.Forms.TreeNode treeNode12 = new System.Windows.Forms.TreeNode("Software");
+            System.Windows.Forms.TreeNode treeNode13 = new System.Windows.Forms.TreeNode("Service");
+            System.Windows.Forms.TreeNode treeNode14 = new System.Windows.Forms.TreeNode("Development", new System.Windows.Forms.TreeNode[] {
+            treeNode12,
+            treeNode13});
+            System.Windows.Forms.TreeNode treeNode15 = new System.Windows.Forms.TreeNode("FPS");
+            System.Windows.Forms.TreeNode treeNode16 = new System.Windows.Forms.TreeNode("Others");
+            System.Windows.Forms.TreeNode treeNode17 = new System.Windows.Forms.TreeNode("Gaming", new System.Windows.Forms.TreeNode[] {
+            treeNode15,
+            treeNode16});
+            System.Windows.Forms.TreeNode treeNode18 = new System.Windows.Forms.TreeNode("Entertaiment", new System.Windows.Forms.TreeNode[] {
+            treeNode17});
+            System.Windows.Forms.TreeNode treeNode19 = new System.Windows.Forms.TreeNode("Banking");
+            System.Windows.Forms.TreeNode treeNode20 = new System.Windows.Forms.TreeNode("Web service");
+            System.Windows.Forms.TreeNode treeNode21 = new System.Windows.Forms.TreeNode("Finance", new System.Windows.Forms.TreeNode[] {
+            treeNode19,
+            treeNode20});
+            System.Windows.Forms.TreeNode treeNode22 = new System.Windows.Forms.TreeNode("Root", new System.Windows.Forms.TreeNode[] {
+            treeNode14,
+            treeNode18,
+            treeNode21});
+            System.Windows.Forms.ListViewItem listViewItem2 = new System.Windows.Forms.ListViewItem(new string[] {
             "Sample",
             "sample@example.com",
             "aaa"}, -1);
@@ -105,30 +105,30 @@
             this.treeView_Folders.Dock = System.Windows.Forms.DockStyle.Fill;
             this.treeView_Folders.Location = new System.Drawing.Point(0, 0);
             this.treeView_Folders.Name = "treeView_Folders";
-            treeNode1.Name = "Node4";
-            treeNode1.Text = "Software";
-            treeNode2.Name = "Node5";
-            treeNode2.Text = "Service";
-            treeNode3.Name = "Node2";
-            treeNode3.Text = "Development";
-            treeNode4.Name = "Node10";
-            treeNode4.Text = "FPS";
-            treeNode5.Name = "Node11";
-            treeNode5.Text = "Others";
-            treeNode6.Name = "Node1";
-            treeNode6.Text = "Gaming";
-            treeNode7.Name = "Node3";
-            treeNode7.Text = "Entertaiment";
-            treeNode8.Name = "Node7";
-            treeNode8.Text = "Banking";
-            treeNode9.Name = "Node8";
-            treeNode9.Text = "Web service";
-            treeNode10.Name = "Node6";
-            treeNode10.Text = "Finance";
-            treeNode11.Name = "Node0";
-            treeNode11.Text = "Root";
+            treeNode12.Name = "Node4";
+            treeNode12.Text = "Software";
+            treeNode13.Name = "Node5";
+            treeNode13.Text = "Service";
+            treeNode14.Name = "Node2";
+            treeNode14.Text = "Development";
+            treeNode15.Name = "Node10";
+            treeNode15.Text = "FPS";
+            treeNode16.Name = "Node11";
+            treeNode16.Text = "Others";
+            treeNode17.Name = "Node1";
+            treeNode17.Text = "Gaming";
+            treeNode18.Name = "Node3";
+            treeNode18.Text = "Entertaiment";
+            treeNode19.Name = "Node7";
+            treeNode19.Text = "Banking";
+            treeNode20.Name = "Node8";
+            treeNode20.Text = "Web service";
+            treeNode21.Name = "Node6";
+            treeNode21.Text = "Finance";
+            treeNode22.Name = "Node0";
+            treeNode22.Text = "Root";
             this.treeView_Folders.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
-            treeNode11});
+            treeNode22});
             this.treeView_Folders.Size = new System.Drawing.Size(202, 321);
             this.treeView_Folders.TabIndex = 0;
             // 
@@ -158,7 +158,7 @@
             this.columnHeader_password});
             this.listView_PasswordItems.Dock = System.Windows.Forms.DockStyle.Fill;
             this.listView_PasswordItems.Items.AddRange(new System.Windows.Forms.ListViewItem[] {
-            listViewItem1});
+            listViewItem2});
             this.listView_PasswordItems.Location = new System.Drawing.Point(0, 0);
             this.listView_PasswordItems.Name = "listView_PasswordItems";
             this.listView_PasswordItems.Size = new System.Drawing.Size(389, 200);
@@ -233,7 +233,8 @@
             // toolStripStatusLabel1
             // 
             this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
-            this.toolStripStatusLabel1.Size = new System.Drawing.Size(0, 17);
+            this.toolStripStatusLabel1.Size = new System.Drawing.Size(43, 17);
+            this.toolStripStatusLabel1.Text = "Ready";
             // 
             // ToolStripMenuItem_about
             // 

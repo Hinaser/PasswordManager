@@ -25,8 +25,8 @@ namespace PasswordManager
         /// <summary>
         /// Header values, which can be seen without master password
         /// </summary>
-        private int RealID; // This represent real record identity. This must be unique all over Password data
-        private int ParentID = InternalApplicationConfig.RootContainerID; // This indicates Parent record container ID.
+        private int RecordID; // This represent real record identity. This must be unique all over Password data
+        private int ParentContainerID = InternalApplicationConfig.RootContainerID; // This indicates Parent record container ID.
         private string Caption = String.Empty;
         private DateTime CreateDate;
         private DateTime LastUpdateDate;
@@ -44,7 +44,7 @@ namespace PasswordManager
 
         #region Constructor
         private PasswordRecord() { } // Disable non-argument constructor.
-        public PasswordRecord(int realID) { this.RealID = realID; } // Instance must be with Real ID
+        public PasswordRecord(int recordID) { this.RecordID = recordID; } // Instance must be with Real ID
         #endregion
 
         #region Setter method
@@ -57,7 +57,7 @@ namespace PasswordManager
         /// <param name="lastUpdateDate">Date the record was updated most recently</param>
         public void SetHeaderData(int parentID, string caption, DateTime createDate, DateTime lastUpdateDate)
         {
-            this.ParentID = parentID;
+            this.ParentContainerID = parentID;
             this.Caption = caption;
             this.CreateDate = createDate;
             this.LastUpdateDate = lastUpdateDate;
@@ -81,7 +81,8 @@ namespace PasswordManager
 
         #region Getter method
         // Public data
-        public int GetParentID() { return this.ParentID; }
+        public int GetRecordID() { return this.RecordID; }
+        public int GetParentID() { return this.ParentContainerID; }
         public string GetCaption() { return this.Caption; }
         public DateTime GetCreateDate() { return this.CreateDate; }
         public DateTime GetLastUpdateDate() { return this.LastUpdateDate; }
@@ -115,7 +116,7 @@ namespace PasswordManager
         /// <returns></returns>
         public override string ToString()
         {
-            return this.RealID.ToString();
+            return this.RecordID.ToString();
         }
         #endregion
 
