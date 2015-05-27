@@ -32,12 +32,14 @@
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.treeView_Folders = new System.Windows.Forms.TreeView();
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
+            this.listView_PasswordItems = new System.Windows.Forms.ListView();
             this.textBox_ItemDescription = new System.Windows.Forms.TextBox();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.ToolStripMenuItem_about = new System.Windows.Forms.ToolStripMenuItem();
-            this.listView_PasswordItems = new System.Windows.Forms.ListView();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
+            this.statusStrip1 = new System.Windows.Forms.StatusStrip();
+            this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
@@ -46,6 +48,7 @@
             this.splitContainer2.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.toolStrip1.SuspendLayout();
+            this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // splitContainer1
@@ -64,7 +67,7 @@
             // splitContainer1.Panel2
             // 
             this.splitContainer1.Panel2.Controls.Add(this.splitContainer2);
-            this.splitContainer1.Size = new System.Drawing.Size(595, 334);
+            this.splitContainer1.Size = new System.Drawing.Size(595, 321);
             this.splitContainer1.SplitterDistance = 202;
             this.splitContainer1.TabIndex = 1;
             // 
@@ -73,7 +76,7 @@
             this.treeView_Folders.Dock = System.Windows.Forms.DockStyle.Fill;
             this.treeView_Folders.Location = new System.Drawing.Point(0, 0);
             this.treeView_Folders.Name = "treeView_Folders";
-            this.treeView_Folders.Size = new System.Drawing.Size(202, 334);
+            this.treeView_Folders.Size = new System.Drawing.Size(202, 321);
             this.treeView_Folders.TabIndex = 0;
             // 
             // splitContainer2
@@ -90,9 +93,18 @@
             // splitContainer2.Panel2
             // 
             this.splitContainer2.Panel2.Controls.Add(this.textBox_ItemDescription);
-            this.splitContainer2.Size = new System.Drawing.Size(389, 334);
-            this.splitContainer2.SplitterDistance = 209;
+            this.splitContainer2.Size = new System.Drawing.Size(389, 321);
+            this.splitContainer2.SplitterDistance = 200;
             this.splitContainer2.TabIndex = 0;
+            // 
+            // listView_PasswordItems
+            // 
+            this.listView_PasswordItems.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.listView_PasswordItems.Location = new System.Drawing.Point(0, 0);
+            this.listView_PasswordItems.Name = "listView_PasswordItems";
+            this.listView_PasswordItems.Size = new System.Drawing.Size(389, 200);
+            this.listView_PasswordItems.TabIndex = 0;
+            this.listView_PasswordItems.UseCompatibleStateImageBehavior = false;
             // 
             // textBox_ItemDescription
             // 
@@ -100,7 +112,7 @@
             this.textBox_ItemDescription.Location = new System.Drawing.Point(0, 0);
             this.textBox_ItemDescription.Multiline = true;
             this.textBox_ItemDescription.Name = "textBox_ItemDescription";
-            this.textBox_ItemDescription.Size = new System.Drawing.Size(389, 121);
+            this.textBox_ItemDescription.Size = new System.Drawing.Size(389, 117);
             this.textBox_ItemDescription.TabIndex = 0;
             // 
             // menuStrip1
@@ -121,15 +133,6 @@
             this.ToolStripMenuItem_about.Name = "ToolStripMenuItem_about";
             this.ToolStripMenuItem_about.Size = new System.Drawing.Size(53, 20);
             this.ToolStripMenuItem_about.Text = "About";
-            // 
-            // listView_PasswordItems
-            // 
-            this.listView_PasswordItems.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.listView_PasswordItems.Location = new System.Drawing.Point(0, 0);
-            this.listView_PasswordItems.Name = "listView_PasswordItems";
-            this.listView_PasswordItems.Size = new System.Drawing.Size(389, 209);
-            this.listView_PasswordItems.TabIndex = 0;
-            this.listView_PasswordItems.UseCompatibleStateImageBehavior = false;
             // 
             // toolStrip1
             // 
@@ -153,11 +156,30 @@
             this.toolStripButton1.Size = new System.Drawing.Size(23, 22);
             this.toolStripButton1.Text = "toolStripButton1";
             // 
+            // statusStrip1
+            // 
+            this.statusStrip1.BackColor = System.Drawing.Color.Transparent;
+            this.statusStrip1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+            this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripStatusLabel1});
+            this.statusStrip1.Location = new System.Drawing.Point(0, 376);
+            this.statusStrip1.Name = "statusStrip1";
+            this.statusStrip1.Size = new System.Drawing.Size(619, 22);
+            this.statusStrip1.TabIndex = 4;
+            this.statusStrip1.Text = "statusStrip1";
+            // 
+            // toolStripStatusLabel1
+            // 
+            this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
+            this.toolStripStatusLabel1.Size = new System.Drawing.Size(133, 17);
+            this.toolStripStatusLabel1.Text = "toolStripStatusLabel1";
+            // 
             // MainForm_PasswordManager
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(619, 398);
+            this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.toolStrip1);
             this.Controls.Add(this.splitContainer1);
             this.Controls.Add(this.menuStrip1);
@@ -175,6 +197,8 @@
             this.menuStrip1.PerformLayout();
             this.toolStrip1.ResumeLayout(false);
             this.toolStrip1.PerformLayout();
+            this.statusStrip1.ResumeLayout(false);
+            this.statusStrip1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -191,6 +215,8 @@
         private System.Windows.Forms.ListView listView_PasswordItems;
         private System.Windows.Forms.ToolStrip toolStrip1;
         private System.Windows.Forms.ToolStripButton toolStripButton1;
+        private System.Windows.Forms.StatusStrip statusStrip1;
+        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
 
 
 
