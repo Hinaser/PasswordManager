@@ -20,7 +20,7 @@ namespace PasswordManager
     public class InternalApplicationConfig
     {
         public static string DefaultLocale = "en-US";
-
+        public static string DefaultPasswordFilename = "data";
         public static int RootContainerID = 0;
     }
 

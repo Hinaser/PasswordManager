@@ -19,11 +19,16 @@ namespace PasswordManager
     /// <summary>
     /// Minimal unit for PasswordContainer. This looks like each folder for password records.
     /// </summary>
-    internal class PasswordContainer
+    [Serializable]
+    public class PasswordContainer
     {
         #region Field
         private int UnitID = 0;
         private string Label = String.Empty;
+        // List<PasswordRecord> field below is not serialized because there is another special class to handle the relation between containers and records.
+        // The reason this List field is defined here is only search efficiency for child records. It does not make any sence that everytime examining container,
+        // it needs to look up all PasswordRecord objects whether those objects are combined to the PasswordContainer.
+        [NonSerialized]
         private List<PasswordRecord> Passwords = new List<PasswordRecord>();
         #endregion
 

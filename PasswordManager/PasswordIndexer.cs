@@ -12,6 +12,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.IO;
 #endregion
 
 namespace PasswordManager
@@ -19,16 +20,17 @@ namespace PasswordManager
     /// <summary>
     /// Defining relations between containers and records
     /// </summary>
-    internal class PasswordRecordIndexer
+    [Serializable]
+    public class PasswordIndexer
     {
+        #region Field
+        // The 1st int represents parent container id and the 2nd List<int> represents list of combined password records
+        private Dictionary<int, List<int>> RecordIndexes = new Dictionary<int, List<int>>();
+        // The 1st int represents parent container id and the 2nd List<int> represents list of combined containers
+        private Dictionary<int, List<int>> ContainerIndexes = new Dictionary<int, List<int>>();
+        #endregion
 
-    }
-
-    /// <summary>
-    /// Defining relations between parent container and child container
-    /// </summary>
-    internal class PasswordContainerIndexer
-    {
-
+        #region Constructor
+        #endregion
     }
 }

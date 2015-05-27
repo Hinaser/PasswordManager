@@ -19,7 +19,7 @@ namespace PasswordManager
     /// <summary>
     /// This represents one password item.
     /// </summary>
-    internal class PasswordRecord
+    public class PasswordRecord
     {
         #region Member field
         /// <summary>
