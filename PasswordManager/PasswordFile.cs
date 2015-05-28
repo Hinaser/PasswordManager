@@ -26,7 +26,7 @@ namespace PasswordManager
     {
         #region Field
         protected string Filepath = Environment.CurrentDirectory + InternalApplicationConfig.DefaultPasswordFilename;
-        protected PasswordFileLayout FileContents = new PasswordFileLayout();
+        protected PasswordFileBody FileContents = new PasswordFileBody();
         protected List<IOFilterBase> Filters = new List<IOFilterBase>();
         #endregion
 
@@ -98,7 +98,7 @@ namespace PasswordManager
             {
                 BinaryFormatter formatter = new BinaryFormatter();
 
-                this.FileContents = (PasswordFileLayout)formatter.Deserialize(istream);
+                this.FileContents = (PasswordFileBody)formatter.Deserialize(istream);
             }
             catch { throw; }
             finally
@@ -148,7 +148,7 @@ namespace PasswordManager
         /// </summary>
         public virtual void ResetPasswordFile()
         {
-            this.FileContents = new PasswordFileLayout();
+            this.FileContents = new PasswordFileBody();
             this.WritePasswordToFile();
         }
 
@@ -178,10 +178,21 @@ namespace PasswordManager
     }
 
     /// <summary>
-    /// File layout for password objects
+    /// Header data for password file
     /// </summary>
     [Serializable]
-    public class PasswordFileLayout
+    public class PasswordFileHeader
+    {
+        public DateTime LastUpdate = DateTime.UtcNow;
+        public string HashMasterPassword = String.Empty;
+        public List<string> FilterInformation = new List<string>();
+    }
+
+    /// <summary>
+    /// Main contents of password file
+    /// </summary>
+    [Serializable]
+    public class PasswordFileBody
     {
         public PasswordIndexer Indexer = new PasswordIndexer();
         public List<PasswordContainer> Containers = new List<PasswordContainer>();
