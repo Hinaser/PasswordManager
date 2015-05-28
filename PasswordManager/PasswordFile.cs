@@ -26,8 +26,8 @@ namespace PasswordManager
     {
         #region Field
         protected string Filepath = Environment.CurrentDirectory + InternalApplicationConfig.DefaultPasswordFilename;
-        protected PasswordFileBody FileContents = new PasswordFileBody();
-        protected List<IOFilterBase> Filters = new List<IOFilterBase>();
+        protected List<IOFilterBase> AvailableFilters = new List<IOFilterBase>();
+        protected List<string> FilterOrder = new List<string>();
         #endregion
 
         #region Constructor
@@ -47,6 +47,33 @@ namespace PasswordManager
         {
             this.Filepath = filepath;
         }
+
+        /// <summary>
+        /// Append I/O filter object to member field.
+        /// </summary>
+        /// <param name="filter"></param>
+        public void AddIOFilter(IOFilterBase filter)
+        {
+            this.AvailableFilters.Add(filter);
+        }
+
+        /// <summary>
+        /// Set filter order hash list. Be attention this clears original list member field.
+        /// </summary>
+        /// <param name="order"></param>
+        public void SetFilterOrder(List<string> order)
+        {
+            this.FilterOrder = order;
+        }
+
+        /// <summary>
+        /// Add a filter hash to tail of the list field..
+        /// </summary>
+        /// <param name="filterHash"></param>
+        public void AddFilterOrder(string filterName)
+        {
+            this.FilterOrder.Add(filterName);
+        }
         #endregion
 
         #region Getter method
@@ -62,35 +89,45 @@ namespace PasswordManager
 
         #region I/O
         /// <summary>
-        /// Read raw password data from file without transformation.
+        /// Read password file with removing data filter. Available filters must be added to instance before this method is called.
         /// </summary>
-        public virtual void ReadPasswordFromFile()
+        public virtual PasswordFileBody ReadPasswordFromFile(byte[] masterPasswordHash)
         {
             if (!File.Exists(this.Filepath))
             {
-                this.ResetPasswordFile();
+                this.ResetPasswordFile(masterPasswordHash);
             }
 
-            MemoryStream istream;
+            PasswordFileBody returnVal;
+            MemoryStream bodySteram;
+            PasswordFileLayout header;
 
             using (FileStream fs = new FileStream(this.Filepath, FileMode.Open, FileAccess.Read))
             {
                 BinaryFormatter formatter = new BinaryFormatter();
-                istream = (MemoryStream)formatter.Deserialize(fs);
+                header = (PasswordFileLayout)formatter.Deserialize(fs);
             }
 
-            foreach (IOFilterBase f in this.Filters)
+            bodySteram = new MemoryStream(header.Data);
+
+            foreach (string filterName in header.FilterOrder)
             {
-                using (MemoryStream ostream = new MemoryStream())
+                foreach (IOFilterBase filter in this.AvailableFilters)
                 {
-                    f.InputFilter(istream, ostream); // Convert input as a filter does and write it to output stream
+                    if (filter.ToString() == filterName)
+                    {
+                        using (MemoryStream tempStream = new MemoryStream())
+                        {
+                            filter.InputFilter(bodySteram, tempStream); // Convert input as a filter does and write it to output stream
 
-                    istream.Close(); // Release input stream resources
-                    istream = new MemoryStream();
+                            bodySteram.Close(); // Release input stream resources
+                            bodySteram = new MemoryStream();
 
-                    PrivateUtility.CopyStream(ostream, istream);
+                            PrivateUtility.CopyStream(tempStream, bodySteram);
 
-                    ostream.Close(); // Release input stream resources
+                            tempStream.Close(); // Release input stream resources
+                        }
+                    }
                 }
             }
 
@@ -98,58 +135,75 @@ namespace PasswordManager
             {
                 BinaryFormatter formatter = new BinaryFormatter();
 
-                this.FileContents = (PasswordFileBody)formatter.Deserialize(istream);
+                returnVal = (PasswordFileBody)formatter.Deserialize(bodySteram);
             }
             catch { throw; }
             finally
             {
-                istream.Close();
+                bodySteram.Close();
             }
+
+            return returnVal;
         }
 
         /// <summary>
-        /// Write row password data to file without transformation.
+        /// Write password data with filtering original data. Available filters must be added to instance before this method is called.
         /// </summary>
-        public virtual void WritePasswordToFile()
+        public virtual void WritePasswordToFile(byte[] masterPasswordHash, PasswordFileBody passwordData)
         {
             if (!PasswordFile.CheckDirectoryWritable(Directory.GetParent(this.Filepath).FullName))
             {
                 throw new IOException();
             }
 
-            MemoryStream istream = new MemoryStream();
+            MemoryStream bodySteram = new MemoryStream();
 
             BinaryFormatter formatter = new BinaryFormatter();
-            formatter.Serialize(istream, this.FileContents);
+            formatter.Serialize(bodySteram, passwordData);
 
-            foreach (IOFilterBase f in this.Filters)
+            foreach (string filterName in this.FilterOrder)
             {
-                using (MemoryStream ostream = new MemoryStream())
+                foreach (IOFilterBase filter in this.AvailableFilters)
                 {
-                    f.OutputFilter(istream, ostream); // Convert input as a filter does and write it to output stream
+                    if (filter.ToString() == filterName)
+                    {
+                        using (MemoryStream tempStream = new MemoryStream())
+                        {
+                            filter.OutputFilter(bodySteram, tempStream); // Convert input as a filter does and write it to output stream
 
-                    istream.Close(); // Release input stream resources
-                    istream = new MemoryStream();
+                            bodySteram.Close(); // Release input stream resources
+                            bodySteram = new MemoryStream();
 
-                    PrivateUtility.CopyStream(ostream, istream);
+                            PrivateUtility.CopyStream(tempStream, bodySteram);
 
-                    ostream.Close(); // Release input stream resources
+                            tempStream.Close(); // Release input stream resources
+                        }
+                    }
                 }
             }
 
+            // Construct header
+            PasswordFileLayout header = new PasswordFileLayout();
+            header.TimeToken = DateTime.Now;
+            header.HashedHashOfMasterPassword = PrivateUtility.GetHashCombined(PrivateUtility.GetHash(masterPasswordHash), PrivateUtility.GetHash(header.TimeToken));
+            foreach (IOFilterBase filter in this.AvailableFilters)
+            {
+                header.FilterOrder.Add(filter.ToString());
+            }
+            header.Data = bodySteram.ToArray();
+
             using (FileStream fs = new FileStream(this.Filepath, FileMode.OpenOrCreate, FileAccess.Write))
             {
-                formatter.Serialize(fs, istream);
+                formatter.Serialize(fs, header);
             }
         }
 
         /// <summary>
         /// Initialize password data file. Plese be carefull that this method also clear data in this.FileContents member variable.
         /// </summary>
-        public virtual void ResetPasswordFile()
+        public virtual void ResetPasswordFile(byte[] masterPasswordHash)
         {
-            this.FileContents = new PasswordFileBody();
-            this.WritePasswordToFile();
+            this.WritePasswordToFile(masterPasswordHash, new PasswordFileBody());
         }
 
         /// <summary>
@@ -178,18 +232,20 @@ namespace PasswordManager
     }
 
     /// <summary>
-    /// Header data for password file
+    /// Header data and filtered body data for password file
     /// </summary>
     [Serializable]
-    public class PasswordFileHeader
+    public class PasswordFileLayout
     {
-        public DateTime LastUpdate = DateTime.UtcNow;
-        public string HashMasterPassword = String.Empty;
-        public List<string> FilterInformation = new List<string>();
+        public DateTime TimeToken = DateTime.UtcNow;
+        public byte[] HashedHashOfMasterPassword;
+        public List<string> FilterOrder = new List<string>();
+
+        public byte[] Data; // This should be filtered PasswordFileBody
     }
 
     /// <summary>
-    /// Main contents of password file
+    /// Raw(unfiltered) contents of password file
     /// </summary>
     [Serializable]
     public class PasswordFileBody

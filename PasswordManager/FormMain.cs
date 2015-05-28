@@ -32,6 +32,8 @@ namespace PasswordManager
             // ListView event
             this.listView_PasswordItems.SizeChanged += listView_PasswordItems_SizeChanged;
             this.listView_PasswordItems.ColumnWidthChanged += listView_PasswordItems_ColumnWidthChanged;
+            // Tooltip menu botton event
+            this.toolStripButton_Open.Click += toolStripButton_Open_Click;
 
             // Apply language setting
             SetupLanguage(InternalApplicationConfig.DefaultLocale);
@@ -57,6 +59,17 @@ namespace PasswordManager
         void listView_PasswordItems_ColumnWidthChanged(object sender, ColumnWidthChangedEventArgs e)
         {
             this.AdjustColumnSize((ListView)sender, e);
+        }
+
+        /// <summary>
+        /// Run file open process
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        void toolStripButton_Open_Click(object sender, EventArgs e)
+        {
+            PasswordFile f = new PasswordFile("test.txt");
+            f.ReadPasswordFromFile(new byte[] { 1, 2, 3, 4, 5 });
         }
         #endregion
 

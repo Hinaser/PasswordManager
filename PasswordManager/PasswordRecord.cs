@@ -19,6 +19,7 @@ namespace PasswordManager
     /// <summary>
     /// This represents one password item.
     /// </summary>
+    [Serializable]
     public class PasswordRecord
     {
         #region Member field

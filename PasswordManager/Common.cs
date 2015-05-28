@@ -14,6 +14,7 @@ using System.Linq;
 using System.Text;
 using System.Runtime.InteropServices; // For DllImport attribute
 using System.IO;
+using System.Security.Cryptography;
 #endregion
 
 namespace PasswordManager
@@ -21,8 +22,11 @@ namespace PasswordManager
     public class InternalApplicationConfig
     {
         public static string DefaultLocale = "en-US";
+        public static string DefaultMasterPassword = "password";
         public static string DefaultPasswordFilename = "data";
         public static int RootContainerID = 0;
+        public static HashAlgorithm Hash = new SHA512Managed();
+        public static int MaxFilter = 1000;
     }
 
     public static class PrivateUtility
@@ -48,6 +52,48 @@ namespace PasswordManager
             {
                 output.Write(buffer, 0, bytesRead);
             }
+        }
+
+        /// <summary>
+        /// Combine 2 hash value
+        /// </summary>
+        /// <param name="h1"></param>
+        /// <param name="h2"></param>
+        /// <returns></returns>
+        public static byte[] GetHashCombined(byte[] h1, byte[] h2)
+        {
+            if (h1.Length != h2.Length)
+            {
+                throw new ArgumentException();
+            }
+
+            byte[] ret = new byte[h1.Length];
+            for (int i = 0; i < h1.Length; i++)
+            {
+                ret[i] = (byte)((int)h1[i]*3 ^ (int)h2[i]);
+            }
+
+            return ret;
+        }
+
+        /// <summary>
+        /// Get hash value as byte array for DateTime
+        /// </summary>
+        /// <param name="d"></param>
+        /// <returns></returns>
+        public static byte[] GetHash(DateTime d)
+        {
+            return InternalApplicationConfig.Hash.ComputeHash(System.Text.Encoding.ASCII.GetBytes(d.ToLongTimeString()));
+        }
+
+        /// <summary>
+        /// Get hash value as byte array for string
+        /// </summary>
+        /// <param name="s"></param>
+        /// <returns></returns>
+        public static byte[] GetHash(byte[] b)
+        {
+            return InternalApplicationConfig.Hash.ComputeHash(b);
         }
     }
 }
