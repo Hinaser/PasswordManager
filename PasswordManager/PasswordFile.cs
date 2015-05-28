@@ -98,13 +98,13 @@ namespace PasswordManager
                 this.ResetPasswordFile(masterPasswordHash);
             }
 
-            PasswordFileBody returnVal;
+            BinaryFormatter formatter = new BinaryFormatter(); ;
             MemoryStream bodySteram;
             PasswordFileLayout header;
+            PasswordFileBody returnVal;
 
             using (FileStream fs = new FileStream(this.Filepath, FileMode.Open, FileAccess.Read))
             {
-                BinaryFormatter formatter = new BinaryFormatter();
                 header = (PasswordFileLayout)formatter.Deserialize(fs);
             }
 
@@ -123,6 +123,7 @@ namespace PasswordManager
                             bodySteram.Close(); // Release input stream resources
                             bodySteram = new MemoryStream();
 
+                            tempStream.Position = 0;
                             PrivateUtility.CopyStream(tempStream, bodySteram);
 
                             tempStream.Close(); // Release input stream resources
@@ -133,11 +134,13 @@ namespace PasswordManager
 
             try
             {
-                BinaryFormatter formatter = new BinaryFormatter();
-
+                bodySteram.Position = 0;
                 returnVal = (PasswordFileBody)formatter.Deserialize(bodySteram);
             }
-            catch { throw; }
+            catch(Exception e)
+            {
+                throw e;
+            }
             finally
             {
                 bodySteram.Close();
@@ -157,7 +160,6 @@ namespace PasswordManager
             }
 
             MemoryStream bodySteram = new MemoryStream();
-
             BinaryFormatter formatter = new BinaryFormatter();
             formatter.Serialize(bodySteram, passwordData);
 
@@ -174,6 +176,7 @@ namespace PasswordManager
                             bodySteram.Close(); // Release input stream resources
                             bodySteram = new MemoryStream();
 
+                            tempStream.Position = 0;
                             PrivateUtility.CopyStream(tempStream, bodySteram);
 
                             tempStream.Close(); // Release input stream resources
@@ -280,14 +283,18 @@ namespace PasswordManager
     /// </summary>
     public class NoFilter : IOFilterBase
     {
-        public override void InputFilter(MemoryStream inStream, MemoryStream outSteram)
+        public override void InputFilter(MemoryStream src, MemoryStream dest)
         {
-            PrivateUtility.CopyStream(inStream, outSteram);
+            src.Position = 0;
+            dest.Position = 0;
+            PrivateUtility.CopyStream(src, dest);
         }
 
-        public override void OutputFilter(MemoryStream inStream, MemoryStream outSteram)
+        public override void OutputFilter(MemoryStream src, MemoryStream dest)
         {
-            PrivateUtility.CopyStream(inStream, outSteram);
+            src.Position = 0;
+            dest.Position = 0;
+            PrivateUtility.CopyStream(src, dest);
         }
     }
 }

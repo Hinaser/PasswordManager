@@ -41,16 +41,16 @@ namespace PasswordManager
         /// <summary>
         /// This method is imitating Stream.CopyTo because .NET 3.5 does not implement the method.
         /// </summary>
-        /// <param name="input"></param>
-        /// <param name="output"></param>
-        public static void CopyStream(Stream input, Stream output)
+        /// <param name="src"></param>
+        /// <param name="dest"></param>
+        public static void CopyStream(Stream src, Stream dest)
         {
             byte[] buffer = new byte[16 * 1024];
             int bytesRead;
 
-            while ((bytesRead = input.Read(buffer, 0, buffer.Length)) > 0)
+            while ((bytesRead = src.Read(buffer, 0, buffer.Length)) > 0)
             {
-                output.Write(buffer, 0, bytesRead);
+                dest.Write(buffer, 0, bytesRead);
             }
         }
 

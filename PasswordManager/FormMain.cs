@@ -69,7 +69,10 @@ namespace PasswordManager
         void toolStripButton_Open_Click(object sender, EventArgs e)
         {
             PasswordFile f = new PasswordFile("test.txt");
-            f.ReadPasswordFromFile(new byte[] { 1, 2, 3, 4, 5 });
+            DebugFilter df = new DebugFilter();
+            f.AddIOFilter(df);
+            f.AddFilterOrder(df.ToString());
+            f.ReadPasswordFromFile(new byte[] { 0xff, 0xfe, 0x00, 0x01, 0x02 });
         }
         #endregion
 
