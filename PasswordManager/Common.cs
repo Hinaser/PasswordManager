@@ -13,6 +13,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Runtime.InteropServices; // For DllImport attribute
+using System.IO;
 #endregion
 
 namespace PasswordManager
@@ -32,5 +33,21 @@ namespace PasswordManager
         public const int GwlStyle = (-16);
         [DllImport("user32.dll", SetLastError = true)]
         public static extern int GetWindowLong(IntPtr hWnd, int nIndex);
+
+        /// <summary>
+        /// This method is imitating Stream.CopyTo because .NET 3.5 does not implement the method.
+        /// </summary>
+        /// <param name="input"></param>
+        /// <param name="output"></param>
+        public static void CopyStream(Stream input, Stream output)
+        {
+            byte[] buffer = new byte[16 * 1024];
+            int bytesRead;
+
+            while ((bytesRead = input.Read(buffer, 0, buffer.Length)) > 0)
+            {
+                output.Write(buffer, 0, bytesRead);
+            }
+        }
     }
 }

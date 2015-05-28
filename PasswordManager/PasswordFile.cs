@@ -27,10 +27,11 @@ namespace PasswordManager
         #region Field
         protected string Filepath = Environment.CurrentDirectory + InternalApplicationConfig.DefaultPasswordFilename;
         protected PasswordFileLayout FileContents = new PasswordFileLayout();
+        protected List<IOFilterBase> Filters = new List<IOFilterBase>();
         #endregion
 
         #region Constructor
-        private PasswordFile(){} // Making default constructor private in order to gurantee that PasswordFile object is always with the filename.
+        private PasswordFile() { } // Making default constructor private in order to gurantee that PasswordFile object is always with the filename.
         public PasswordFile(string filepath)
         {
             this.Filepath = filepath;
@@ -61,8 +62,7 @@ namespace PasswordManager
 
         #region I/O
         /// <summary>
-        /// Read raw password data from file without transformation. This method can be overridden by inherited class.
-        /// Please override this method if you want to change the way for handling password data file. For example, read encrypted data with decryption.
+        /// Read raw password data from file without transformation.
         /// </summary>
         public virtual void ReadPasswordFromFile()
         {
@@ -71,26 +71,44 @@ namespace PasswordManager
                 this.ResetPasswordFile();
             }
 
-            FileStream fs = new FileStream(this.Filepath, FileMode.Open, FileAccess.Read);
+            MemoryStream istream;
+
+            using (FileStream fs = new FileStream(this.Filepath, FileMode.Open, FileAccess.Read))
+            {
+                BinaryFormatter formatter = new BinaryFormatter();
+                istream = (MemoryStream)formatter.Deserialize(fs);
+            }
+
+            foreach (IOFilterBase f in this.Filters)
+            {
+                using (MemoryStream ostream = new MemoryStream())
+                {
+                    f.InputFilter(istream, ostream); // Convert input as a filter does and write it to output stream
+
+                    istream.Close(); // Release input stream resources
+                    istream = new MemoryStream();
+
+                    PrivateUtility.CopyStream(ostream, istream);
+
+                    ostream.Close(); // Release input stream resources
+                }
+            }
+
             try
             {
                 BinaryFormatter formatter = new BinaryFormatter();
 
-                this.FileContents = (PasswordFileLayout)formatter.Deserialize(fs);
+                this.FileContents = (PasswordFileLayout)formatter.Deserialize(istream);
             }
-            catch(SerializationException e)
-            {
-                throw e;
-            }
+            catch { throw; }
             finally
             {
-                fs.Close();
+                istream.Close();
             }
         }
 
         /// <summary>
-        /// Write row password data to file without transformation. This method can be overridden by inherited class.
-        /// Please override this method if you want to change the way for handling password data file. For example, write raw data with converting encrypted data.
+        /// Write row password data to file without transformation.
         /// </summary>
         public virtual void WritePasswordToFile()
         {
@@ -99,20 +117,29 @@ namespace PasswordManager
                 throw new IOException();
             }
 
-            FileStream fs = new FileStream(this.Filepath, FileMode.OpenOrCreate, FileAccess.Write);
-            BinaryFormatter formatter = new BinaryFormatter();
+            MemoryStream istream = new MemoryStream();
 
-            try
+            BinaryFormatter formatter = new BinaryFormatter();
+            formatter.Serialize(istream, this.FileContents);
+
+            foreach (IOFilterBase f in this.Filters)
             {
-                formatter.Serialize(fs, this.FileContents);
+                using (MemoryStream ostream = new MemoryStream())
+                {
+                    f.OutputFilter(istream, ostream); // Convert input as a filter does and write it to output stream
+
+                    istream.Close(); // Release input stream resources
+                    istream = new MemoryStream();
+
+                    PrivateUtility.CopyStream(ostream, istream);
+
+                    ostream.Close(); // Release input stream resources
+                }
             }
-            catch(SerializationException e)
+
+            using (FileStream fs = new FileStream(this.Filepath, FileMode.OpenOrCreate, FileAccess.Write))
             {
-                throw e;
-            }
-            finally
-            {
-                fs.Close();
+                formatter.Serialize(fs, istream);
             }
         }
 
@@ -159,5 +186,41 @@ namespace PasswordManager
         public PasswordIndexer Indexer = new PasswordIndexer();
         public List<PasswordContainer> Containers = new List<PasswordContainer>();
         public List<PasswordRecord> Records = new List<PasswordRecord>();
+    }
+
+    /// <summary>
+    /// Abstract class for handling inputting/outputting data stream.
+    /// </summary>
+    public abstract class IOFilterBase
+    {
+        /// <summary>
+        /// This method should be used after reading data from file.
+        /// </summary>
+        /// <param name="inStream">Source stream</param>
+        /// <param name="outSteram">Destination stream</param>
+        public abstract void InputFilter(MemoryStream inStream, MemoryStream outSteram);
+
+        /// <summary>
+        /// This method should be used before writing data to file.
+        /// </summary>
+        /// <param name="inStream">Source stream</param>
+        /// <param name="outSteram">Destination stream</param>
+        public abstract void OutputFilter(MemoryStream inStream, MemoryStream outSteram);
+    }
+
+    /// <summary>
+    /// This filter change nothing. Only pass exact same content to output stream from input stream.
+    /// </summary>
+    public class NoFilter : IOFilterBase
+    {
+        public override void InputFilter(MemoryStream inStream, MemoryStream outSteram)
+        {
+            PrivateUtility.CopyStream(inStream, outSteram);
+        }
+
+        public override void OutputFilter(MemoryStream inStream, MemoryStream outSteram)
+        {
+            PrivateUtility.CopyStream(inStream, outSteram);
+        }
     }
 }
