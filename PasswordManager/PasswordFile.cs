@@ -27,8 +27,7 @@ namespace PasswordManager
     {
         #region Field
         protected string Filepath = Environment.CurrentDirectory + InternalApplicationConfig.DefaultPasswordFilename;
-        protected PasswordHeader Header = new PasswordHeader();
-        protected PasswordFileBodyFiltered BodyFiltered = new PasswordFileBodyFiltered();
+        protected PasswordFileBodyFiltered BodyFiltered = new PasswordFileBodyFiltered(); // This field is kept to maintain original filterOrder information of password file.
         protected List<IOFilterBase> AvailableFilters = new List<IOFilterBase>();
         #endregion
 
@@ -113,11 +112,12 @@ namespace PasswordManager
             {
                 using (BinaryReader reader = new BinaryReader(fs))
                 {
-                    this.Header.Token = reader.ReadChars(InternalApplicationConfig.HeaderTokenSize);
-                    this.Header.CombinedMasterPasswordHash = reader.ReadBytes(InternalApplicationConfig.Hash.HashSize / InternalApplicationConfig.BitsPerAByte);
+                    PasswordHeader header = new PasswordHeader();
+                    header.Token = reader.ReadChars(InternalApplicationConfig.HeaderTokenSize);
+                    header.CombinedMasterPasswordHash = reader.ReadBytes(InternalApplicationConfig.Hash.HashSize / InternalApplicationConfig.BitsPerAByte);
 
                     // Check masterPasswordHash is valid
-                    if (!this.CheckMasterPasswordHash(this.Header.CombinedMasterPasswordHash, masterPasswordHash, this.Header.Token))
+                    if (!this.CheckMasterPasswordHash(header.CombinedMasterPasswordHash, masterPasswordHash, header.Token))
                     {
                         throw new InvalidMasterPasswordException();
                     }
@@ -213,8 +213,9 @@ namespace PasswordManager
             }
 
             // Construct header
-            this.Header.Token = DateTime.Now.ToString(CultureInfo.InvariantCulture).ToCharArray();
-            this.Header.CombinedMasterPasswordHash = PrivateUtility.GetHashCombined(masterPasswordHash, PrivateUtility.GetHash(this.Header.Token));
+            PasswordHeader header = new PasswordHeader();
+            header.Token = DateTime.Now.ToString(CultureInfo.InvariantCulture).ToCharArray();
+            header.CombinedMasterPasswordHash = PrivateUtility.GetHashCombined(masterPasswordHash, PrivateUtility.GetHash(header.Token));
 
             // Construct filter informatoin
             foreach (IOFilterBase filter in this.AvailableFilters)
@@ -228,8 +229,8 @@ namespace PasswordManager
                 // Write header
                 using (BinaryWriter writer = new BinaryWriter(fs))
                 {
-                    writer.Write(this.Header.Token); // Write token
-                    writer.Write(this.Header.CombinedMasterPasswordHash); // Write hash
+                    writer.Write(header.Token); // Write token
+                    writer.Write(header.CombinedMasterPasswordHash); // Write hash
                     // Write Filtered data
                     formatter.Serialize(fs, this.BodyFiltered);
                 }
