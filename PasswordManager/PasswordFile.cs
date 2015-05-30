@@ -95,7 +95,7 @@ namespace PasswordManager
         /// </summary>
         public virtual PasswordFileBody ReadPasswordFromFile(byte[] masterPasswordHash)
         {
-            if (masterPasswordHash.Length != InternalApplicationConfig.Hash.HashSize/8)
+            if (masterPasswordHash.Length != InternalApplicationConfig.Hash.HashSize/InternalApplicationConfig.BitsPerAByte)
             {
                 throw new ArgumentException();
             }
@@ -114,7 +114,7 @@ namespace PasswordManager
                 using (BinaryReader reader = new BinaryReader(fs))
                 {
                     this.Header.Token = reader.ReadChars(InternalApplicationConfig.HeaderTokenSize);
-                    this.Header.CombinedMasterPasswordHash = reader.ReadBytes(InternalApplicationConfig.Hash.HashSize / 8);
+                    this.Header.CombinedMasterPasswordHash = reader.ReadBytes(InternalApplicationConfig.Hash.HashSize / InternalApplicationConfig.BitsPerAByte);
 
                     // Check masterPasswordHash is valid
                     if (!this.CheckMasterPasswordHash(this.Header.CombinedMasterPasswordHash, masterPasswordHash, this.Header.Token))
@@ -122,7 +122,7 @@ namespace PasswordManager
                         throw new UnauthorizedAccessException();
                     }
 
-                    reader.BaseStream.Position = InternalApplicationConfig.HeaderTokenSize + InternalApplicationConfig.Hash.HashSize/8;
+                    reader.BaseStream.Position = InternalApplicationConfig.HeaderTokenSize + InternalApplicationConfig.Hash.HashSize / InternalApplicationConfig.BitsPerAByte;
                     this.BodyFiltered = (PasswordFileBodyFiltered)formatter.Deserialize(reader.BaseStream);
                 }
             }
@@ -311,7 +311,7 @@ namespace PasswordManager
     public class PasswordHeader
     {
         public char[] Token = new char[InternalApplicationConfig.HeaderTokenSize];
-        public byte[] CombinedMasterPasswordHash = new byte[InternalApplicationConfig.Hash.HashSize/8];
+        public byte[] CombinedMasterPasswordHash = new byte[InternalApplicationConfig.Hash.HashSize / InternalApplicationConfig.BitsPerAByte];
     }
 
     /// <summary>

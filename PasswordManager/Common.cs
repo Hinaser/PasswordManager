@@ -29,6 +29,7 @@ namespace PasswordManager
         public static HashAlgorithm Hash = new SHA512Managed();
         public static int MaxFilter = 1000;
         public static int HeaderTokenSize = DateTime.Now.ToString(CultureInfo.InvariantCulture).ToCharArray().Length;
+        public static int BitsPerAByte = 8;
     }
 
     public static class PrivateUtility
