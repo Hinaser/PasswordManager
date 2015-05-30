@@ -72,7 +72,7 @@ namespace PasswordManager
             DebugFilter df = new DebugFilter();
             f.AddIOFilter(df);
             f.AddFilterOrder(df.ToString());
-            f.ReadPasswordFromFile(new byte[] { 0xff, 0xfe, 0x00, 0x01, 0x02 });
+            f.ReadPasswordFromFile(PrivateUtility.GetHash(new byte[] { 0xff, 0xfe, 0x00, 0x01, 0x02 }));
         }
         #endregion
 

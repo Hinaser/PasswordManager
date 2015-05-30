@@ -15,6 +15,7 @@ using System.Text;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Runtime.Serialization;
+using System.Globalization;
 #endregion
 
 namespace PasswordManager
@@ -26,8 +27,9 @@ namespace PasswordManager
     {
         #region Field
         protected string Filepath = Environment.CurrentDirectory + InternalApplicationConfig.DefaultPasswordFilename;
+        protected PasswordHeader Header = new PasswordHeader();
+        protected PasswordFileBodyFiltered BodyFiltered = new PasswordFileBodyFiltered();
         protected List<IOFilterBase> AvailableFilters = new List<IOFilterBase>();
-        protected List<string> FilterOrder = new List<string>();
         #endregion
 
         #region Constructor
@@ -63,7 +65,7 @@ namespace PasswordManager
         /// <param name="order"></param>
         public void SetFilterOrder(List<string> order)
         {
-            this.FilterOrder = order;
+            this.BodyFiltered.Filters = order;
         }
 
         /// <summary>
@@ -72,7 +74,7 @@ namespace PasswordManager
         /// <param name="filterHash"></param>
         public void AddFilterOrder(string filterName)
         {
-            this.FilterOrder.Add(filterName);
+            this.BodyFiltered.Filters.Add(filterName);
         }
         #endregion
 
@@ -93,25 +95,43 @@ namespace PasswordManager
         /// </summary>
         public virtual PasswordFileBody ReadPasswordFromFile(byte[] masterPasswordHash)
         {
+            if (masterPasswordHash.Length != InternalApplicationConfig.Hash.HashSize/8)
+            {
+                throw new ArgumentException();
+            }
+
             if (!File.Exists(this.Filepath))
             {
                 this.ResetPasswordFile(masterPasswordHash);
             }
 
-            BinaryFormatter formatter = new BinaryFormatter(); ;
+            BinaryFormatter formatter = new BinaryFormatter();
             MemoryStream bodySteram;
-            PasswordFileLayout header;
             PasswordFileBody returnVal;
 
             using (FileStream fs = new FileStream(this.Filepath, FileMode.Open, FileAccess.Read))
             {
-                header = (PasswordFileLayout)formatter.Deserialize(fs);
+                using (BinaryReader reader = new BinaryReader(fs))
+                {
+                    this.Header.Token = reader.ReadChars(InternalApplicationConfig.HeaderTokenSize);
+                    this.Header.CombinedMasterPasswordHash = reader.ReadBytes(InternalApplicationConfig.Hash.HashSize / 8);
+
+                    // Check masterPasswordHash is valid
+                    if (!this.CheckMasterPasswordHash(this.Header.CombinedMasterPasswordHash, masterPasswordHash, this.Header.Token))
+                    {
+                        throw new UnauthorizedAccessException();
+                    }
+
+                    reader.BaseStream.Position = InternalApplicationConfig.HeaderTokenSize + InternalApplicationConfig.Hash.HashSize/8;
+                    this.BodyFiltered = (PasswordFileBodyFiltered)formatter.Deserialize(reader.BaseStream);
+                }
             }
 
-            bodySteram = new MemoryStream(header.Data);
+            bodySteram = new MemoryStream(this.BodyFiltered.data);
 
-            foreach (string filterName in header.FilterOrder)
+            foreach (string filterName in this.BodyFiltered.Filters)
             {
+                bool filterFound = false;
                 foreach (IOFilterBase filter in this.AvailableFilters)
                 {
                     if (filter.ToString() == filterName)
@@ -128,7 +148,14 @@ namespace PasswordManager
 
                             tempStream.Close(); // Release input stream resources
                         }
+                        filterFound = true;
+                        break;
                     }
+                }
+
+                if (!filterFound)
+                {
+                    throw new InvalidDataException();
                 }
             }
 
@@ -163,7 +190,7 @@ namespace PasswordManager
             BinaryFormatter formatter = new BinaryFormatter();
             formatter.Serialize(bodySteram, passwordData);
 
-            foreach (string filterName in this.FilterOrder)
+            foreach (string filterName in this.BodyFiltered.Filters)
             {
                 foreach (IOFilterBase filter in this.AvailableFilters)
                 {
@@ -186,18 +213,26 @@ namespace PasswordManager
             }
 
             // Construct header
-            PasswordFileLayout header = new PasswordFileLayout();
-            header.TimeToken = DateTime.Now;
-            header.HashedHashOfMasterPassword = PrivateUtility.GetHashCombined(PrivateUtility.GetHash(masterPasswordHash), PrivateUtility.GetHash(header.TimeToken));
+            this.Header.Token = DateTime.Now.ToString(CultureInfo.InvariantCulture).ToCharArray();
+            this.Header.CombinedMasterPasswordHash = PrivateUtility.GetHashCombined(masterPasswordHash, PrivateUtility.GetHash(this.Header.Token));
+
+            // Construct filter informatoin
             foreach (IOFilterBase filter in this.AvailableFilters)
             {
-                header.FilterOrder.Add(filter.ToString());
+                this.BodyFiltered.Filters.Add(filter.ToString());
             }
-            header.Data = bodySteram.ToArray();
+            this.BodyFiltered.data = bodySteram.ToArray();
 
             using (FileStream fs = new FileStream(this.Filepath, FileMode.OpenOrCreate, FileAccess.Write))
             {
-                formatter.Serialize(fs, header);
+                // Write header
+                using (BinaryWriter writer = new BinaryWriter(fs))
+                {
+                    writer.Write(this.Header.Token); // Write token
+                    writer.Write(this.Header.CombinedMasterPasswordHash); // Write hash
+                    // Write Filtered data
+                    formatter.Serialize(fs, this.BodyFiltered);
+                }
             }
         }
 
@@ -231,20 +266,62 @@ namespace PasswordManager
                 return false;
             }
         }
+
+        /// <summary>
+        /// Challenge master password hash with token.
+        /// </summary>
+        /// <param name="expectedCombinedHash">This should be combining result of master password hash and token, which might be described in Password file header</param>
+        /// <param name="challengingMasterPasswordHash">Challenging password hash</param>
+        /// <param name="token">Token value, which might be described in Password file header</param>
+        /// <returns></returns>
+        public bool CheckMasterPasswordHash(byte[] expectedCombinedHash, byte[] challengingMasterPasswordHash, char[] token)
+        {
+            return CompareHashes(expectedCombinedHash, PrivateUtility.GetHashCombined(challengingMasterPasswordHash, PrivateUtility.GetHash(token)));
+        }
+
+        /// <summary>
+        /// Compare two argument hashes one by one.
+        /// </summary>
+        /// <param name="b1">A hash value to compare</param>
+        /// <param name="b2">A hash value to compare</param>
+        /// <returns></returns>
+        public bool CompareHashes(byte[] b1, byte[] b2)
+        {
+            if (b1.Length != b2.Length)
+            {
+                return false;
+            }
+
+            for (int i = 0; i < b1.Length; i++)
+            {
+                if (b1[i] != b2[i])
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
         #endregion
     }
 
     /// <summary>
-    /// Header data and filtered body data for password file
+    /// Header layout for password file
+    /// </summary>
+    public class PasswordHeader
+    {
+        public char[] Token = new char[InternalApplicationConfig.HeaderTokenSize];
+        public byte[] CombinedMasterPasswordHash = new byte[InternalApplicationConfig.Hash.HashSize/8];
+    }
+
+    /// <summary>
+    /// Password file body which is filtered
     /// </summary>
     [Serializable]
-    public class PasswordFileLayout
+    public class PasswordFileBodyFiltered
     {
-        public DateTime TimeToken = DateTime.UtcNow;
-        public byte[] HashedHashOfMasterPassword;
-        public List<string> FilterOrder = new List<string>();
-
-        public byte[] Data; // This should be filtered PasswordFileBody
+        public List<string> Filters = new List<string>();
+        public byte[] data;
     }
 
     /// <summary>

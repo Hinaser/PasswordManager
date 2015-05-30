@@ -15,6 +15,7 @@ using System.Text;
 using System.Runtime.InteropServices; // For DllImport attribute
 using System.IO;
 using System.Security.Cryptography;
+using System.Globalization;
 #endregion
 
 namespace PasswordManager
@@ -27,6 +28,7 @@ namespace PasswordManager
         public static int RootContainerID = 0;
         public static HashAlgorithm Hash = new SHA512Managed();
         public static int MaxFilter = 1000;
+        public static int HeaderTokenSize = DateTime.Now.ToString(CultureInfo.InvariantCulture).ToCharArray().Length;
     }
 
     public static class PrivateUtility
@@ -77,13 +79,13 @@ namespace PasswordManager
         }
 
         /// <summary>
-        /// Get hash value as byte array for DateTime
+        /// Get hash value as byte array
         /// </summary>
         /// <param name="d"></param>
         /// <returns></returns>
-        public static byte[] GetHash(DateTime d)
+        public static byte[] GetHash(char[] c)
         {
-            return InternalApplicationConfig.Hash.ComputeHash(System.Text.Encoding.ASCII.GetBytes(d.ToLongTimeString()));
+            return InternalApplicationConfig.Hash.ComputeHash(Encoding.Unicode.GetBytes(c));
         }
 
         /// <summary>
