@@ -99,4 +99,9 @@ namespace PasswordManager
             return InternalApplicationConfig.Hash.ComputeHash(b);
         }
     }
+
+    #region Exception
+    public class InvalidMasterPasswordException : Exception { }
+    public class NoCorrespondingFilterFoundException : Exception { }
+    #endregion
 }

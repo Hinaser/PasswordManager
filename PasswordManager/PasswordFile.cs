@@ -119,7 +119,7 @@ namespace PasswordManager
                     // Check masterPasswordHash is valid
                     if (!this.CheckMasterPasswordHash(this.Header.CombinedMasterPasswordHash, masterPasswordHash, this.Header.Token))
                     {
-                        throw new UnauthorizedAccessException();
+                        throw new InvalidMasterPasswordException();
                     }
 
                     reader.BaseStream.Position = InternalApplicationConfig.HeaderTokenSize + InternalApplicationConfig.Hash.HashSize / InternalApplicationConfig.BitsPerAByte;
@@ -155,7 +155,7 @@ namespace PasswordManager
 
                 if (!filterFound)
                 {
-                    throw new InvalidDataException();
+                    throw new NoCorrespondingFilterFoundException();
                 }
             }
 
