@@ -105,10 +105,10 @@ namespace PasswordManager
             this.PasswordData.Containers.Add(new PasswordContainer(5, "test5"));
             this.PasswordData.Containers.Add(new PasswordContainer(6, "test6"));
             this.PasswordData.Containers.Add(new PasswordContainer(7, "test7"));
-            this.PasswordData.Records.Add(new PasswordRecord(1));
-            this.PasswordData.Records.Add(new PasswordRecord(2));
-            this.PasswordData.Records.Add(new PasswordRecord(3));
-            this.PasswordData.Records.Add(new PasswordRecord(4));
+            this.PasswordData.Records.Add(new PasswordRecord(1, "test1", DateTime.Now, DateTime.Now, "id1", "***", "some description1"));
+            this.PasswordData.Records.Add(new PasswordRecord(2, "test2", DateTime.Now, DateTime.Now, "id2", "***", "some description2"));
+            this.PasswordData.Records.Add(new PasswordRecord(3, "test3", DateTime.Now, DateTime.Now, "id3", "***", "some description3"));
+            this.PasswordData.Records.Add(new PasswordRecord(4, "test4", DateTime.Now, DateTime.Now, "id4", "***", "some description4"));
             this.PasswordData.Indexer.AppendContainer(1, 0);
             this.PasswordData.Indexer.AppendContainer(2, 0);
             this.PasswordData.Indexer.AppendContainer(3, 1);
@@ -141,13 +141,24 @@ namespace PasswordManager
             this.listView_PasswordItems.Items.Clear();
             this.textBox_ItemDescription.Text = String.Empty;
 
-            foreach (int recordID in this.PasswordData.Indexer.GetChildRecords(containerID))
+            ICollection<int> ids = this.PasswordData.Indexer.GetChildRecords(containerID);
+            if (ids == null || ids.Count < 1)
+            {
+                return;
+            }
+
+            // Only the top of records obtained is appeared in text box.
+            this.textBox_ItemDescription.Text = this.PasswordData.Indexer.GetRecordByID(this.PasswordData.Records, ids.ElementAt(0)).GetDescription();
+
+            foreach (int recordID in ids)
             {
                 PasswordRecord record = this.PasswordData.Indexer.GetRecordByID(this.PasswordData.Records, recordID);
                 ListViewItem lvi = new ListViewItem();
                 lvi.Text = record.GetCaption();
                 lvi.SubItems.Add(record.GetID().ToString());
                 lvi.SubItems.Add(record.GetPassword());
+
+                this.listView_PasswordItems.Items.Add(lvi);
             }
         }
         #endregion
@@ -277,6 +288,13 @@ namespace PasswordManager
             Thread.CurrentThread.CurrentUICulture = CultureInfo.GetCultureInfo(locale);
 
             this.ToolStripMenuItem_about.Text = strings.Form_MenuItem_About;
+            this.ToolStripMenuItem_option.Text = strings.Form_MenuItem_Option;
+            this.toolStripStatusLabel1.Text = strings.Status_Ready;
+            this.toolStripButton_Open.ToolTipText = strings.Form_Tooltip_OpenFile;
+            this.toolStripButton_Save.ToolTipText = strings.Form_Tooltip_SaveFile;
+            this.columnHeader_caption.Text = strings.Form_Listview_Caption;
+            this.columnHeader_ID.Text = strings.Form_Listview_ID;
+            this.columnHeader_password.Text = strings.Form_Listview_Password;
         }
         #endregion
     }

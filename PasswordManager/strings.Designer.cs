@@ -61,11 +61,74 @@ namespace PasswordManager {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Caption.
+        /// </summary>
+        internal static string Form_Listview_Caption {
+            get {
+                return ResourceManager.GetString("Form_Listview_Caption", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ID.
+        /// </summary>
+        internal static string Form_Listview_ID {
+            get {
+                return ResourceManager.GetString("Form_Listview_ID", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Password.
+        /// </summary>
+        internal static string Form_Listview_Password {
+            get {
+                return ResourceManager.GetString("Form_Listview_Password", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to About.
         /// </summary>
         internal static string Form_MenuItem_About {
             get {
                 return ResourceManager.GetString("Form_MenuItem_About", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Option.
+        /// </summary>
+        internal static string Form_MenuItem_Option {
+            get {
+                return ResourceManager.GetString("Form_MenuItem_Option", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Open file.
+        /// </summary>
+        internal static string Form_Tooltip_OpenFile {
+            get {
+                return ResourceManager.GetString("Form_Tooltip_OpenFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Save file.
+        /// </summary>
+        internal static string Form_Tooltip_SaveFile {
+            get {
+                return ResourceManager.GetString("Form_Tooltip_SaveFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ready.
+        /// </summary>
+        internal static string Status_Ready {
+            get {
+                return ResourceManager.GetString("Status_Ready", resourceCulture);
             }
         }
     }

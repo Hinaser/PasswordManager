@@ -117,7 +117,28 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="Form_Listview_Caption" xml:space="preserve">
+    <value>タイトル</value>
+  </data>
+  <data name="Form_Listview_ID" xml:space="preserve">
+    <value>ID</value>
+  </data>
+  <data name="Form_Listview_Password" xml:space="preserve">
+    <value>パスワード</value>
+  </data>
   <data name="Form_MenuItem_About" xml:space="preserve">
     <value>本アプリについて</value>
+  </data>
+  <data name="Form_MenuItem_Option" xml:space="preserve">
+    <value>オプション</value>
+  </data>
+  <data name="Form_Tooltip_OpenFile" xml:space="preserve">
+    <value>ファイルを開く</value>
+  </data>
+  <data name="Form_Tooltip_SaveFile" xml:space="preserve">
+    <value>ファイルに保存する</value>
+  </data>
+  <data name="Status_Ready" xml:space="preserve">
+    <value>準備完了</value>
   </data>
 </root>

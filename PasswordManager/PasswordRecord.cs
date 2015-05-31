@@ -37,7 +37,6 @@ namespace PasswordManager
         private string ID = String.Empty;
         private string Password = String.Empty;
         private string Descriptioin = String.Empty;
-        private int Complexity;
         // Will be implemented in future update
         //private byte[] UnlockToken = null; // This value is required to get actual secret value from this class. If invalid value is passed when secret values are refered, dummy value will be returned.
         #endregion
@@ -45,6 +44,16 @@ namespace PasswordManager
         #region Constructor
         private PasswordRecord() { } // Disable non-argument constructor.
         public PasswordRecord(int recordID) { this.RecordID = recordID; } // Instance must be with Real ID
+        public PasswordRecord(int recordID, string caption, DateTime createDate, DateTime lastUpdateDate, string id, string password, string description)
+        {
+            this.RecordID = recordID;
+            this.Caption = caption;
+            this.CreateDate = createDate;
+            this.LastUpdateDate = lastUpdateDate;
+            this.ID = id;
+            this.Password = password;
+            this.Descriptioin = description;
+        }
         #endregion
 
         #region Setter method
@@ -55,7 +64,7 @@ namespace PasswordManager
         /// <param name="caption">Caption</param>
         /// <param name="createDate">Date the record was created</param>
         /// <param name="lastUpdateDate">Date the record was updated most recently</param>
-        public void SetHeaderData(int parentID, string caption, DateTime createDate, DateTime lastUpdateDate)
+        public void SetHeaderData(string caption, DateTime createDate, DateTime lastUpdateDate)
         {
             this.Caption = caption;
             this.CreateDate = createDate;
@@ -69,12 +78,11 @@ namespace PasswordManager
         /// <param name="password"></param>
         /// <param name="description"></param>
         /// <param name="complexity"></param>
-        public void SetPrivateData(string id, string password, string description, int complexity)
+        public void SetPrivateData(string id, string password, string description)
         {
             this.ID = id;
             this.Password = password;
             this.Descriptioin = description;
-            this.Complexity = complexity;
         }
         #endregion
 
@@ -99,11 +107,6 @@ namespace PasswordManager
         public string GetDescription()
         {
             return this.Descriptioin;
-        }
-
-        public int GetCompexity()
-        {
-            return this.Complexity;
         }
         #endregion
 

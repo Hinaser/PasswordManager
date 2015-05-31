@@ -117,7 +117,28 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="Form_Listview_Caption" xml:space="preserve">
+    <value>Caption</value>
+  </data>
+  <data name="Form_Listview_ID" xml:space="preserve">
+    <value>ID</value>
+  </data>
+  <data name="Form_Listview_Password" xml:space="preserve">
+    <value>Password</value>
+  </data>
   <data name="Form_MenuItem_About" xml:space="preserve">
     <value>About</value>
+  </data>
+  <data name="Form_MenuItem_Option" xml:space="preserve">
+    <value>Option</value>
+  </data>
+  <data name="Form_Tooltip_OpenFile" xml:space="preserve">
+    <value>Open file</value>
+  </data>
+  <data name="Form_Tooltip_SaveFile" xml:space="preserve">
+    <value>Save file</value>
+  </data>
+  <data name="Status_Ready" xml:space="preserve">
+    <value>Ready</value>
   </data>
 </root>
