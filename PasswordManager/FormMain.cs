@@ -24,6 +24,10 @@ namespace PasswordManager
 {
     public partial class MainForm_PasswordManager : Form
     {
+        #region Fields
+        PasswordFileBody PasswordData = new PasswordFileBody();
+        #endregion
+
         #region Constructor
         public MainForm_PasswordManager()
         {
@@ -32,6 +36,8 @@ namespace PasswordManager
             // ListView event
             this.listView_PasswordItems.SizeChanged += listView_PasswordItems_SizeChanged;
             this.listView_PasswordItems.ColumnWidthChanged += listView_PasswordItems_ColumnWidthChanged;
+            // TreeView event
+            this.treeView_Folders.AfterSelect += treeView_Folders_AfterSelect;
             // Tooltip menu botton event
             this.toolStripButton_Open.Click += toolStripButton_Open_Click;
             this.toolStripButton_Save.Click += toolStripButton_Save_Click;
@@ -74,8 +80,8 @@ namespace PasswordManager
             f.AddIOFilter(df);
             f.AddFilterOrder(df.ToString());
 
-            PasswordFileBody b = f.ReadPasswordFromFile(Utility.GetHash(new byte[] { 0xff, 0xfe, 0x00, 0x01, 0x02 }));
-            this.InitializeTreeStructure(b.Containers, b.Indexer);
+            this.PasswordData = f.ReadPasswordFromFile(Utility.GetHash(new byte[] { 0xff, 0xfe, 0x00, 0x01, 0x02 }));
+            this.InitializeTreeStructure(this.PasswordData.Containers, this.PasswordData.Indexer);
             this.listView_PasswordItems.Invalidate();
         }
 
@@ -91,30 +97,58 @@ namespace PasswordManager
             f.AddIOFilter(df);
             f.AddFilterOrder(df.ToString());
 
-            PasswordFileBody body = new PasswordFileBody(new PasswordIndexer(), new List<PasswordContainer>(), new List<PasswordRecord>());
-            body.Containers.Add(new PasswordContainer(1, "test1"));
-            body.Containers.Add(new PasswordContainer(2, "test2"));
-            body.Containers.Add(new PasswordContainer(3, "test3"));
-            body.Containers.Add(new PasswordContainer(4, "test4"));
-            body.Containers.Add(new PasswordContainer(5, "test5"));
-            body.Containers.Add(new PasswordContainer(6, "test6"));
-            body.Containers.Add(new PasswordContainer(7, "test7"));
-            body.Records.Add(new PasswordRecord(1));
-            body.Records.Add(new PasswordRecord(2));
-            body.Records.Add(new PasswordRecord(3));
-            body.Records.Add(new PasswordRecord(4));
-            body.Indexer.AppendContainer(1, 0);
-            body.Indexer.AppendContainer(2, 0);
-            body.Indexer.AppendContainer(3, 1);
-            body.Indexer.AppendContainer(4, 3);
-            body.Indexer.AppendContainer(5, 7);
-            body.Indexer.AppendContainer(6, 2);
-            body.Indexer.AppendContainer(7, 6);
-            body.Indexer.AppendRecord(1, 0);
-            body.Indexer.AppendRecord(2, 1);
-            body.Indexer.AppendRecord(3, 1);
-            body.Indexer.AppendRecord(4, 2);
-            f.WritePasswordToFile(Utility.GetHash(new byte[] { 0xff, 0xfe, 0x00, 0x01, 0x02 }), body);
+            this.PasswordData = new PasswordFileBody(new PasswordIndexer(), new List<PasswordContainer>(), new List<PasswordRecord>());
+            this.PasswordData.Containers.Add(new PasswordContainer(1, "test1"));
+            this.PasswordData.Containers.Add(new PasswordContainer(2, "test2"));
+            this.PasswordData.Containers.Add(new PasswordContainer(3, "test3"));
+            this.PasswordData.Containers.Add(new PasswordContainer(4, "test4"));
+            this.PasswordData.Containers.Add(new PasswordContainer(5, "test5"));
+            this.PasswordData.Containers.Add(new PasswordContainer(6, "test6"));
+            this.PasswordData.Containers.Add(new PasswordContainer(7, "test7"));
+            this.PasswordData.Records.Add(new PasswordRecord(1));
+            this.PasswordData.Records.Add(new PasswordRecord(2));
+            this.PasswordData.Records.Add(new PasswordRecord(3));
+            this.PasswordData.Records.Add(new PasswordRecord(4));
+            this.PasswordData.Indexer.AppendContainer(1, 0);
+            this.PasswordData.Indexer.AppendContainer(2, 0);
+            this.PasswordData.Indexer.AppendContainer(3, 1);
+            this.PasswordData.Indexer.AppendContainer(4, 3);
+            this.PasswordData.Indexer.AppendContainer(5, 7);
+            this.PasswordData.Indexer.AppendContainer(6, 2);
+            this.PasswordData.Indexer.AppendContainer(7, 6);
+            this.PasswordData.Indexer.AppendRecord(1, 0);
+            this.PasswordData.Indexer.AppendRecord(2, 1);
+            this.PasswordData.Indexer.AppendRecord(3, 1);
+            this.PasswordData.Indexer.AppendRecord(4, 2);
+            f.WritePasswordToFile(Utility.GetHash(new byte[] { 0xff, 0xfe, 0x00, 0x01, 0x02 }), this.PasswordData);
+        }
+
+        /// <summary>
+        /// Click event for Node on TreeView 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        void treeView_Folders_AfterSelect(object sender, TreeViewEventArgs e)
+        {
+            // When tag contains no information about actual pointer to internal PasswordObjects, stop processing.
+            if (e.Node.Tag == null)
+            {
+                return;
+            }
+            int containerID = (int)e.Node.Tag;
+
+            // Initialize listview/textbox control
+            this.listView_PasswordItems.Items.Clear();
+            this.textBox_ItemDescription.Text = String.Empty;
+
+            foreach (int recordID in this.PasswordData.Indexer.GetChildRecords(containerID))
+            {
+                PasswordRecord record = this.PasswordData.Indexer.GetRecordByID(this.PasswordData.Records, recordID);
+                ListViewItem lvi = new ListViewItem();
+                lvi.Text = record.GetCaption();
+                lvi.SubItems.Add(record.GetID().ToString());
+                lvi.SubItems.Add(record.GetPassword());
+            }
         }
         #endregion
 

@@ -27,7 +27,6 @@ namespace PasswordManager
         /// Header values, which can be seen without master password
         /// </summary>
         private int RecordID; // This represent real record identity. This must be unique all over Password data
-        private int ParentContainerID = InternalApplicationConfig.RootContainerID; // This indicates Parent record container ID.
         private string Caption = String.Empty;
         private DateTime CreateDate;
         private DateTime LastUpdateDate;
@@ -58,7 +57,6 @@ namespace PasswordManager
         /// <param name="lastUpdateDate">Date the record was updated most recently</param>
         public void SetHeaderData(int parentID, string caption, DateTime createDate, DateTime lastUpdateDate)
         {
-            this.ParentContainerID = parentID;
             this.Caption = caption;
             this.CreateDate = createDate;
             this.LastUpdateDate = lastUpdateDate;
@@ -83,7 +81,6 @@ namespace PasswordManager
         #region Getter method
         // Public data
         public int GetRecordID() { return this.RecordID; }
-        public int GetParentID() { return this.ParentContainerID; }
         public string GetCaption() { return this.Caption; }
         public DateTime GetCreateDate() { return this.CreateDate; }
         public DateTime GetLastUpdateDate() { return this.LastUpdateDate; }
