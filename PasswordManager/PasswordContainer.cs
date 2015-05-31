@@ -23,7 +23,7 @@ namespace PasswordManager
     public class PasswordContainer
     {
         #region Field
-        private int UnitID = 0;
+        private int ContainerID = 0;
         private string Label = String.Empty;
         // List<PasswordRecord> field below is not serialized because there is another special class to handle the relation between containers and records.
         // The reason this List field is defined here is only search efficiency for child records. It does not make any sence that everytime examining container,
@@ -34,7 +34,7 @@ namespace PasswordManager
 
         #region Constructor
         private PasswordContainer() { } // Making default constructor private in order to gurantee all PasswordContainer class exists with its UnitID.
-        public PasswordContainer(int unitID) { this.UnitID = unitID; }
+        public PasswordContainer(int containerID) { this.ContainerID = containerID; }
         #endregion
 
         #region Setter method
@@ -58,9 +58,9 @@ namespace PasswordManager
         /// Get UnitID of instance
         /// </summary>
         /// <returns></returns>
-        public int GetUnitID()
+        public int GetContainerID()
         {
-            return this.UnitID;
+            return this.ContainerID;
         }
 
         /// <summary>
