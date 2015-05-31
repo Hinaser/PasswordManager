@@ -21,7 +21,7 @@ namespace PasswordManager
     /// Defining relations between containers and records
     /// </summary>
     [Serializable]
-    public class PasswordIndexer
+    public class PasswordIndexer : PasswordIndexerBase
     {
         #region Field
         // The 1st int represents parent container id and the 2nd List<int> represents list of combined password records
@@ -29,11 +29,18 @@ namespace PasswordManager
         // The 1st int represents parent container id and the 2nd List<int> represents list of combined containers
         private Dictionary<int, List<int>> ContainerIndexes = new Dictionary<int, List<int>>();
 
-        public const int RootContainerID = 0;
+        public static readonly int RootContainerID = InternalApplicationConfig.RootContainerID;
         #endregion
 
         #region Constructor
-        public PasswordIndexer() { }
+        /// <summary>
+        /// Construct root container
+        /// </summary>
+        public PasswordIndexer()
+        {
+            this.RecordIndexes.Add(InternalApplicationConfig.RootContainerID, new List<int>());
+            this.ContainerIndexes.Add(InternalApplicationConfig.RootContainerID, new List<int>());
+        }
         #endregion
 
         #region Setter method
@@ -43,21 +50,17 @@ namespace PasswordManager
         /// <param name="destContainerID"></param>
         /// <param name="containerID"></param>
         /// <returns></returns>
-        public bool AppendContainer(int containerID, int destContainerID)
+        public override bool AppendContainer(int containerID, int destContainerID)
         {
-            // Check dest container exists
             if (!this.ContainerIndexes.ContainsKey(destContainerID))
             {
-                return false;
+                this.ContainerIndexes.Add(destContainerID, new List<int>() { containerID });
             }
-
-            // Check appending container is already registered
-            if (this.ContainerIndexes[destContainerID].Contains(containerID))
+            else
             {
-                return false;
+                this.ContainerIndexes[destContainerID].Add(containerID);
             }
 
-            this.ContainerIndexes[destContainerID].Add(containerID);
             return true;
         }
 
@@ -67,7 +70,7 @@ namespace PasswordManager
         /// <param name="containerID"></param>
         /// <param name="parentContainerID"></param>
         /// <returns></returns>
-        public bool RemoveContainer(int containerID, int parentContainerID)
+        public override bool RemoveContainer(int containerID, int parentContainerID)
         {
             // Check dest container exists
             if (!this.ContainerIndexes.ContainsKey(parentContainerID))
@@ -91,7 +94,7 @@ namespace PasswordManager
         /// <param name="srcContainerID"></param>
         /// <param name="destContainerID"></param>
         /// <returns></returns>
-        public bool MoveContainer(int containerID, int srcContainerID, int destContainerID)
+        public override bool MoveContainer(int containerID, int srcContainerID, int destContainerID)
         {
             return this.RemoveContainer(containerID, srcContainerID) && this.AppendContainer(containerID, destContainerID);
         }
@@ -102,21 +105,17 @@ namespace PasswordManager
         /// <param name="destContainerID"></param>
         /// <param name="recordID"></param>
         /// <returns></returns>
-        public bool AppendRecord(int recordID, int destContainerID)
+        public override bool AppendRecord(int recordID, int destContainerID)
         {
-            // Check dest container exists
             if (!this.RecordIndexes.ContainsKey(destContainerID))
             {
-                return false;
+                this.RecordIndexes.Add(destContainerID, new List<int>() { recordID });
             }
-
-            // Check appending record is already registered
-            if (this.RecordIndexes[destContainerID].Contains(recordID))
+            else
             {
-                return false;
+                this.RecordIndexes[destContainerID].Add(recordID);
             }
 
-            this.RecordIndexes[destContainerID].Add(recordID);
             return true;
         }
 
@@ -126,7 +125,7 @@ namespace PasswordManager
         /// <param name="recordID"></param>
         /// <param name="parentContainerID"></param>
         /// <returns></returns>
-        public bool RemoveRecord(int recordID, int parentContainerID)
+        public override bool RemoveRecord(int recordID, int parentContainerID)
         {
             // Check dest container exists
             if (!this.RecordIndexes.ContainsKey(parentContainerID))
@@ -150,7 +149,7 @@ namespace PasswordManager
         /// <param name="srcContainerID"></param>
         /// <param name="destContainerID"></param>
         /// <returns></returns>
-        public bool MoveRecord(int recordID, int srcContainerID, int destContainerID)
+        public override bool MoveRecord(int recordID, int srcContainerID, int destContainerID)
         {
             return this.RemoveRecord(recordID, srcContainerID) && this.AppendRecord(recordID, destContainerID);
         }
@@ -162,7 +161,7 @@ namespace PasswordManager
         /// </summary>
         /// <param name="containerID"></param>
         /// <returns></returns>
-        public List<int> GetChildContainers(int containerID)
+        public override ICollection<int> GetChildContainers(int containerID)
         {
             if (!this.ContainerIndexes.ContainsKey(containerID))
             {
@@ -177,7 +176,7 @@ namespace PasswordManager
         /// </summary>
         /// <param name="containerID"></param>
         /// <returns></returns>
-        public List<int> GetChildRecords(int containerID)
+        public override ICollection<int> GetChildRecords(int containerID)
         {
             if (!this.RecordIndexes.ContainsKey(containerID))
             {
@@ -186,6 +185,52 @@ namespace PasswordManager
 
             return this.RecordIndexes[containerID];
         }
+
+        /// <summary>
+        /// Get container object with the specified by container ID
+        /// </summary>
+        /// <param name="containers"></param>
+        /// <param name="containerID"></param>
+        /// <returns></returns>
+        public override PasswordContainer GetContainerByID(ICollection<PasswordContainer> containers, int containerID)
+        {
+            // Pick up child container by its ID. This is a liner search which average search performance would be O(n). 
+            // In future data structure will be update to get better performance.
+            foreach (PasswordContainer c in containers)
+            {
+                if (c.GetContainerID() == containerID)
+                {
+                    return c;
+                }
+            }
+
+            return null;
+        }
+
+        /// <summary>
+        /// Get record object with the specified by record ID
+        /// </summary>
+        /// <param name="containers"></param>
+        /// <param name="containerID"></param>
+        /// <returns></returns>
+        public override PasswordRecord GetRecordByID(ICollection<PasswordRecord> records, int recordID)
+        {
+            // Pick up child container by its ID. This is a liner search which average search performance would be O(n). 
+            // In future data structure will be update to get better performance.
+            foreach (PasswordRecord c in records)
+            {
+                if (c.GetRecordID() == recordID)
+                {
+                    return c;
+                }
+            }
+
+            return null;
+        }
+        #endregion
+
+        #region Integrity check method
+        //public bool CheckRecordIndex
         #endregion
     }
 }

@@ -26,13 +26,14 @@ namespace PasswordManager
         public static string DefaultMasterPassword = "password";
         public static string DefaultPasswordFilename = "data";
         public static int RootContainerID = 0;
+        public static string RootContainerLabel = "All";
         public static HashAlgorithm Hash = new SHA512Managed();
         public static int MaxFilter = 1000;
         public static int HeaderTokenSize = DateTime.Now.ToString(CultureInfo.InvariantCulture).ToCharArray().Length;
         public static int BitsPerAByte = 8;
     }
 
-    public static class PrivateUtility
+    public static class Utility
     {
         // Parameters related to Windows Handle
         public const UInt32 WsHScroll = 0x100000;

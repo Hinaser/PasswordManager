@@ -34,6 +34,7 @@ namespace PasswordManager
             this.listView_PasswordItems.ColumnWidthChanged += listView_PasswordItems_ColumnWidthChanged;
             // Tooltip menu botton event
             this.toolStripButton_Open.Click += toolStripButton_Open_Click;
+            this.toolStripButton_Save.Click += toolStripButton_Save_Click;
 
             // Apply language setting
             SetupLanguage(InternalApplicationConfig.DefaultLocale);
@@ -62,7 +63,7 @@ namespace PasswordManager
         }
 
         /// <summary>
-        /// Run file open process
+        /// Open and read password file and construct associated windows form.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -72,7 +73,48 @@ namespace PasswordManager
             DebugFilter df = new DebugFilter();
             f.AddIOFilter(df);
             f.AddFilterOrder(df.ToString());
-            f.ReadPasswordFromFile(PrivateUtility.GetHash(new byte[] { 0xff, 0xfe, 0x00, 0x01, 0x02 }));
+
+            PasswordFileBody b = f.ReadPasswordFromFile(Utility.GetHash(new byte[] { 0xff, 0xfe, 0x00, 0x01, 0x02 }));
+            this.InitializeTreeStructure(b.Containers, b.Indexer);
+            this.listView_PasswordItems.Invalidate();
+        }
+
+        /// <summary>
+        /// Save current password data into a file
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        void toolStripButton_Save_Click(object sender, EventArgs e)
+        {
+            PasswordFile f = new PasswordFile("test.txt");
+            DebugFilter df = new DebugFilter();
+            f.AddIOFilter(df);
+            f.AddFilterOrder(df.ToString());
+
+            PasswordFileBody body = new PasswordFileBody(new PasswordIndexer(), new List<PasswordContainer>(), new List<PasswordRecord>());
+            body.Containers.Add(new PasswordContainer(1, "test1"));
+            body.Containers.Add(new PasswordContainer(2, "test2"));
+            body.Containers.Add(new PasswordContainer(3, "test3"));
+            body.Containers.Add(new PasswordContainer(4, "test4"));
+            body.Containers.Add(new PasswordContainer(5, "test5"));
+            body.Containers.Add(new PasswordContainer(6, "test6"));
+            body.Containers.Add(new PasswordContainer(7, "test7"));
+            body.Records.Add(new PasswordRecord(1));
+            body.Records.Add(new PasswordRecord(2));
+            body.Records.Add(new PasswordRecord(3));
+            body.Records.Add(new PasswordRecord(4));
+            body.Indexer.AppendContainer(1, 0);
+            body.Indexer.AppendContainer(2, 0);
+            body.Indexer.AppendContainer(3, 1);
+            body.Indexer.AppendContainer(4, 3);
+            body.Indexer.AppendContainer(5, 7);
+            body.Indexer.AppendContainer(6, 2);
+            body.Indexer.AppendContainer(7, 6);
+            body.Indexer.AppendRecord(1, 0);
+            body.Indexer.AppendRecord(2, 1);
+            body.Indexer.AppendRecord(3, 1);
+            body.Indexer.AppendRecord(4, 2);
+            f.WritePasswordToFile(Utility.GetHash(new byte[] { 0xff, 0xfe, 0x00, 0x01, 0x02 }), body);
         }
         #endregion
 
@@ -120,14 +162,71 @@ namespace PasswordManager
         /// <returns></returns>
         public bool IsVScrollbarVisibleOnListView(ListView lv)
         {
-            long wndStyle = PrivateUtility.GetWindowLong(lv.Handle, PrivateUtility.GwlStyle);
+            long wndStyle = Utility.GetWindowLong(lv.Handle, Utility.GwlStyle);
 
-            if ((wndStyle & PrivateUtility.WsVScroll) != 0)
+            if ((wndStyle & Utility.WsVScroll) != 0)
             {
                 return true;
             }
 
             return false;
+        }
+
+        /// <summary>
+        /// Set up password container/record tree structure by PasswordIndexer object
+        /// </summary>
+        /// <param name="indexer"></param>
+        public void InitializeTreeStructure(ICollection<PasswordContainer> containers, PasswordIndexerBase indexer)
+        {
+            // Remove all children from folder
+            this.treeView_Folders.Nodes.Clear();
+
+            // Construct container tree
+            this.treeView_Folders.Nodes.Add(this.GetTreeViewNodeBuilt(containers, indexer));
+        }
+
+        /// <summary>
+        /// Generate completed tree object by provided containers and indexer object
+        /// </summary>
+        /// <param name="containers"></param>
+        /// <param name="indexer"></param>
+        /// <returns></returns>
+        private TreeNode GetTreeViewNodeBuilt(ICollection<PasswordContainer> containers, PasswordIndexerBase indexer)
+        {
+            // Setup root parent container
+            int parentContainerID = InternalApplicationConfig.RootContainerID;
+            TreeNode parentNode = new TreeNode(InternalApplicationConfig.RootContainerLabel);
+
+            // Execute recursive tree method
+            this.AddContainerToTreeView(containers, indexer, parentContainerID, parentNode);
+
+            return parentNode;
+        }
+
+        /// <summary>
+        /// Setup container tree in a recursive manner.
+        /// </summary>
+        /// <param name="parentContainerID"></param>
+        /// <param name="containers"></param>
+        /// <param name="indexer"></param>
+        private void AddContainerToTreeView(ICollection<PasswordContainer> containers, PasswordIndexerBase indexer, int parentContainerID, TreeNode parentNode)
+        {
+            ICollection<int> childrenContainers = indexer.GetChildContainers(parentContainerID);
+
+            // When there are no child containers, do nothing. This path should be walked into when executing end-leaf object.
+            if (childrenContainers == null)
+            {
+                return;
+            }
+
+            // Loop over all associated child containers of specified parent container
+            foreach (int childContainerID in childrenContainers)
+            {
+                PasswordContainer c = indexer.GetContainerByID(containers, childContainerID);
+                TreeNode node = new TreeNode(c.GetLabel());
+                parentNode.Nodes.Add(node);
+                this.AddContainerToTreeView(containers, indexer, childContainerID, node);
+            }
         }
         #endregion
 

@@ -35,7 +35,7 @@ namespace PasswordManager
 
             MemoryStream temp = new MemoryStream(debug);
             dest.Position = 0;
-            PrivateUtility.CopyStream(temp, dest);
+            Utility.CopyStream(temp, dest);
         }
 
         public override void OutputFilter(MemoryStream src, MemoryStream dest)
@@ -51,7 +51,7 @@ namespace PasswordManager
 
             MemoryStream temp = new MemoryStream(debug);
             dest.Position = 0;
-            PrivateUtility.CopyStream(temp, dest);
+            Utility.CopyStream(temp, dest);
         }
     }
 }

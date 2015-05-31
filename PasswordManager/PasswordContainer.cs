@@ -35,6 +35,7 @@ namespace PasswordManager
         #region Constructor
         private PasswordContainer() { } // Making default constructor private in order to gurantee all PasswordContainer class exists with its UnitID.
         public PasswordContainer(int containerID) { this.ContainerID = containerID; }
+        public PasswordContainer(int containerID, string label) { this.ContainerID = containerID; this.Label = label; }
         #endregion
 
         #region Setter method

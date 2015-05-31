@@ -92,7 +92,7 @@ namespace PasswordManager
         /// <summary>
         /// Read password file with removing data filter. Available filters must be added to instance before this method is called.
         /// </summary>
-        public virtual PasswordFileBody ReadPasswordFromFile(byte[] masterPasswordHash)
+        public virtual PasswordFileBody ReadPasswordFromFile(byte[] masterPasswordHash, PasswordFileBody defaultPasswordFileBody = null)
         {
             if (masterPasswordHash.Length != InternalApplicationConfig.Hash.HashSize/InternalApplicationConfig.BitsPerAByte)
             {
@@ -101,7 +101,7 @@ namespace PasswordManager
 
             if (!File.Exists(this.Filepath))
             {
-                this.ResetPasswordFile(masterPasswordHash);
+                this.ResetPasswordFile(masterPasswordHash, defaultPasswordFileBody);
             }
 
             BinaryFormatter formatter = new BinaryFormatter();
@@ -129,6 +129,8 @@ namespace PasswordManager
 
             bodySteram = new MemoryStream(this.BodyFiltered.data);
 
+            // Reverse filter list order
+            this.BodyFiltered.Filters.Reverse();
             foreach (string filterName in this.BodyFiltered.Filters)
             {
                 bool filterFound = false;
@@ -144,7 +146,7 @@ namespace PasswordManager
                             bodySteram = new MemoryStream();
 
                             tempStream.Position = 0;
-                            PrivateUtility.CopyStream(tempStream, bodySteram);
+                            Utility.CopyStream(tempStream, bodySteram);
 
                             tempStream.Close(); // Release input stream resources
                         }
@@ -158,6 +160,8 @@ namespace PasswordManager
                     throw new NoCorrespondingFilterFoundException();
                 }
             }
+            // Set back filter order
+            this.BodyFiltered.Filters.Reverse();
 
             try
             {
@@ -190,6 +194,7 @@ namespace PasswordManager
             BinaryFormatter formatter = new BinaryFormatter();
             formatter.Serialize(bodySteram, passwordData);
 
+            List<string> appliedFilters = new List<string>();
             foreach (string filterName in this.BodyFiltered.Filters)
             {
                 foreach (IOFilterBase filter in this.AvailableFilters)
@@ -199,31 +204,28 @@ namespace PasswordManager
                         using (MemoryStream tempStream = new MemoryStream())
                         {
                             filter.OutputFilter(bodySteram, tempStream); // Convert input as a filter does and write it to output stream
+                            appliedFilters.Add(filterName);
 
                             bodySteram.Close(); // Release input stream resources
                             bodySteram = new MemoryStream();
 
                             tempStream.Position = 0;
-                            PrivateUtility.CopyStream(tempStream, bodySteram);
+                            Utility.CopyStream(tempStream, bodySteram);
 
                             tempStream.Close(); // Release input stream resources
                         }
                     }
                 }
             }
+            this.BodyFiltered.Filters = appliedFilters;
 
             // Construct header
             PasswordHeader header = new PasswordHeader();
             header.Token = DateTime.Now.ToString(CultureInfo.InvariantCulture).ToCharArray();
-            header.CombinedMasterPasswordHash = PrivateUtility.GetHashCombined(masterPasswordHash, PrivateUtility.GetHash(header.Token));
+            header.CombinedMasterPasswordHash = Utility.GetHashCombined(masterPasswordHash, Utility.GetHash(header.Token));
 
-            // Construct filter informatoin
-            foreach (IOFilterBase filter in this.AvailableFilters)
-            {
-                this.BodyFiltered.Filters.Add(filter.ToString());
-            }
+            // Write filtered data to the file
             this.BodyFiltered.data = bodySteram.ToArray();
-
             using (FileStream fs = new FileStream(this.Filepath, FileMode.OpenOrCreate, FileAccess.Write))
             {
                 // Write header
@@ -240,9 +242,9 @@ namespace PasswordManager
         /// <summary>
         /// Initialize password data file. Plese be carefull that this method also clear data in this.FileContents member variable.
         /// </summary>
-        public virtual void ResetPasswordFile(byte[] masterPasswordHash)
+        public virtual void ResetPasswordFile(byte[] masterPasswordHash, PasswordFileBody b = null)
         {
-            this.WritePasswordToFile(masterPasswordHash, new PasswordFileBody());
+            this.WritePasswordToFile(masterPasswordHash, b != null ? b : new PasswordFileBody());
         }
 
         /// <summary>
@@ -277,7 +279,7 @@ namespace PasswordManager
         /// <returns></returns>
         public bool CheckMasterPasswordHash(byte[] expectedCombinedHash, byte[] challengingMasterPasswordHash, char[] token)
         {
-            return CompareHashes(expectedCombinedHash, PrivateUtility.GetHashCombined(challengingMasterPasswordHash, PrivateUtility.GetHash(token)));
+            return CompareHashes(expectedCombinedHash, Utility.GetHashCombined(challengingMasterPasswordHash, Utility.GetHash(token)));
         }
 
         /// <summary>
@@ -331,9 +333,17 @@ namespace PasswordManager
     [Serializable]
     public class PasswordFileBody
     {
-        public PasswordIndexer Indexer = new PasswordIndexer();
-        public List<PasswordContainer> Containers = new List<PasswordContainer>();
-        public List<PasswordRecord> Records = new List<PasswordRecord>();
+        public PasswordIndexerBase Indexer;
+        public ICollection<PasswordContainer> Containers;
+        public ICollection<PasswordRecord> Records;
+
+        public PasswordFileBody() : this(new PasswordIndexer(), new List<PasswordContainer>(), new List<PasswordRecord>()) { }
+        public PasswordFileBody(PasswordIndexerBase i, ICollection<PasswordContainer> c, ICollection<PasswordRecord> r)
+        {
+            this.Indexer = i;
+            this.Containers = c;
+            this.Records = r;
+        }
     }
 
     /// <summary>
@@ -365,14 +375,14 @@ namespace PasswordManager
         {
             src.Position = 0;
             dest.Position = 0;
-            PrivateUtility.CopyStream(src, dest);
+            Utility.CopyStream(src, dest);
         }
 
         public override void OutputFilter(MemoryStream src, MemoryStream dest)
         {
             src.Position = 0;
             dest.Position = 0;
-            PrivateUtility.CopyStream(src, dest);
+            Utility.CopyStream(src, dest);
         }
     }
 }
