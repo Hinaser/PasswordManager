@@ -194,13 +194,14 @@ namespace PasswordManager
         private TreeNode GetTreeViewNodeBuilt(ICollection<PasswordContainer> containers, PasswordIndexerBase indexer)
         {
             // Setup root parent container
-            int parentContainerID = InternalApplicationConfig.RootContainerID;
-            TreeNode parentNode = new TreeNode(InternalApplicationConfig.RootContainerLabel);
+            int rootContainerID = InternalApplicationConfig.RootContainerID;
+            TreeNode rootNode = new TreeNode(InternalApplicationConfig.RootContainerLabel);
+            rootNode.Tag = rootContainerID;
 
             // Execute recursive tree method
-            this.AddContainerToTreeView(containers, indexer, parentContainerID, parentNode);
+            this.AddContainerToTreeView(containers, indexer, rootContainerID, rootNode);
 
-            return parentNode;
+            return rootNode;
         }
 
         /// <summary>
@@ -224,7 +225,10 @@ namespace PasswordManager
             {
                 PasswordContainer c = indexer.GetContainerByID(containers, childContainerID);
                 TreeNode node = new TreeNode(c.GetLabel());
-                parentNode.Nodes.Add(node);
+                node.Tag = childContainerID; // Store identification information
+
+                parentNode.Nodes.Add(node); // Add the current node to parnet node
+
                 this.AddContainerToTreeView(containers, indexer, childContainerID, node);
             }
         }
