@@ -295,7 +295,7 @@ namespace PasswordManager
                 TreeNode node = new TreeNode(c.GetLabel());
                 node.Tag = childContainerID; // Store identification information
 
-                parentNode.Nodes.Add(node); // Add the current node to parnet node
+                parentNode.Nodes.Add(node); // Add the current node to parent node
 
                 this.AddContainerToTreeView(containers, indexer, childContainerID, node);
             }

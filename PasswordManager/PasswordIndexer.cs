@@ -24,10 +24,22 @@ namespace PasswordManager
     public class PasswordIndexer : PasswordIndexerBase
     {
         #region Field
-        // The 1st int represents parent container id and the 2nd List<int> represents list of combined password records
+        /// <summary>
+        ///  The 1st int represents parent container id and the 2nd List<int> represents list of combined password records
+        /// </summary>
         private Dictionary<int, List<int>> RecordIndexes = new Dictionary<int, List<int>>();
-        // The 1st int represents parent container id and the 2nd List<int> represents list of combined containers
+        /// <summary>
+        /// The 1st int represents parent container id and the 2nd List<int> represents list of combined containers
+        /// </summary>
         private Dictionary<int, List<int>> ContainerIndexes = new Dictionary<int, List<int>>();
+        /// <summary>
+        /// The 1st int represents child record id and the 2nd int represents parent container id
+        /// </summary>
+        private Dictionary<int, int> RecordReverseIndexes = new Dictionary<int, int>();
+        /// <summary>
+        /// The 1st int represents child container id and the 2nd int represents parent container id
+        /// </summary>
+        private Dictionary<int, int> ContainerReverseIndexes = new Dictionary<int, int>();
 
         public static readonly int RootContainerID = InternalApplicationConfig.RootContainerID;
         #endregion
@@ -58,8 +70,15 @@ namespace PasswordManager
             }
             else
             {
+                if (this.ContainerIndexes[destContainerID].Contains(containerID))
+                {
+                    return false;
+                }
                 this.ContainerIndexes[destContainerID].Add(containerID);
             }
+
+            this.ContainerReverseIndexes.Remove(containerID);
+            this.ContainerReverseIndexes.Add(containerID, destContainerID);
 
             return true;
         }
@@ -78,13 +97,28 @@ namespace PasswordManager
                 return false;
             }
 
-            // Check removing container does exist
-            if (!this.ContainerIndexes[parentContainerID].Contains(containerID))
+            return this.ContainerIndexes[parentContainerID].Remove(containerID) && this.ContainerReverseIndexes.Remove(containerID);
+        }
+
+        /// <summary>
+        /// Remove specified container from parent container without specifying parent container id.
+        /// </summary>
+        /// <param name="containerID"></param>
+        /// <returns></returns>
+        public override bool RemoveContainer(int containerID)
+        {
+            int parentContainerID;
+
+            try
+            {
+                parentContainerID = this.GetParentContainerOfContainer(containerID);
+            }
+            catch
             {
                 return false;
             }
 
-            return this.ContainerIndexes[parentContainerID].Remove(containerID);
+            return this.RemoveContainer(containerID, parentContainerID);
         }
 
         /// <summary>
@@ -97,6 +131,28 @@ namespace PasswordManager
         public override bool MoveContainer(int containerID, int srcContainerID, int destContainerID)
         {
             return this.RemoveContainer(containerID, srcContainerID) && this.AppendContainer(containerID, destContainerID);
+        }
+
+        /// <summary>
+        /// Move container from current parent container to another container without specifying current parent container ID.
+        /// </summary>
+        /// <param name="containerID"></param>
+        /// <param name="destContainerID"></param>
+        /// <returns></returns>
+        public override bool MoveContainer(int containerID, int destContainerID)
+        {
+            int srcContainerID;
+
+            try
+            {
+                srcContainerID = this.GetParentContainerOfContainer(containerID);
+            }
+            catch
+            {
+                return false;
+            }
+
+            return this.MoveContainer(containerID, srcContainerID, destContainerID);
         }
 
         /// <summary>
@@ -113,8 +169,15 @@ namespace PasswordManager
             }
             else
             {
+                if (this.RecordIndexes[destContainerID].Contains(recordID))
+                {
+                    return false;
+                }
                 this.RecordIndexes[destContainerID].Add(recordID);
             }
+
+            this.RecordReverseIndexes.Remove(recordID);
+            this.RecordReverseIndexes.Add(recordID, destContainerID);
 
             return true;
         }
@@ -133,17 +196,32 @@ namespace PasswordManager
                 return false;
             }
 
-            // Check removing container does exist
-            if (!this.RecordIndexes[parentContainerID].Contains(recordID))
+            return this.RecordIndexes[parentContainerID].Remove(recordID) && this.RecordReverseIndexes.Remove(recordID);
+        }
+
+        /// <summary>
+        /// Remove specified record from parent container without specifying parent container id.
+        /// </summary>
+        /// <param name="containerID"></param>
+        /// <returns></returns>
+        public override bool RemoveRecord(int recordID)
+        {
+            int parentContainerID;
+
+            try
+            {
+                parentContainerID = this.GetParentContainerOfRecord(recordID);
+            }
+            catch
             {
                 return false;
             }
 
-            return this.RecordIndexes[parentContainerID].Remove(recordID);
+            return this.RemoveRecord(recordID, parentContainerID);
         }
 
         /// <summary>
-        /// Move container from src parent container to dest parent container
+        /// Move record from current parent container to another container.
         /// </summary>
         /// <param name="recordID"></param>
         /// <param name="srcContainerID"></param>
@@ -152,6 +230,28 @@ namespace PasswordManager
         public override bool MoveRecord(int recordID, int srcContainerID, int destContainerID)
         {
             return this.RemoveRecord(recordID, srcContainerID) && this.AppendRecord(recordID, destContainerID);
+        }
+
+        /// <summary>
+        /// Move record from current parent container to another container without specifying current parent container ID.
+        /// </summary>
+        /// <param name="recordID"></param>
+        /// <param name="destContainerID"></param>
+        /// <returns></returns>
+        public override bool MoveRecord(int recordID, int destContainerID)
+        {
+            int srcContainerID;
+
+            try
+            {
+                srcContainerID = this.GetParentContainerOfRecord(recordID);
+            }
+            catch
+            {
+                return false;
+            }
+
+            return this.MoveRecord(recordID, srcContainerID, destContainerID);
         }
         #endregion
 
@@ -185,6 +285,29 @@ namespace PasswordManager
 
             return this.RecordIndexes[containerID];
         }
+
+        /// <summary>
+        /// Get parent container id for child container. This method might throw exception.
+        /// </summary>
+        /// <exception cref="KeyNotFoundException">When unknown child container ID is passed to this method, it will throw this exception</exception>
+        /// <param name="childContainerID"></param>
+        /// <returns></returns>
+        public override int GetParentContainerOfContainer(int childContainerID)
+        {
+            return this.ContainerReverseIndexes[childContainerID];
+        }
+
+        /// <summary>
+        /// Get parent container id for child record. This method might throw exception.
+        /// </summary>
+        /// <exception cref="KeyNotFoundException">When unknown child record ID is passed to this method, it will throw this exception</exception>
+        /// <param name="childContainerID"></param>
+        /// <returns></returns>
+        public override int GetParentContainerOfRecord(int childRecordID)
+        {
+            return this.RecordReverseIndexes[childRecordID];
+        }
+
 
         /// <summary>
         /// Get container object with the specified by container ID
