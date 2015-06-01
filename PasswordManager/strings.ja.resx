@@ -129,6 +129,15 @@
   <data name="Form_MenuItem_About" xml:space="preserve">
     <value>本アプリについて</value>
   </data>
+  <data name="Form_MenuItem_Language" xml:space="preserve">
+    <value>言語</value>
+  </data>
+  <data name="Form_MenuItem_Language_English" xml:space="preserve">
+    <value>English</value>
+  </data>
+  <data name="Form_MenuItem_Language_Japanese" xml:space="preserve">
+    <value>日本語</value>
+  </data>
   <data name="Form_MenuItem_Option" xml:space="preserve">
     <value>オプション</value>
   </data>

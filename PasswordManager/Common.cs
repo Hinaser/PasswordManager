@@ -22,7 +22,10 @@ namespace PasswordManager
 {
     public class InternalApplicationConfig
     {
-        public static string DefaultLocale = "en-US";
+        public static string LocaleEnUS = "en-US";
+        public static string LocaleJaJP = "ja-JP";
+        public static string DefaultLocale = LocaleEnUS;
+        public static Dictionary<int, string> Locale = new Dictionary<int, string>();
         public static string DefaultMasterPassword = "password";
         public static string DefaultPasswordFilename = "data";
         public static int RootContainerID = 0;

@@ -97,6 +97,33 @@ namespace PasswordManager {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Language.
+        /// </summary>
+        internal static string Form_MenuItem_Language {
+            get {
+                return ResourceManager.GetString("Form_MenuItem_Language", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to English.
+        /// </summary>
+        internal static string Form_MenuItem_Language_English {
+            get {
+                return ResourceManager.GetString("Form_MenuItem_Language_English", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 日本語.
+        /// </summary>
+        internal static string Form_MenuItem_Language_Japanese {
+            get {
+                return ResourceManager.GetString("Form_MenuItem_Language_Japanese", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Option.
         /// </summary>
         internal static string Form_MenuItem_Option {

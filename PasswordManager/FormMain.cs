@@ -41,6 +41,9 @@ namespace PasswordManager
             // Tooltip menu botton event
             this.toolStripButton_Open.Click += toolStripButton_Open_Click;
             this.toolStripButton_Save.Click += toolStripButton_Save_Click;
+            // Menu item click event
+            this.ToolStripMenuItem_Language_English.Click += ToolStripMenuItem_Language_English_Click;
+            this.ToolStripMenuItem_Language_Japanese.Click += ToolStripMenuItem_Language_Japanese_Click;
 
             // Apply language setting
             SetupLanguage(InternalApplicationConfig.DefaultLocale);
@@ -121,6 +124,26 @@ namespace PasswordManager
             this.PasswordData.Indexer.AppendRecord(3, 1);
             this.PasswordData.Indexer.AppendRecord(4, 2);
             f.WritePasswordToFile(Utility.GetHash(new byte[] { 0xff, 0xfe, 0x00, 0x01, 0x02 }), this.PasswordData);
+        }
+
+        /// <summary>
+        /// Change language setting to Japanese
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        void ToolStripMenuItem_Language_Japanese_Click(object sender, EventArgs e)
+        {
+            this.SetupLanguage(InternalApplicationConfig.LocaleJaJP);
+        }
+
+        /// <summary>
+        /// Change language setting to English
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        void ToolStripMenuItem_Language_English_Click(object sender, EventArgs e)
+        {
+            this.SetupLanguage(InternalApplicationConfig.LocaleEnUS);
         }
 
         /// <summary>
@@ -295,6 +318,9 @@ namespace PasswordManager
             this.columnHeader_caption.Text = strings.Form_Listview_Caption;
             this.columnHeader_ID.Text = strings.Form_Listview_ID;
             this.columnHeader_password.Text = strings.Form_Listview_Password;
+            this.ToolStripMenuItem_Language.Text = strings.Form_MenuItem_Language;
+            this.ToolStripMenuItem_Language_English.Text = strings.Form_MenuItem_Language_English;
+            this.ToolStripMenuItem_Language_Japanese.Text = strings.Form_MenuItem_Language_Japanese;
         }
         #endregion
     }
