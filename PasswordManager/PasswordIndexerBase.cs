@@ -35,5 +35,7 @@ namespace PasswordManager
         public abstract int GetParentContainerOfRecord(int childRecordID);
         public abstract PasswordContainer GetContainerByID(ICollection<PasswordContainer> containers, int containerID);
         public abstract PasswordRecord GetRecordByID(ICollection<PasswordRecord> records, int recordID);
+        public abstract int GetUniqueContainerID();
+        public abstract int GetUniqueRecordID();
     }
 }

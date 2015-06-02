@@ -158,11 +158,23 @@ namespace PasswordManager
         void ToolStripMenuItem_AddSubFolder_Click(object sender, EventArgs e)
         {
             // Throw an exception when CurrentTreeNode value is null. This should not be happend.
-            if (this.CurrentTreeNode == null)
+            if (this.CurrentTreeNode == null || this.CurrentTreeNode.Tag == null)
             {
                 //return;
                 throw new InvalidOperationException();
             }
+
+            // Add a child container to current selected container
+            PasswordContainer container = new PasswordContainer(this.PasswordData.Indexer.GetUniqueContainerID(), InternalApplicationConfig.NewUnnamedContainerLabel);
+            this.PasswordData.Containers.Add(container);
+            this.PasswordData.Indexer.AppendContainer(container.GetContainerID(), (int)this.CurrentTreeNode.Tag);
+
+            // Add sub folder to current selected tree node
+            TreeNode node = this.AddContainerToTreeView(container, this.CurrentTreeNode);
+
+            // Invoke editlabel feature on the created folder
+            this.treeView_Folders.SelectedNode = node;
+            node.BeginEdit();
         }
 
         /// <summary>
@@ -402,11 +414,31 @@ namespace PasswordManager
                 node.Tag = childContainerID; // Store identification information
                 node.ContextMenuStrip = this.contextMenuStrip_TreeViewNode; // Attach context menu strip
 
-
                 parentNode.Nodes.Add(node); // Add the current node to parent node
 
                 this.AddContainerToTreeView(containers, indexer, childContainerID, node);
             }
+        }
+
+        /// <summary>
+        /// Add container to specified parent tree node
+        /// </summary>
+        /// <param name="container"></param>
+        /// <param name="parentNode"></param>
+        private TreeNode AddContainerToTreeView(PasswordContainer container, TreeNode parentNode)
+        {
+            if (container == null || parentNode == null)
+            {
+                throw new ArgumentNullException();
+            }
+
+            TreeNode node = new TreeNode(!String.IsNullOrEmpty(container.GetLabel()) ? container.GetLabel() : InternalApplicationConfig.NewUnnamedContainerLabel);
+            node.Tag = container.GetContainerID();
+            node.ContextMenuStrip = this.contextMenuStrip_TreeViewNode;
+
+            parentNode.Nodes.Add(node);
+
+            return node;
         }
         #endregion
 

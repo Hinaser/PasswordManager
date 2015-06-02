@@ -355,5 +355,35 @@ namespace PasswordManager
         #region Integrity check method
         //public bool CheckRecordIndex
         #endregion
+
+        #region Utility
+        /// <summary>
+        /// Get unique container ID. Unique key would be the maximum number of curret IDs added by 1.
+        /// </summary>
+        /// <returns></returns>
+        public override int GetUniqueContainerID()
+        {
+            if (this.ContainerReverseIndexes.Count < 1)
+            {
+                return PasswordIndexer.RootContainerID + 1;
+            }
+
+            return this.ContainerReverseIndexes.Keys.Max() + 1;
+        }
+
+        /// <summary>
+        /// Get unique record ID. Unique key would be the maximum number of curret IDs added by 1.
+        /// </summary>
+        /// <returns></returns>
+        public override int GetUniqueRecordID()
+        {
+            if (this.RecordReverseIndexes.Count < 1)
+            {
+                return 0;
+            }
+
+            return this.RecordReverseIndexes.Keys.Max() + 1;
+        }
+        #endregion
     }
 }

@@ -30,6 +30,7 @@ namespace PasswordManager
         public static string DefaultPasswordFilename = "data";
         public static int RootContainerID = 0;
         public static string RootContainerLabel = "All";
+        public static string NewUnnamedContainerLabel = "New folder";
         public static HashAlgorithm Hash = new SHA512Managed();
         public static int MaxFilter = 1000;
         public static int HeaderTokenSize = DateTime.Now.ToString(CultureInfo.InvariantCulture).ToCharArray().Length;
