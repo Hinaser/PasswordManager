@@ -32,14 +32,18 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm_PasswordManager));
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.treeView_Folders = new System.Windows.Forms.TreeView();
-            this.contextMenuStrip_TreeViewNode = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.ToolStripMenuItem_AddSubFolder = new System.Windows.Forms.ToolStripMenuItem();
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
             this.listView_PasswordItems = new System.Windows.Forms.ListView();
             this.columnHeader_caption = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader_ID = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader_password = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.textBox_ItemDescription = new System.Windows.Forms.TextBox();
+            this.contextMenuStrip_TreeViewNode = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.ToolStripMenuItem_AddSubFolder = new System.Windows.Forms.ToolStripMenuItem();
+            this.ToolStripMenuItem_RenameFolder = new System.Windows.Forms.ToolStripMenuItem();
+            this.ToolStripMenuItem_DeleteFolder = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
+            this.ToolStripMenuItem_AddPassword = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip_Main = new System.Windows.Forms.MenuStrip();
             this.ToolStripMenuItem_option = new System.Windows.Forms.ToolStripMenuItem();
             this.ToolStripMenuItem_Language = new System.Windows.Forms.ToolStripMenuItem();
@@ -51,17 +55,13 @@
             this.toolStripButton_Save = new System.Windows.Forms.ToolStripButton();
             this.statusStrip_Main = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
-            this.ToolStripMenuItem_RenameFolder = new System.Windows.Forms.ToolStripMenuItem();
-            this.ToolStripMenuItem_DeleteFolder = new System.Windows.Forms.ToolStripMenuItem();
-            this.ToolStripMenuItem_AddPassword = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
-            this.contextMenuStrip_TreeViewNode.SuspendLayout();
             this.splitContainer2.Panel1.SuspendLayout();
             this.splitContainer2.Panel2.SuspendLayout();
             this.splitContainer2.SuspendLayout();
+            this.contextMenuStrip_TreeViewNode.SuspendLayout();
             this.menuStrip_Main.SuspendLayout();
             this.toolStrip_Main.SuspendLayout();
             this.statusStrip_Main.SuspendLayout();
@@ -89,29 +89,13 @@
             // 
             // treeView_Folders
             // 
+            this.treeView_Folders.AllowDrop = true;
             this.treeView_Folders.Dock = System.Windows.Forms.DockStyle.Fill;
             this.treeView_Folders.LabelEdit = true;
             this.treeView_Folders.Location = new System.Drawing.Point(0, 0);
             this.treeView_Folders.Name = "treeView_Folders";
             this.treeView_Folders.Size = new System.Drawing.Size(202, 321);
             this.treeView_Folders.TabIndex = 0;
-            // 
-            // contextMenuStrip_TreeViewNode
-            // 
-            this.contextMenuStrip_TreeViewNode.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.ToolStripMenuItem_AddSubFolder,
-            this.ToolStripMenuItem_RenameFolder,
-            this.ToolStripMenuItem_DeleteFolder,
-            this.toolStripMenuItem1,
-            this.ToolStripMenuItem_AddPassword});
-            this.contextMenuStrip_TreeViewNode.Name = "contextMenuStrip_TreeView";
-            this.contextMenuStrip_TreeViewNode.Size = new System.Drawing.Size(153, 98);
-            // 
-            // ToolStripMenuItem_AddSubFolder
-            // 
-            this.ToolStripMenuItem_AddSubFolder.Name = "ToolStripMenuItem_AddSubFolder";
-            this.ToolStripMenuItem_AddSubFolder.Size = new System.Drawing.Size(152, 22);
-            this.ToolStripMenuItem_AddSubFolder.Text = "Add sub folder";
             // 
             // splitContainer2
             // 
@@ -169,6 +153,46 @@
             this.textBox_ItemDescription.Name = "textBox_ItemDescription";
             this.textBox_ItemDescription.Size = new System.Drawing.Size(389, 117);
             this.textBox_ItemDescription.TabIndex = 0;
+            // 
+            // contextMenuStrip_TreeViewNode
+            // 
+            this.contextMenuStrip_TreeViewNode.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.ToolStripMenuItem_AddSubFolder,
+            this.ToolStripMenuItem_RenameFolder,
+            this.ToolStripMenuItem_DeleteFolder,
+            this.toolStripMenuItem1,
+            this.ToolStripMenuItem_AddPassword});
+            this.contextMenuStrip_TreeViewNode.Name = "contextMenuStrip_TreeView";
+            this.contextMenuStrip_TreeViewNode.Size = new System.Drawing.Size(153, 98);
+            // 
+            // ToolStripMenuItem_AddSubFolder
+            // 
+            this.ToolStripMenuItem_AddSubFolder.Name = "ToolStripMenuItem_AddSubFolder";
+            this.ToolStripMenuItem_AddSubFolder.Size = new System.Drawing.Size(152, 22);
+            this.ToolStripMenuItem_AddSubFolder.Text = "Add sub folder";
+            // 
+            // ToolStripMenuItem_RenameFolder
+            // 
+            this.ToolStripMenuItem_RenameFolder.Name = "ToolStripMenuItem_RenameFolder";
+            this.ToolStripMenuItem_RenameFolder.Size = new System.Drawing.Size(152, 22);
+            this.ToolStripMenuItem_RenameFolder.Text = "Rename folder";
+            // 
+            // ToolStripMenuItem_DeleteFolder
+            // 
+            this.ToolStripMenuItem_DeleteFolder.Name = "ToolStripMenuItem_DeleteFolder";
+            this.ToolStripMenuItem_DeleteFolder.Size = new System.Drawing.Size(152, 22);
+            this.ToolStripMenuItem_DeleteFolder.Text = "Delete folder";
+            // 
+            // toolStripMenuItem1
+            // 
+            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(149, 6);
+            // 
+            // ToolStripMenuItem_AddPassword
+            // 
+            this.ToolStripMenuItem_AddPassword.Name = "ToolStripMenuItem_AddPassword";
+            this.ToolStripMenuItem_AddPassword.Size = new System.Drawing.Size(152, 22);
+            this.ToolStripMenuItem_AddPassword.Text = "Add password";
             // 
             // menuStrip_Main
             // 
@@ -268,29 +292,6 @@
             this.toolStripStatusLabel1.Size = new System.Drawing.Size(39, 17);
             this.toolStripStatusLabel1.Text = "Ready";
             // 
-            // ToolStripMenuItem_RenameFolder
-            // 
-            this.ToolStripMenuItem_RenameFolder.Name = "ToolStripMenuItem_RenameFolder";
-            this.ToolStripMenuItem_RenameFolder.Size = new System.Drawing.Size(152, 22);
-            this.ToolStripMenuItem_RenameFolder.Text = "Rename folder";
-            // 
-            // ToolStripMenuItem_DeleteFolder
-            // 
-            this.ToolStripMenuItem_DeleteFolder.Name = "ToolStripMenuItem_DeleteFolder";
-            this.ToolStripMenuItem_DeleteFolder.Size = new System.Drawing.Size(152, 22);
-            this.ToolStripMenuItem_DeleteFolder.Text = "Delete folder";
-            // 
-            // ToolStripMenuItem_AddPassword
-            // 
-            this.ToolStripMenuItem_AddPassword.Name = "ToolStripMenuItem_AddPassword";
-            this.ToolStripMenuItem_AddPassword.Size = new System.Drawing.Size(152, 22);
-            this.ToolStripMenuItem_AddPassword.Text = "Add password";
-            // 
-            // toolStripMenuItem1
-            // 
-            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(149, 6);
-            // 
             // MainForm_PasswordManager
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -306,11 +307,11 @@
             this.splitContainer1.Panel1.ResumeLayout(false);
             this.splitContainer1.Panel2.ResumeLayout(false);
             this.splitContainer1.ResumeLayout(false);
-            this.contextMenuStrip_TreeViewNode.ResumeLayout(false);
             this.splitContainer2.Panel1.ResumeLayout(false);
             this.splitContainer2.Panel2.ResumeLayout(false);
             this.splitContainer2.Panel2.PerformLayout();
             this.splitContainer2.ResumeLayout(false);
+            this.contextMenuStrip_TreeViewNode.ResumeLayout(false);
             this.menuStrip_Main.ResumeLayout(false);
             this.menuStrip_Main.PerformLayout();
             this.toolStrip_Main.ResumeLayout(false);

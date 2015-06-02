@@ -42,6 +42,10 @@ namespace PasswordManager
             this.treeView_Folders.NodeMouseClick += treeView_Folders_NodeMouseClick;
             this.treeView_Folders.KeyUp += treeView_Folders_KeyUp;
             this.treeView_Folders.AfterLabelEdit += treeView_Folders_AfterLabelEdit;
+            this.treeView_Folders.ItemDrag += treeView_Folders_ItemDrag;
+            this.treeView_Folders.DragEnter += treeView_Folders_DragEnter;
+            this.treeView_Folders.DragDrop += treeView_Folders_DragDrop;
+            this.treeView_Folders.DragOver += treeView_Folders_DragOver;
             // Tooltip menu botton event
             this.toolStripButton_Open.Click += toolStripButton_Open_Click;
             this.toolStripButton_Save.Click += toolStripButton_Save_Click;
@@ -298,6 +302,76 @@ namespace PasswordManager
 
             container.SetLabel(e.Label);
         }
+
+        /// <summary>
+        /// Move operation is occured when some of nodes are began being dragged.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        void treeView_Folders_ItemDrag(object sender, ItemDragEventArgs e)
+        {
+            // Move the dragged node when the left mouse button is used.
+            if (e.Button == MouseButtons.Left)
+            {
+                DoDragDrop(e.Item, DragDropEffects.Move);
+            }
+        }
+
+        /// <summary>
+        /// This is called when dragged item is entered on another control item
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        void treeView_Folders_DragEnter(object sender, DragEventArgs e)
+        {
+            e.Effect = e.AllowedEffect;
+        }
+
+        /// <summary>
+        /// Select the node under the mouse pointer to indicate the expected drop location.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        void treeView_Folders_DragOver(object sender, DragEventArgs e)
+        {
+            // Retrieve the client coordinates of the mouse position.
+            Point targetPoint = this.treeView_Folders.PointToClient(new Point(e.X, e.Y));
+
+            // Select the node at the mouse position.
+            this.treeView_Folders.SelectedNode = this.treeView_Folders.GetNodeAt(targetPoint);
+            this.CurrentTreeNode = this.treeView_Folders.SelectedNode;
+        }
+
+        /// <summary>
+        /// This is called when dragged node is dropped
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        void treeView_Folders_DragDrop(object sender, DragEventArgs e)
+        {
+            Point targetPoint = treeView_Folders.PointToClient(new Point(e.X, e.Y));
+            TreeNode targetNode = treeView_Folders.GetNodeAt(targetPoint);
+            TreeNode draggedNode = (TreeNode)e.Data.GetData(typeof(TreeNode));
+
+            if(targetNode.Tag == null || draggedNode.Tag == null)
+            {
+                return;
+            }
+
+            if (!draggedNode.Equals(targetNode) && !ContainsNode(draggedNode, targetNode))
+            {
+                if (e.Effect == DragDropEffects.Move)
+                {
+                    draggedNode.Remove();
+                    this.PasswordData.Indexer.RemoveContainer((int)draggedNode.Tag);
+
+                    targetNode.Nodes.Add(draggedNode);
+                    this.PasswordData.Indexer.AppendContainer((int)draggedNode.Tag, (int)targetNode.Tag);
+                }
+
+                targetNode.Expand();
+            }
+        }
         #endregion
         #endregion
 
@@ -439,6 +513,24 @@ namespace PasswordManager
             parentNode.Nodes.Add(node);
 
             return node;
+        }
+
+        /// <summary>
+        /// Determine whether one node is a parent or ancestor of a second node.
+        /// </summary>
+        /// <param name="node1"></param>
+        /// <param name="node2"></param>
+        /// <returns></returns>
+        private bool ContainsNode(TreeNode node1, TreeNode node2)
+        {
+            // Check the parent node of the second node.
+            if (node2.Parent == null) return false;
+            if (node2.Parent.Equals(node1)) return true;
+
+            // If the parent node is not null or equal to the first node, 
+            // call the ContainsNode method recursively using the parent of 
+            // the second node.
+            return ContainsNode(node1, node2.Parent);
         }
         #endregion
 
