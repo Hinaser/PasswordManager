@@ -25,7 +25,8 @@ namespace PasswordManager
     public partial class MainForm_PasswordManager : Form
     {
         #region Fields
-        PasswordFileBody PasswordData = new PasswordFileBody();
+        private PasswordFileBody PasswordData = new PasswordFileBody();
+        private TreeNode CurrentTreeNode = null;
         #endregion
 
         #region Constructor
@@ -39,9 +40,16 @@ namespace PasswordManager
             // TreeView event
             this.treeView_Folders.AfterSelect += treeView_Folders_AfterSelect;
             this.treeView_Folders.NodeMouseClick += treeView_Folders_NodeMouseClick;
+            this.treeView_Folders.KeyUp += treeView_Folders_KeyUp;
+            this.treeView_Folders.AfterLabelEdit += treeView_Folders_AfterLabelEdit;
             // Tooltip menu botton event
             this.toolStripButton_Open.Click += toolStripButton_Open_Click;
             this.toolStripButton_Save.Click += toolStripButton_Save_Click;
+            // Context menu event
+            this.ToolStripMenuItem_AddSubFolder.Click += ToolStripMenuItem_AddSubFolder_Click;
+            this.ToolStripMenuItem_RenameFolder.Click += ToolStripMenuItem_RenameFolder_Click;
+            this.ToolStripMenuItem_DeleteFolder.Click += ToolStripMenuItem_DeleteFolder_Click;
+            this.ToolStripMenuItem_AddPassword.Click += ToolStripMenuItem_AddPassword_Click;
             // Menu item click event
             this.ToolStripMenuItem_Language_English.Click += ToolStripMenuItem_Language_English_Click;
             this.ToolStripMenuItem_Language_Japanese.Click += ToolStripMenuItem_Language_Japanese_Click;
@@ -117,29 +125,6 @@ namespace PasswordManager
             f.AddIOFilter(df);
             f.AddFilterOrder(df.ToString());
 
-            this.PasswordData = new PasswordFileBody(new PasswordIndexer(), new List<PasswordContainer>(), new List<PasswordRecord>());
-            this.PasswordData.Containers.Add(new PasswordContainer(1, "test1"));
-            this.PasswordData.Containers.Add(new PasswordContainer(2, "test2"));
-            this.PasswordData.Containers.Add(new PasswordContainer(3, "test3"));
-            this.PasswordData.Containers.Add(new PasswordContainer(4, "test4"));
-            this.PasswordData.Containers.Add(new PasswordContainer(5, "test5"));
-            this.PasswordData.Containers.Add(new PasswordContainer(6, "test6"));
-            this.PasswordData.Containers.Add(new PasswordContainer(7, "test7"));
-            this.PasswordData.Records.Add(new PasswordRecord(1, "test1", DateTime.Now, DateTime.Now, "id1", "***", "some description1"));
-            this.PasswordData.Records.Add(new PasswordRecord(2, "test2", DateTime.Now, DateTime.Now, "id2", "***", "some description2"));
-            this.PasswordData.Records.Add(new PasswordRecord(3, "test3", DateTime.Now, DateTime.Now, "id3", "***", "some description3"));
-            this.PasswordData.Records.Add(new PasswordRecord(4, "test4", DateTime.Now, DateTime.Now, "id4", "***", "some description4"));
-            this.PasswordData.Indexer.AppendContainer(1, 0);
-            this.PasswordData.Indexer.AppendContainer(2, 0);
-            this.PasswordData.Indexer.AppendContainer(3, 1);
-            this.PasswordData.Indexer.AppendContainer(4, 3);
-            this.PasswordData.Indexer.AppendContainer(5, 7);
-            this.PasswordData.Indexer.AppendContainer(6, 2);
-            this.PasswordData.Indexer.AppendContainer(7, 6);
-            this.PasswordData.Indexer.AppendRecord(1, 0);
-            this.PasswordData.Indexer.AppendRecord(2, 1);
-            this.PasswordData.Indexer.AppendRecord(3, 1);
-            this.PasswordData.Indexer.AppendRecord(4, 2);
             f.WritePasswordToFile(Utility.GetHash(new byte[] { 0xff, 0xfe, 0x00, 0x01, 0x02 }), this.PasswordData);
         }
         #endregion
@@ -164,6 +149,48 @@ namespace PasswordManager
             this.SetupLanguage(InternalApplicationConfig.LocaleEnUS);
         }
         #endregion
+        #region context menu event
+        /// <summary>
+        /// Add subfolder to current node
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        void ToolStripMenuItem_AddSubFolder_Click(object sender, EventArgs e)
+        {
+            // Throw an exception when CurrentTreeNode value is null. This should not be happend.
+            if (this.CurrentTreeNode == null)
+            {
+                //return;
+                throw new InvalidOperationException();
+            }
+        }
+
+        /// <summary>
+        /// Rename current selected folder
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        void ToolStripMenuItem_RenameFolder_Click(object sender, EventArgs e)
+        {
+            if (this.CurrentTreeNode == null)
+            {
+                //return;
+                throw new InvalidOperationException();
+            }
+
+            this.CurrentTreeNode.BeginEdit();
+        }
+
+        void ToolStripMenuItem_DeleteFolder_Click(object sender, EventArgs e)
+        {
+            throw new NotImplementedException();
+        }
+
+        void ToolStripMenuItem_AddPassword_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show(this.CurrentTreeNode.Text);
+        }
+        #endregion
         #region treeview event
         /// <summary>
         /// Click event for Node on TreeView 
@@ -178,6 +205,7 @@ namespace PasswordManager
                 return;
             }
             int containerID = (int)e.Node.Tag;
+            this.CurrentTreeNode = e.Node;
 
             // Initialize listview/textbox control
             this.listView_PasswordItems.Items.Clear();
@@ -205,17 +233,58 @@ namespace PasswordManager
         }
 
         /// <summary>
-        /// Show context menu when a node is right-clicked
+        /// When node is clicked, selectednode property on treeview is changed here
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         void treeView_Folders_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs e)
         {
-            // If not right-clicked, do nothing
-            if (e.Button != MouseButtons.Right)
+            this.CurrentTreeNode = e.Node;
+        }
+
+        /// <summary>
+        /// Handling keyboard events here
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        void treeView_Folders_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (this.CurrentTreeNode == null)
+            {
+                throw new InvalidOperationException();
+            }
+
+            switch (e.KeyCode)
+            {
+                case Keys.F2:
+                    this.CurrentTreeNode.BeginEdit();
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        /// <summary>
+        /// Set edited label value to password container object
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        void treeView_Folders_AfterLabelEdit(object sender, NodeLabelEditEventArgs e)
+        {
+            // When the user presses ESC to cancel edit or pressed ENTER without modifying label text, e.Label is null.
+            if (e.Label == null || e.Node.Tag == null)
             {
                 return;
             }
+
+            PasswordContainer container = this.PasswordData.Indexer.GetContainerByID(this.PasswordData.Containers, (int)e.Node.Tag);
+
+            if (container == null)
+            {
+                return;
+            }
+
+            container.SetLabel(e.Label);
         }
         #endregion
         #endregion

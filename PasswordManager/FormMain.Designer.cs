@@ -33,7 +33,7 @@
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.treeView_Folders = new System.Windows.Forms.TreeView();
             this.contextMenuStrip_TreeViewNode = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.newToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.ToolStripMenuItem_AddSubFolder = new System.Windows.Forms.ToolStripMenuItem();
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
             this.listView_PasswordItems = new System.Windows.Forms.ListView();
             this.columnHeader_caption = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -51,9 +51,9 @@
             this.toolStripButton_Save = new System.Windows.Forms.ToolStripButton();
             this.statusStrip_Main = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
-            this.renameFolderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.deleteFolderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.addPasswordToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.ToolStripMenuItem_RenameFolder = new System.Windows.Forms.ToolStripMenuItem();
+            this.ToolStripMenuItem_DeleteFolder = new System.Windows.Forms.ToolStripMenuItem();
+            this.ToolStripMenuItem_AddPassword = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -90,6 +90,7 @@
             // treeView_Folders
             // 
             this.treeView_Folders.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.treeView_Folders.LabelEdit = true;
             this.treeView_Folders.Location = new System.Drawing.Point(0, 0);
             this.treeView_Folders.Name = "treeView_Folders";
             this.treeView_Folders.Size = new System.Drawing.Size(202, 321);
@@ -98,19 +99,19 @@
             // contextMenuStrip_TreeViewNode
             // 
             this.contextMenuStrip_TreeViewNode.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.newToolStripMenuItem,
-            this.renameFolderToolStripMenuItem,
-            this.deleteFolderToolStripMenuItem,
+            this.ToolStripMenuItem_AddSubFolder,
+            this.ToolStripMenuItem_RenameFolder,
+            this.ToolStripMenuItem_DeleteFolder,
             this.toolStripMenuItem1,
-            this.addPasswordToolStripMenuItem1});
+            this.ToolStripMenuItem_AddPassword});
             this.contextMenuStrip_TreeViewNode.Name = "contextMenuStrip_TreeView";
-            this.contextMenuStrip_TreeViewNode.Size = new System.Drawing.Size(153, 120);
+            this.contextMenuStrip_TreeViewNode.Size = new System.Drawing.Size(153, 98);
             // 
-            // newToolStripMenuItem
+            // ToolStripMenuItem_AddSubFolder
             // 
-            this.newToolStripMenuItem.Name = "newToolStripMenuItem";
-            this.newToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.newToolStripMenuItem.Text = "Add sub folder";
+            this.ToolStripMenuItem_AddSubFolder.Name = "ToolStripMenuItem_AddSubFolder";
+            this.ToolStripMenuItem_AddSubFolder.Size = new System.Drawing.Size(152, 22);
+            this.ToolStripMenuItem_AddSubFolder.Text = "Add sub folder";
             // 
             // splitContainer2
             // 
@@ -267,23 +268,23 @@
             this.toolStripStatusLabel1.Size = new System.Drawing.Size(39, 17);
             this.toolStripStatusLabel1.Text = "Ready";
             // 
-            // renameFolderToolStripMenuItem
+            // ToolStripMenuItem_RenameFolder
             // 
-            this.renameFolderToolStripMenuItem.Name = "renameFolderToolStripMenuItem";
-            this.renameFolderToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.renameFolderToolStripMenuItem.Text = "Rename folder";
+            this.ToolStripMenuItem_RenameFolder.Name = "ToolStripMenuItem_RenameFolder";
+            this.ToolStripMenuItem_RenameFolder.Size = new System.Drawing.Size(152, 22);
+            this.ToolStripMenuItem_RenameFolder.Text = "Rename folder";
             // 
-            // deleteFolderToolStripMenuItem
+            // ToolStripMenuItem_DeleteFolder
             // 
-            this.deleteFolderToolStripMenuItem.Name = "deleteFolderToolStripMenuItem";
-            this.deleteFolderToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.deleteFolderToolStripMenuItem.Text = "Delete folder";
+            this.ToolStripMenuItem_DeleteFolder.Name = "ToolStripMenuItem_DeleteFolder";
+            this.ToolStripMenuItem_DeleteFolder.Size = new System.Drawing.Size(152, 22);
+            this.ToolStripMenuItem_DeleteFolder.Text = "Delete folder";
             // 
-            // addPasswordToolStripMenuItem1
+            // ToolStripMenuItem_AddPassword
             // 
-            this.addPasswordToolStripMenuItem1.Name = "addPasswordToolStripMenuItem1";
-            this.addPasswordToolStripMenuItem1.Size = new System.Drawing.Size(152, 22);
-            this.addPasswordToolStripMenuItem1.Text = "Add password";
+            this.ToolStripMenuItem_AddPassword.Name = "ToolStripMenuItem_AddPassword";
+            this.ToolStripMenuItem_AddPassword.Size = new System.Drawing.Size(152, 22);
+            this.ToolStripMenuItem_AddPassword.Text = "Add password";
             // 
             // toolStripMenuItem1
             // 
@@ -343,10 +344,10 @@
         private System.Windows.Forms.ToolStripMenuItem ToolStripMenuItem_Language_English;
         private System.Windows.Forms.ToolStripMenuItem ToolStripMenuItem_Language_Japanese;
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip_TreeViewNode;
-        private System.Windows.Forms.ToolStripMenuItem newToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem renameFolderToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem deleteFolderToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem addPasswordToolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem ToolStripMenuItem_AddSubFolder;
+        private System.Windows.Forms.ToolStripMenuItem ToolStripMenuItem_RenameFolder;
+        private System.Windows.Forms.ToolStripMenuItem ToolStripMenuItem_DeleteFolder;
+        private System.Windows.Forms.ToolStripMenuItem ToolStripMenuItem_AddPassword;
         private System.Windows.Forms.ToolStripSeparator toolStripMenuItem1;
 
 
