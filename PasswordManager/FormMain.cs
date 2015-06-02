@@ -38,6 +38,7 @@ namespace PasswordManager
             this.listView_PasswordItems.ColumnWidthChanged += listView_PasswordItems_ColumnWidthChanged;
             // TreeView event
             this.treeView_Folders.AfterSelect += treeView_Folders_AfterSelect;
+            this.treeView_Folders.NodeMouseClick += treeView_Folders_NodeMouseClick;
             // Tooltip menu botton event
             this.toolStripButton_Open.Click += toolStripButton_Open_Click;
             this.toolStripButton_Save.Click += toolStripButton_Save_Click;
@@ -46,11 +47,26 @@ namespace PasswordManager
             this.ToolStripMenuItem_Language_Japanese.Click += ToolStripMenuItem_Language_Japanese_Click;
 
             // Apply language setting
-            SetupLanguage(InternalApplicationConfig.DefaultLocale);
+            this.SetupLanguage(InternalApplicationConfig.DefaultLocale);
+
+            // Initialize form element
+            this.Initialize();
+        }
+        #endregion
+
+        #region Initialize
+        /// <summary>
+        /// Initialize form element
+        /// </summary>
+        void Initialize()
+        {
+            this.InitializeTreeStructure(this.PasswordData.Containers, this.PasswordData.Indexer);
+            this.listView_PasswordItems.Invalidate();
         }
         #endregion
 
         #region Event
+        #region listview event
         /// <summary>
         /// Adjust column size when parent listview size is changed
         /// </summary>
@@ -70,7 +86,8 @@ namespace PasswordManager
         {
             this.AdjustColumnSize((ListView)sender, e);
         }
-
+        #endregion
+        #region toolstrip event
         /// <summary>
         /// Open and read password file and construct associated windows form.
         /// </summary>
@@ -125,7 +142,8 @@ namespace PasswordManager
             this.PasswordData.Indexer.AppendRecord(4, 2);
             f.WritePasswordToFile(Utility.GetHash(new byte[] { 0xff, 0xfe, 0x00, 0x01, 0x02 }), this.PasswordData);
         }
-
+        #endregion
+        #region menuitem event
         /// <summary>
         /// Change language setting to Japanese
         /// </summary>
@@ -145,7 +163,8 @@ namespace PasswordManager
         {
             this.SetupLanguage(InternalApplicationConfig.LocaleEnUS);
         }
-
+        #endregion
+        #region treeview event
         /// <summary>
         /// Click event for Node on TreeView 
         /// </summary>
@@ -184,6 +203,21 @@ namespace PasswordManager
                 this.listView_PasswordItems.Items.Add(lvi);
             }
         }
+
+        /// <summary>
+        /// Show context menu when a node is right-clicked
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        void treeView_Folders_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs e)
+        {
+            // If not right-clicked, do nothing
+            if (e.Button != MouseButtons.Right)
+            {
+                return;
+            }
+        }
+        #endregion
         #endregion
 
         #region Utility
@@ -269,6 +303,9 @@ namespace PasswordManager
             // Execute recursive tree method
             this.AddContainerToTreeView(containers, indexer, rootContainerID, rootNode);
 
+            // Attach context menu strip
+            rootNode.ContextMenuStrip = this.contextMenuStrip_TreeViewNode;
+
             return rootNode;
         }
 
@@ -294,6 +331,8 @@ namespace PasswordManager
                 PasswordContainer c = indexer.GetContainerByID(containers, childContainerID);
                 TreeNode node = new TreeNode(c.GetLabel());
                 node.Tag = childContainerID; // Store identification information
+                node.ContextMenuStrip = this.contextMenuStrip_TreeViewNode; // Attach context menu strip
+
 
                 parentNode.Nodes.Add(node); // Add the current node to parent node
 
