@@ -202,9 +202,20 @@ namespace PasswordManager
             throw new NotImplementedException();
         }
 
+        /// <summary>
+        /// Add new password record to specified parent container
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         void ToolStripMenuItem_AddPassword_Click(object sender, EventArgs e)
         {
-            MessageBox.Show(this.CurrentTreeNode.Text);
+            if (this.CurrentTreeNode.Tag == null)
+            {
+                throw new InvalidOperationException();
+            }
+
+            FormCreatePassword form = new FormCreatePassword((int)this.CurrentTreeNode.Tag);
+            form.ShowDialog();
         }
         #endregion
         #region treeview event
