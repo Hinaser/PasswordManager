@@ -48,9 +48,7 @@
             this.checkBox_NewPassword_DoubleQuoto = new System.Windows.Forms.CheckBox();
             this.checkBox_NewPassword_Exclamation = new System.Windows.Forms.CheckBox();
             this.label4 = new System.Windows.Forms.Label();
-            this.textBox_NewPassword_MaxChars = new System.Windows.Forms.TextBox();
             this.label_NewPassword_MaxChars = new System.Windows.Forms.Label();
-            this.textBox_NewPassword_MinChars = new System.Windows.Forms.TextBox();
             this.label_NewPassword_MinChars = new System.Windows.Forms.Label();
             this.checkBox2_NewPassword_UseSymbols = new System.Windows.Forms.CheckBox();
             this.checkBox_NewPassword_UseNumerics = new System.Windows.Forms.CheckBox();
@@ -79,8 +77,13 @@
             this.checkBox_NewPassword_Question = new System.Windows.Forms.CheckBox();
             this.checkBox_NewPassword_UnderBar = new System.Windows.Forms.CheckBox();
             this.checkBox_NewPassword_Space = new System.Windows.Forms.CheckBox();
+            this.numericUpDown_NewPassword_Minchars = new System.Windows.Forms.NumericUpDown();
+            this.numericUpDown_NewPassword_Maxchars = new System.Windows.Forms.NumericUpDown();
+            this.button_NewPassword_GeneratePassword = new System.Windows.Forms.Button();
             this.groupBox_NewPassword_Randomize.SuspendLayout();
             this.groupBox_NewPassword_AllowedSymbols.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_NewPassword_Minchars)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_NewPassword_Maxchars)).BeginInit();
             this.SuspendLayout();
             // 
             // textBox_NewPassword_Caption
@@ -133,11 +136,12 @@
             // 
             // groupBox_NewPassword_Randomize
             // 
+            this.groupBox_NewPassword_Randomize.Controls.Add(this.button_NewPassword_GeneratePassword);
+            this.groupBox_NewPassword_Randomize.Controls.Add(this.numericUpDown_NewPassword_Maxchars);
+            this.groupBox_NewPassword_Randomize.Controls.Add(this.numericUpDown_NewPassword_Minchars);
             this.groupBox_NewPassword_Randomize.Controls.Add(this.groupBox_NewPassword_AllowedSymbols);
             this.groupBox_NewPassword_Randomize.Controls.Add(this.label4);
-            this.groupBox_NewPassword_Randomize.Controls.Add(this.textBox_NewPassword_MaxChars);
             this.groupBox_NewPassword_Randomize.Controls.Add(this.label_NewPassword_MaxChars);
-            this.groupBox_NewPassword_Randomize.Controls.Add(this.textBox_NewPassword_MinChars);
             this.groupBox_NewPassword_Randomize.Controls.Add(this.label_NewPassword_MinChars);
             this.groupBox_NewPassword_Randomize.Controls.Add(this.checkBox2_NewPassword_UseSymbols);
             this.groupBox_NewPassword_Randomize.Controls.Add(this.checkBox_NewPassword_UseNumerics);
@@ -154,7 +158,7 @@
             this.checkBox_NewPassword_Tilde.Location = new System.Drawing.Point(181, 41);
             this.checkBox_NewPassword_Tilde.Name = "checkBox_NewPassword_Tilde";
             this.checkBox_NewPassword_Tilde.Size = new System.Drawing.Size(29, 16);
-            this.checkBox_NewPassword_Tilde.TabIndex = 18;
+            this.checkBox_NewPassword_Tilde.TabIndex = 16;
             this.checkBox_NewPassword_Tilde.Text = "~";
             this.checkBox_NewPassword_Tilde.UseVisualStyleBackColor = true;
             // 
@@ -164,7 +168,7 @@
             this.checkBox_Circumflex.Location = new System.Drawing.Point(146, 41);
             this.checkBox_Circumflex.Name = "checkBox_Circumflex";
             this.checkBox_Circumflex.Size = new System.Drawing.Size(29, 16);
-            this.checkBox_Circumflex.TabIndex = 17;
+            this.checkBox_Circumflex.TabIndex = 15;
             this.checkBox_Circumflex.Text = "^";
             this.checkBox_Circumflex.UseVisualStyleBackColor = true;
             // 
@@ -174,7 +178,7 @@
             this.checkBox_NewPassword_Hyphen.Location = new System.Drawing.Point(76, 41);
             this.checkBox_NewPassword_Hyphen.Name = "checkBox_NewPassword_Hyphen";
             this.checkBox_NewPassword_Hyphen.Size = new System.Drawing.Size(30, 16);
-            this.checkBox_NewPassword_Hyphen.TabIndex = 16;
+            this.checkBox_NewPassword_Hyphen.TabIndex = 13;
             this.checkBox_NewPassword_Hyphen.Text = "-";
             this.checkBox_NewPassword_Hyphen.UseVisualStyleBackColor = true;
             // 
@@ -184,7 +188,7 @@
             this.checkBox_NewPassword_RightParenthesis.Location = new System.Drawing.Point(41, 41);
             this.checkBox_NewPassword_RightParenthesis.Name = "checkBox_NewPassword_RightParenthesis";
             this.checkBox_NewPassword_RightParenthesis.Size = new System.Drawing.Size(28, 16);
-            this.checkBox_NewPassword_RightParenthesis.TabIndex = 15;
+            this.checkBox_NewPassword_RightParenthesis.TabIndex = 12;
             this.checkBox_NewPassword_RightParenthesis.Text = ")";
             this.checkBox_NewPassword_RightParenthesis.UseVisualStyleBackColor = true;
             // 
@@ -194,7 +198,7 @@
             this.checkBox_NewPassword_LeftParenthesis.Location = new System.Drawing.Point(9, 41);
             this.checkBox_NewPassword_LeftParenthesis.Name = "checkBox_NewPassword_LeftParenthesis";
             this.checkBox_NewPassword_LeftParenthesis.Size = new System.Drawing.Size(28, 16);
-            this.checkBox_NewPassword_LeftParenthesis.TabIndex = 14;
+            this.checkBox_NewPassword_LeftParenthesis.TabIndex = 11;
             this.checkBox_NewPassword_LeftParenthesis.Text = "(";
             this.checkBox_NewPassword_LeftParenthesis.UseVisualStyleBackColor = true;
             // 
@@ -204,7 +208,7 @@
             this.checkBox_NewPassword_SingleQuoto.Location = new System.Drawing.Point(217, 19);
             this.checkBox_NewPassword_SingleQuoto.Name = "checkBox_NewPassword_SingleQuoto";
             this.checkBox_NewPassword_SingleQuoto.Size = new System.Drawing.Size(26, 16);
-            this.checkBox_NewPassword_SingleQuoto.TabIndex = 13;
+            this.checkBox_NewPassword_SingleQuoto.TabIndex = 10;
             this.checkBox_NewPassword_SingleQuoto.Text = "\'";
             this.checkBox_NewPassword_SingleQuoto.UseVisualStyleBackColor = true;
             // 
@@ -214,7 +218,7 @@
             this.checkBox_NewPassword_Ampersand.Location = new System.Drawing.Point(181, 19);
             this.checkBox_NewPassword_Ampersand.Name = "checkBox_NewPassword_Ampersand";
             this.checkBox_NewPassword_Ampersand.Size = new System.Drawing.Size(31, 16);
-            this.checkBox_NewPassword_Ampersand.TabIndex = 12;
+            this.checkBox_NewPassword_Ampersand.TabIndex = 9;
             this.checkBox_NewPassword_Ampersand.Text = "&&";
             this.checkBox_NewPassword_Ampersand.UseVisualStyleBackColor = true;
             // 
@@ -224,7 +228,7 @@
             this.checkBox_NewPassword_Percentage.Location = new System.Drawing.Point(146, 19);
             this.checkBox_NewPassword_Percentage.Name = "checkBox_NewPassword_Percentage";
             this.checkBox_NewPassword_Percentage.Size = new System.Drawing.Size(30, 16);
-            this.checkBox_NewPassword_Percentage.TabIndex = 11;
+            this.checkBox_NewPassword_Percentage.TabIndex = 8;
             this.checkBox_NewPassword_Percentage.Text = "%";
             this.checkBox_NewPassword_Percentage.UseVisualStyleBackColor = true;
             // 
@@ -234,7 +238,7 @@
             this.checkBox_NewPassword_Dollar.Location = new System.Drawing.Point(111, 19);
             this.checkBox_NewPassword_Dollar.Name = "checkBox_NewPassword_Dollar";
             this.checkBox_NewPassword_Dollar.Size = new System.Drawing.Size(30, 16);
-            this.checkBox_NewPassword_Dollar.TabIndex = 10;
+            this.checkBox_NewPassword_Dollar.TabIndex = 7;
             this.checkBox_NewPassword_Dollar.Text = "$";
             this.checkBox_NewPassword_Dollar.UseVisualStyleBackColor = true;
             // 
@@ -244,7 +248,7 @@
             this.checkBox_NewPassword_Sharp.Location = new System.Drawing.Point(76, 19);
             this.checkBox_NewPassword_Sharp.Name = "checkBox_NewPassword_Sharp";
             this.checkBox_NewPassword_Sharp.Size = new System.Drawing.Size(30, 16);
-            this.checkBox_NewPassword_Sharp.TabIndex = 9;
+            this.checkBox_NewPassword_Sharp.TabIndex = 6;
             this.checkBox_NewPassword_Sharp.Text = "#";
             this.checkBox_NewPassword_Sharp.UseVisualStyleBackColor = true;
             // 
@@ -254,7 +258,7 @@
             this.checkBox_NewPassword_DoubleQuoto.Location = new System.Drawing.Point(41, 19);
             this.checkBox_NewPassword_DoubleQuoto.Name = "checkBox_NewPassword_DoubleQuoto";
             this.checkBox_NewPassword_DoubleQuoto.Size = new System.Drawing.Size(30, 16);
-            this.checkBox_NewPassword_DoubleQuoto.TabIndex = 8;
+            this.checkBox_NewPassword_DoubleQuoto.TabIndex = 5;
             this.checkBox_NewPassword_DoubleQuoto.Text = "\"";
             this.checkBox_NewPassword_DoubleQuoto.UseVisualStyleBackColor = true;
             // 
@@ -264,7 +268,7 @@
             this.checkBox_NewPassword_Exclamation.Location = new System.Drawing.Point(9, 19);
             this.checkBox_NewPassword_Exclamation.Name = "checkBox_NewPassword_Exclamation";
             this.checkBox_NewPassword_Exclamation.Size = new System.Drawing.Size(27, 16);
-            this.checkBox_NewPassword_Exclamation.TabIndex = 7;
+            this.checkBox_NewPassword_Exclamation.TabIndex = 4;
             this.checkBox_NewPassword_Exclamation.Text = "!";
             this.checkBox_NewPassword_Exclamation.UseVisualStyleBackColor = true;
             // 
@@ -277,13 +281,6 @@
             this.label4.TabIndex = 6;
             this.label4.Text = "-";
             // 
-            // textBox_NewPassword_MaxChars
-            // 
-            this.textBox_NewPassword_MaxChars.Location = new System.Drawing.Point(99, 218);
-            this.textBox_NewPassword_MaxChars.Name = "textBox_NewPassword_MaxChars";
-            this.textBox_NewPassword_MaxChars.Size = new System.Drawing.Size(44, 19);
-            this.textBox_NewPassword_MaxChars.TabIndex = 5;
-            // 
             // label_NewPassword_MaxChars
             // 
             this.label_NewPassword_MaxChars.AutoSize = true;
@@ -292,13 +289,6 @@
             this.label_NewPassword_MaxChars.Size = new System.Drawing.Size(58, 12);
             this.label_NewPassword_MaxChars.TabIndex = 4;
             this.label_NewPassword_MaxChars.Text = "Max chars";
-            // 
-            // textBox_NewPassword_MinChars
-            // 
-            this.textBox_NewPassword_MinChars.Location = new System.Drawing.Point(9, 218);
-            this.textBox_NewPassword_MinChars.Name = "textBox_NewPassword_MinChars";
-            this.textBox_NewPassword_MinChars.Size = new System.Drawing.Size(44, 19);
-            this.textBox_NewPassword_MinChars.TabIndex = 3;
             // 
             // label_NewPassword_MinChars
             // 
@@ -364,7 +354,7 @@
             this.checkBox_NewPassword_Equal.Location = new System.Drawing.Point(111, 41);
             this.checkBox_NewPassword_Equal.Name = "checkBox_NewPassword_Equal";
             this.checkBox_NewPassword_Equal.Size = new System.Drawing.Size(30, 16);
-            this.checkBox_NewPassword_Equal.TabIndex = 19;
+            this.checkBox_NewPassword_Equal.TabIndex = 14;
             this.checkBox_NewPassword_Equal.Text = "=";
             this.checkBox_NewPassword_Equal.UseVisualStyleBackColor = true;
             // 
@@ -374,7 +364,7 @@
             this.checkBox_NewPassword_BackSlash.Location = new System.Drawing.Point(217, 41);
             this.checkBox_NewPassword_BackSlash.Name = "checkBox_NewPassword_BackSlash";
             this.checkBox_NewPassword_BackSlash.Size = new System.Drawing.Size(30, 16);
-            this.checkBox_NewPassword_BackSlash.TabIndex = 20;
+            this.checkBox_NewPassword_BackSlash.TabIndex = 17;
             this.checkBox_NewPassword_BackSlash.Text = "\\";
             this.checkBox_NewPassword_BackSlash.UseVisualStyleBackColor = true;
             // 
@@ -426,7 +416,7 @@
             this.checkBox_NewPassword_Bar.Location = new System.Drawing.Point(9, 63);
             this.checkBox_NewPassword_Bar.Name = "checkBox_NewPassword_Bar";
             this.checkBox_NewPassword_Bar.Size = new System.Drawing.Size(27, 16);
-            this.checkBox_NewPassword_Bar.TabIndex = 21;
+            this.checkBox_NewPassword_Bar.TabIndex = 18;
             this.checkBox_NewPassword_Bar.Text = "|";
             this.checkBox_NewPassword_Bar.UseVisualStyleBackColor = true;
             // 
@@ -436,7 +426,7 @@
             this.checkBox_NewPassword_Atmark.Location = new System.Drawing.Point(41, 63);
             this.checkBox_NewPassword_Atmark.Name = "checkBox_NewPassword_Atmark";
             this.checkBox_NewPassword_Atmark.Size = new System.Drawing.Size(32, 16);
-            this.checkBox_NewPassword_Atmark.TabIndex = 22;
+            this.checkBox_NewPassword_Atmark.TabIndex = 19;
             this.checkBox_NewPassword_Atmark.Text = "@";
             this.checkBox_NewPassword_Atmark.UseVisualStyleBackColor = true;
             // 
@@ -446,7 +436,7 @@
             this.checkBox_NewPassword_BackQuote.Location = new System.Drawing.Point(76, 63);
             this.checkBox_NewPassword_BackQuote.Name = "checkBox_NewPassword_BackQuote";
             this.checkBox_NewPassword_BackQuote.Size = new System.Drawing.Size(29, 16);
-            this.checkBox_NewPassword_BackQuote.TabIndex = 23;
+            this.checkBox_NewPassword_BackQuote.TabIndex = 20;
             this.checkBox_NewPassword_BackQuote.Text = "`";
             this.checkBox_NewPassword_BackQuote.UseVisualStyleBackColor = true;
             // 
@@ -456,7 +446,7 @@
             this.checkBox_NewPassword_LeftSquareBracket.Location = new System.Drawing.Point(111, 63);
             this.checkBox_NewPassword_LeftSquareBracket.Name = "checkBox_NewPassword_LeftSquareBracket";
             this.checkBox_NewPassword_LeftSquareBracket.Size = new System.Drawing.Size(28, 16);
-            this.checkBox_NewPassword_LeftSquareBracket.TabIndex = 24;
+            this.checkBox_NewPassword_LeftSquareBracket.TabIndex = 21;
             this.checkBox_NewPassword_LeftSquareBracket.Text = "[";
             this.checkBox_NewPassword_LeftSquareBracket.UseVisualStyleBackColor = true;
             // 
@@ -466,7 +456,7 @@
             this.checkBox_NewPassword_LeftBrace.Location = new System.Drawing.Point(146, 63);
             this.checkBox_NewPassword_LeftBrace.Name = "checkBox_NewPassword_LeftBrace";
             this.checkBox_NewPassword_LeftBrace.Size = new System.Drawing.Size(27, 16);
-            this.checkBox_NewPassword_LeftBrace.TabIndex = 25;
+            this.checkBox_NewPassword_LeftBrace.TabIndex = 22;
             this.checkBox_NewPassword_LeftBrace.Text = "{";
             this.checkBox_NewPassword_LeftBrace.UseVisualStyleBackColor = true;
             // 
@@ -476,7 +466,7 @@
             this.checkBox_NewPassword_SemiColon.Location = new System.Drawing.Point(181, 63);
             this.checkBox_NewPassword_SemiColon.Name = "checkBox_NewPassword_SemiColon";
             this.checkBox_NewPassword_SemiColon.Size = new System.Drawing.Size(26, 16);
-            this.checkBox_NewPassword_SemiColon.TabIndex = 26;
+            this.checkBox_NewPassword_SemiColon.TabIndex = 23;
             this.checkBox_NewPassword_SemiColon.Text = ";";
             this.checkBox_NewPassword_SemiColon.UseVisualStyleBackColor = true;
             // 
@@ -486,7 +476,7 @@
             this.checkBox_NewPassword_Plus.Location = new System.Drawing.Point(217, 63);
             this.checkBox_NewPassword_Plus.Name = "checkBox_NewPassword_Plus";
             this.checkBox_NewPassword_Plus.Size = new System.Drawing.Size(30, 16);
-            this.checkBox_NewPassword_Plus.TabIndex = 27;
+            this.checkBox_NewPassword_Plus.TabIndex = 24;
             this.checkBox_NewPassword_Plus.Text = "+";
             this.checkBox_NewPassword_Plus.UseVisualStyleBackColor = true;
             // 
@@ -496,7 +486,7 @@
             this.checkBox_NewPassword_Colon.Location = new System.Drawing.Point(9, 85);
             this.checkBox_NewPassword_Colon.Name = "checkBox_NewPassword_Colon";
             this.checkBox_NewPassword_Colon.Size = new System.Drawing.Size(26, 16);
-            this.checkBox_NewPassword_Colon.TabIndex = 28;
+            this.checkBox_NewPassword_Colon.TabIndex = 25;
             this.checkBox_NewPassword_Colon.Text = ":";
             this.checkBox_NewPassword_Colon.UseVisualStyleBackColor = true;
             // 
@@ -506,7 +496,7 @@
             this.checkBox_NewPassword_Asterisk.Location = new System.Drawing.Point(41, 85);
             this.checkBox_NewPassword_Asterisk.Name = "checkBox_NewPassword_Asterisk";
             this.checkBox_NewPassword_Asterisk.Size = new System.Drawing.Size(30, 16);
-            this.checkBox_NewPassword_Asterisk.TabIndex = 29;
+            this.checkBox_NewPassword_Asterisk.TabIndex = 26;
             this.checkBox_NewPassword_Asterisk.Text = "*";
             this.checkBox_NewPassword_Asterisk.UseVisualStyleBackColor = true;
             // 
@@ -516,7 +506,7 @@
             this.checkBox_NewPassword_RightBracket.Location = new System.Drawing.Point(76, 85);
             this.checkBox_NewPassword_RightBracket.Name = "checkBox_NewPassword_RightBracket";
             this.checkBox_NewPassword_RightBracket.Size = new System.Drawing.Size(28, 16);
-            this.checkBox_NewPassword_RightBracket.TabIndex = 30;
+            this.checkBox_NewPassword_RightBracket.TabIndex = 27;
             this.checkBox_NewPassword_RightBracket.Text = "]";
             this.checkBox_NewPassword_RightBracket.UseVisualStyleBackColor = true;
             // 
@@ -526,7 +516,7 @@
             this.checkBox_NewPassword_RightBrace.Location = new System.Drawing.Point(111, 85);
             this.checkBox_NewPassword_RightBrace.Name = "checkBox_NewPassword_RightBrace";
             this.checkBox_NewPassword_RightBrace.Size = new System.Drawing.Size(27, 16);
-            this.checkBox_NewPassword_RightBrace.TabIndex = 31;
+            this.checkBox_NewPassword_RightBrace.TabIndex = 28;
             this.checkBox_NewPassword_RightBrace.Text = "}";
             this.checkBox_NewPassword_RightBrace.UseVisualStyleBackColor = true;
             // 
@@ -536,7 +526,7 @@
             this.checkBox_NewPassword_Comma.Location = new System.Drawing.Point(146, 85);
             this.checkBox_NewPassword_Comma.Name = "checkBox_NewPassword_Comma";
             this.checkBox_NewPassword_Comma.Size = new System.Drawing.Size(26, 16);
-            this.checkBox_NewPassword_Comma.TabIndex = 32;
+            this.checkBox_NewPassword_Comma.TabIndex = 29;
             this.checkBox_NewPassword_Comma.Text = ",";
             this.checkBox_NewPassword_Comma.UseVisualStyleBackColor = true;
             // 
@@ -546,7 +536,7 @@
             this.checkBox_NewPassword_LessThan.Location = new System.Drawing.Point(181, 85);
             this.checkBox_NewPassword_LessThan.Name = "checkBox_NewPassword_LessThan";
             this.checkBox_NewPassword_LessThan.Size = new System.Drawing.Size(30, 16);
-            this.checkBox_NewPassword_LessThan.TabIndex = 33;
+            this.checkBox_NewPassword_LessThan.TabIndex = 30;
             this.checkBox_NewPassword_LessThan.Text = "<";
             this.checkBox_NewPassword_LessThan.UseVisualStyleBackColor = true;
             // 
@@ -556,7 +546,7 @@
             this.checkBox_NewPassword_Dot.Location = new System.Drawing.Point(217, 85);
             this.checkBox_NewPassword_Dot.Name = "checkBox_NewPassword_Dot";
             this.checkBox_NewPassword_Dot.Size = new System.Drawing.Size(26, 16);
-            this.checkBox_NewPassword_Dot.TabIndex = 34;
+            this.checkBox_NewPassword_Dot.TabIndex = 31;
             this.checkBox_NewPassword_Dot.Text = ".";
             this.checkBox_NewPassword_Dot.UseVisualStyleBackColor = true;
             // 
@@ -566,7 +556,7 @@
             this.checkBox_NewPassword_GreaterThan.Location = new System.Drawing.Point(9, 107);
             this.checkBox_NewPassword_GreaterThan.Name = "checkBox_NewPassword_GreaterThan";
             this.checkBox_NewPassword_GreaterThan.Size = new System.Drawing.Size(30, 16);
-            this.checkBox_NewPassword_GreaterThan.TabIndex = 35;
+            this.checkBox_NewPassword_GreaterThan.TabIndex = 32;
             this.checkBox_NewPassword_GreaterThan.Text = ">";
             this.checkBox_NewPassword_GreaterThan.UseVisualStyleBackColor = true;
             // 
@@ -576,7 +566,7 @@
             this.checkBox_NewPassword_Slash.Location = new System.Drawing.Point(41, 107);
             this.checkBox_NewPassword_Slash.Name = "checkBox_NewPassword_Slash";
             this.checkBox_NewPassword_Slash.Size = new System.Drawing.Size(30, 16);
-            this.checkBox_NewPassword_Slash.TabIndex = 36;
+            this.checkBox_NewPassword_Slash.TabIndex = 33;
             this.checkBox_NewPassword_Slash.Text = "/";
             this.checkBox_NewPassword_Slash.UseVisualStyleBackColor = true;
             // 
@@ -586,7 +576,7 @@
             this.checkBox_NewPassword_Question.Location = new System.Drawing.Point(76, 107);
             this.checkBox_NewPassword_Question.Name = "checkBox_NewPassword_Question";
             this.checkBox_NewPassword_Question.Size = new System.Drawing.Size(29, 16);
-            this.checkBox_NewPassword_Question.TabIndex = 37;
+            this.checkBox_NewPassword_Question.TabIndex = 34;
             this.checkBox_NewPassword_Question.Text = "?";
             this.checkBox_NewPassword_Question.UseVisualStyleBackColor = true;
             // 
@@ -596,7 +586,7 @@
             this.checkBox_NewPassword_UnderBar.Location = new System.Drawing.Point(111, 107);
             this.checkBox_NewPassword_UnderBar.Name = "checkBox_NewPassword_UnderBar";
             this.checkBox_NewPassword_UnderBar.Size = new System.Drawing.Size(28, 16);
-            this.checkBox_NewPassword_UnderBar.TabIndex = 38;
+            this.checkBox_NewPassword_UnderBar.TabIndex = 35;
             this.checkBox_NewPassword_UnderBar.Text = "_";
             this.checkBox_NewPassword_UnderBar.UseVisualStyleBackColor = true;
             // 
@@ -606,9 +596,52 @@
             this.checkBox_NewPassword_Space.Location = new System.Drawing.Point(146, 107);
             this.checkBox_NewPassword_Space.Name = "checkBox_NewPassword_Space";
             this.checkBox_NewPassword_Space.Size = new System.Drawing.Size(55, 16);
-            this.checkBox_NewPassword_Space.TabIndex = 39;
+            this.checkBox_NewPassword_Space.TabIndex = 36;
             this.checkBox_NewPassword_Space.Text = "Space";
             this.checkBox_NewPassword_Space.UseVisualStyleBackColor = true;
+            // 
+            // numericUpDown_NewPassword_Minchars
+            // 
+            this.numericUpDown_NewPassword_Minchars.Location = new System.Drawing.Point(11, 221);
+            this.numericUpDown_NewPassword_Minchars.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.numericUpDown_NewPassword_Minchars.Name = "numericUpDown_NewPassword_Minchars";
+            this.numericUpDown_NewPassword_Minchars.Size = new System.Drawing.Size(45, 19);
+            this.numericUpDown_NewPassword_Minchars.TabIndex = 2;
+            this.numericUpDown_NewPassword_Minchars.Value = new decimal(new int[] {
+            6,
+            0,
+            0,
+            0});
+            // 
+            // numericUpDown_NewPassword_Maxchars
+            // 
+            this.numericUpDown_NewPassword_Maxchars.Location = new System.Drawing.Point(101, 221);
+            this.numericUpDown_NewPassword_Maxchars.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.numericUpDown_NewPassword_Maxchars.Name = "numericUpDown_NewPassword_Maxchars";
+            this.numericUpDown_NewPassword_Maxchars.Size = new System.Drawing.Size(45, 19);
+            this.numericUpDown_NewPassword_Maxchars.TabIndex = 3;
+            this.numericUpDown_NewPassword_Maxchars.Value = new decimal(new int[] {
+            12,
+            0,
+            0,
+            0});
+            // 
+            // button_NewPassword_GeneratePassword
+            // 
+            this.button_NewPassword_GeneratePassword.Location = new System.Drawing.Point(119, 18);
+            this.button_NewPassword_GeneratePassword.Name = "button_NewPassword_GeneratePassword";
+            this.button_NewPassword_GeneratePassword.Size = new System.Drawing.Size(135, 39);
+            this.button_NewPassword_GeneratePassword.TabIndex = 24;
+            this.button_NewPassword_GeneratePassword.Text = "Generate password";
+            this.button_NewPassword_GeneratePassword.UseVisualStyleBackColor = true;
             // 
             // FormCreatePassword
             // 
@@ -632,6 +665,8 @@
             this.groupBox_NewPassword_Randomize.PerformLayout();
             this.groupBox_NewPassword_AllowedSymbols.ResumeLayout(false);
             this.groupBox_NewPassword_AllowedSymbols.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_NewPassword_Minchars)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_NewPassword_Maxchars)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -652,9 +687,7 @@
         private System.Windows.Forms.CheckBox checkBox2_NewPassword_UseSymbols;
         private System.Windows.Forms.CheckBox checkBox_NewPassword_UseNumerics;
         private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.TextBox textBox_NewPassword_MaxChars;
         private System.Windows.Forms.Label label_NewPassword_MaxChars;
-        private System.Windows.Forms.TextBox textBox_NewPassword_MinChars;
         private System.Windows.Forms.Label label_NewPassword_MinChars;
         private System.Windows.Forms.CheckBox checkBox_NewPassword_Exclamation;
         private System.Windows.Forms.CheckBox checkBox_NewPassword_Ampersand;
@@ -690,5 +723,8 @@
         private System.Windows.Forms.CheckBox checkBox_NewPassword_LeftBrace;
         private System.Windows.Forms.CheckBox checkBox_NewPassword_LeftSquareBracket;
         private System.Windows.Forms.CheckBox checkBox_NewPassword_Space;
+        private System.Windows.Forms.Button button_NewPassword_GeneratePassword;
+        private System.Windows.Forms.NumericUpDown numericUpDown_NewPassword_Maxchars;
+        private System.Windows.Forms.NumericUpDown numericUpDown_NewPassword_Minchars;
     }
 }
