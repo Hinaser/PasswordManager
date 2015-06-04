@@ -117,6 +117,18 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="Form_ContextMenu_AddContainer" xml:space="preserve">
+    <value>新規フォルダ</value>
+  </data>
+  <data name="Form_ContextMenu_AddPassword" xml:space="preserve">
+    <value>新規パスワード</value>
+  </data>
+  <data name="Form_ContextMenu_DeleteContainer" xml:space="preserve">
+    <value>フォルダ削除</value>
+  </data>
+  <data name="Form_ContextMenu_RenameContainer" xml:space="preserve">
+    <value>フォルダ名変更</value>
+  </data>
   <data name="Form_Listview_Caption" xml:space="preserve">
     <value>タイトル</value>
   </data>
@@ -140,6 +152,60 @@
   </data>
   <data name="Form_MenuItem_Option" xml:space="preserve">
     <value>オプション</value>
+  </data>
+  <data name="Form_NewPassword_AllowedSymbols" xml:space="preserve">
+    <value>使用する記号</value>
+  </data>
+  <data name="Form_NewPassword_Cancel" xml:space="preserve">
+    <value>キャンセル</value>
+  </data>
+  <data name="Form_NewPassword_Caption" xml:space="preserve">
+    <value>タイトル</value>
+  </data>
+  <data name="Form_NewPassword_Generate" xml:space="preserve">
+    <value>ランダムパスワードを生成する</value>
+  </data>
+  <data name="Form_NewPassword_ID" xml:space="preserve">
+    <value>ID</value>
+  </data>
+  <data name="Form_NewPassword_MaxChars" xml:space="preserve">
+    <value>最大文字数</value>
+  </data>
+  <data name="Form_NewPassword_Memo" xml:space="preserve">
+    <value>メモ</value>
+  </data>
+  <data name="Form_NewPassword_MinChars" xml:space="preserve">
+    <value>最小文字数</value>
+  </data>
+  <data name="Form_NewPassword_OK" xml:space="preserve">
+    <value>OK</value>
+  </data>
+  <data name="Form_NewPassword_PasswdNormal" xml:space="preserve">
+    <value>普通</value>
+  </data>
+  <data name="Form_NewPassword_PasswdSecure" xml:space="preserve">
+    <value>強い</value>
+  </data>
+  <data name="Form_NewPassword_PasswdWeak" xml:space="preserve">
+    <value>弱い</value>
+  </data>
+  <data name="Form_NewPassword_Password" xml:space="preserve">
+    <value>パスワード</value>
+  </data>
+  <data name="Form_NewPassword_Randomize" xml:space="preserve">
+    <value>ランダムパスワード生成</value>
+  </data>
+  <data name="Form_NewPassword_StrengthTest" xml:space="preserve">
+    <value>パスワード強度チェック</value>
+  </data>
+  <data name="Form_NewPassword_UseNumeric" xml:space="preserve">
+    <value>数字を含める</value>
+  </data>
+  <data name="Form_NewPassword_UseSymbolic" xml:space="preserve">
+    <value>記号を含める</value>
+  </data>
+  <data name="Form_NewPassword_WndTitle" xml:space="preserve">
+    <value>新規パスワード作成</value>
   </data>
   <data name="Form_Tooltip_OpenFile" xml:space="preserve">
     <value>ファイルを開く</value>

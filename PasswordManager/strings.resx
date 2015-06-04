@@ -117,6 +117,18 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="Form_ContextMenu_AddContainer" xml:space="preserve">
+    <value>New folder</value>
+  </data>
+  <data name="Form_ContextMenu_AddPassword" xml:space="preserve">
+    <value>New password</value>
+  </data>
+  <data name="Form_ContextMenu_DeleteContainer" xml:space="preserve">
+    <value>Delete folder</value>
+  </data>
+  <data name="Form_ContextMenu_RenameContainer" xml:space="preserve">
+    <value>Rename folder</value>
+  </data>
   <data name="Form_Listview_Caption" xml:space="preserve">
     <value>Caption</value>
   </data>
@@ -140,6 +152,60 @@
   </data>
   <data name="Form_MenuItem_Option" xml:space="preserve">
     <value>Option</value>
+  </data>
+  <data name="Form_NewPassword_AllowedSymbols" xml:space="preserve">
+    <value>Allowed symbols</value>
+  </data>
+  <data name="Form_NewPassword_Cancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="Form_NewPassword_Caption" xml:space="preserve">
+    <value>Caption</value>
+  </data>
+  <data name="Form_NewPassword_Generate" xml:space="preserve">
+    <value>Generate password</value>
+  </data>
+  <data name="Form_NewPassword_ID" xml:space="preserve">
+    <value>ID</value>
+  </data>
+  <data name="Form_NewPassword_MaxChars" xml:space="preserve">
+    <value>Max chars</value>
+  </data>
+  <data name="Form_NewPassword_Memo" xml:space="preserve">
+    <value>Memo</value>
+  </data>
+  <data name="Form_NewPassword_MinChars" xml:space="preserve">
+    <value>Min chars</value>
+  </data>
+  <data name="Form_NewPassword_OK" xml:space="preserve">
+    <value>OK</value>
+  </data>
+  <data name="Form_NewPassword_PasswdNormal" xml:space="preserve">
+    <value>Normal</value>
+  </data>
+  <data name="Form_NewPassword_PasswdSecure" xml:space="preserve">
+    <value>Strong</value>
+  </data>
+  <data name="Form_NewPassword_PasswdWeak" xml:space="preserve">
+    <value>Weak</value>
+  </data>
+  <data name="Form_NewPassword_Password" xml:space="preserve">
+    <value>Password</value>
+  </data>
+  <data name="Form_NewPassword_Randomize" xml:space="preserve">
+    <value>Randomize password</value>
+  </data>
+  <data name="Form_NewPassword_StrengthTest" xml:space="preserve">
+    <value>Password strength test</value>
+  </data>
+  <data name="Form_NewPassword_UseNumeric" xml:space="preserve">
+    <value>Use numeric</value>
+  </data>
+  <data name="Form_NewPassword_UseSymbolic" xml:space="preserve">
+    <value>Use symbol</value>
+  </data>
+  <data name="Form_NewPassword_WndTitle" xml:space="preserve">
+    <value>Create New Password</value>
   </data>
   <data name="Form_Tooltip_OpenFile" xml:space="preserve">
     <value>Open file</value>

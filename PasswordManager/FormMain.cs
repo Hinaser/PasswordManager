@@ -571,6 +571,10 @@ namespace PasswordManager
             this.ToolStripMenuItem_Language.Text = strings.Form_MenuItem_Language;
             this.ToolStripMenuItem_Language_English.Text = strings.Form_MenuItem_Language_English;
             this.ToolStripMenuItem_Language_Japanese.Text = strings.Form_MenuItem_Language_Japanese;
+            this.ToolStripMenuItem_AddSubFolder.Text = strings.Form_ContextMenu_AddContainer;
+            this.ToolStripMenuItem_RenameFolder.Text = strings.Form_ContextMenu_RenameContainer;
+            this.ToolStripMenuItem_DeleteFolder.Text = strings.Form_ContextMenu_DeleteContainer;
+            this.ToolStripMenuItem_AddPassword.Text = strings.Form_ContextMenu_AddPassword;
         }
         #endregion
     }

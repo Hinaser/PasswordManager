@@ -59,6 +59,7 @@ namespace PasswordManager
         {
             this.checkBox_NewPassword_UseNumerics.Checked = true;
             this.checkBox_NewPassword_UseSymbols.Checked = true;
+            this.SetupLanguage();
         }
         #endregion
 
@@ -183,7 +184,27 @@ namespace PasswordManager
         /// <summary>
         /// Setup language-variable text to this dialog
         /// </summary>
-        public void SetupLanguage() { }
+        public void SetupLanguage()
+        {
+            this.label_NewPassword_Caption.Text = strings.Form_NewPassword_Caption;
+            this.label_NewPassword_ID.Text = strings.Form_NewPassword_ID;
+            this.label_NewPassword_Password.Text = strings.Form_NewPassword_Password;
+            this.groupBox_NewPassword_Test.Text = strings.Form_NewPassword_StrengthTest;
+            this.groupBox_NewPassword_Randomize.Text = strings.Form_NewPassword_Randomize;
+            this.checkBox_NewPassword_UseNumerics.Text = strings.Form_NewPassword_UseNumeric;
+            this.checkBox_NewPassword_UseSymbols.Text = strings.Form_NewPassword_UseSymbolic;
+            this.button_NewPassword_GeneratePassword.Text = strings.Form_NewPassword_Generate;
+            this.groupBox_NewPassword_AllowedSymbols.Text = strings.Form_NewPassword_AllowedSymbols;
+            this.label_NewPassword_MinChars.Text = strings.Form_NewPassword_MinChars;
+            this.label_NewPassword_MaxChars.Text = strings.Form_NewPassword_MaxChars;
+            this.label_NewPassword_Week.Text = strings.Form_NewPassword_PasswdWeak;
+            this.label_NewPassword_Normal.Text = strings.Form_NewPassword_PasswdNormal;
+            this.label_NewPassword_Secure.Text = strings.Form_NewPassword_PasswdSecure;
+            this.label_NewPassword_Memo.Text = strings.Form_NewPassword_Memo;
+            this.button_NewPassword_OK.Text = strings.Form_NewPassword_OK;
+            this.button_NewPassword_Cancel.Text = strings.Form_NewPassword_Cancel;
+            this.Text = strings.Form_NewPassword_WndTitle;
+        }
         #endregion
     }
 }

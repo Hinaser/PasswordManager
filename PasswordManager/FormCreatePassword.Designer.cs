@@ -29,10 +29,10 @@
         private void InitializeComponent()
         {
             this.textBox_NewPassword_Caption = new System.Windows.Forms.TextBox();
-            this.label1 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
+            this.label_NewPassword_Caption = new System.Windows.Forms.Label();
+            this.label_NewPassword_ID = new System.Windows.Forms.Label();
             this.textBox_NewPassword_ID = new System.Windows.Forms.TextBox();
-            this.label3 = new System.Windows.Forms.Label();
+            this.label_NewPassword_Password = new System.Windows.Forms.Label();
             this.textBox_NewPassword_Password = new System.Windows.Forms.TextBox();
             this.groupBox_NewPassword_Randomize = new System.Windows.Forms.GroupBox();
             this.button_NewPassword_GeneratePassword = new System.Windows.Forms.Button();
@@ -72,7 +72,7 @@
             this.checkBox_NewPassword_RightParenthesis = new System.Windows.Forms.CheckBox();
             this.checkBox_NewPassword_SingleQuoto = new System.Windows.Forms.CheckBox();
             this.checkBox_NewPassword_LeftParenthesis = new System.Windows.Forms.CheckBox();
-            this.label4 = new System.Windows.Forms.Label();
+            this.label_NewPassword_Hyphen = new System.Windows.Forms.Label();
             this.label_NewPassword_MaxChars = new System.Windows.Forms.Label();
             this.label_NewPassword_MinChars = new System.Windows.Forms.Label();
             this.checkBox_NewPassword_UseSymbols = new System.Windows.Forms.CheckBox();
@@ -85,7 +85,7 @@
             this.button_NewPassword_OK = new System.Windows.Forms.Button();
             this.button_NewPassword_Cancel = new System.Windows.Forms.Button();
             this.textBox_NewPassword_Memo = new System.Windows.Forms.TextBox();
-            this.label5 = new System.Windows.Forms.Label();
+            this.label_NewPassword_Memo = new System.Windows.Forms.Label();
             this.groupBox_NewPassword_Randomize.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_NewPassword_Maxchars)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_NewPassword_Minchars)).BeginInit();
@@ -100,23 +100,23 @@
             this.textBox_NewPassword_Caption.Size = new System.Drawing.Size(210, 19);
             this.textBox_NewPassword_Caption.TabIndex = 0;
             // 
-            // label1
+            // label_NewPassword_Caption
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(12, 16);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(44, 12);
-            this.label1.TabIndex = 1;
-            this.label1.Text = "Caption";
+            this.label_NewPassword_Caption.AutoSize = true;
+            this.label_NewPassword_Caption.Location = new System.Drawing.Point(12, 16);
+            this.label_NewPassword_Caption.Name = "label_NewPassword_Caption";
+            this.label_NewPassword_Caption.Size = new System.Drawing.Size(44, 12);
+            this.label_NewPassword_Caption.TabIndex = 1;
+            this.label_NewPassword_Caption.Text = "Caption";
             // 
-            // label2
+            // label_NewPassword_ID
             // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(12, 41);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(16, 12);
-            this.label2.TabIndex = 2;
-            this.label2.Text = "ID";
+            this.label_NewPassword_ID.AutoSize = true;
+            this.label_NewPassword_ID.Location = new System.Drawing.Point(12, 41);
+            this.label_NewPassword_ID.Name = "label_NewPassword_ID";
+            this.label_NewPassword_ID.Size = new System.Drawing.Size(16, 12);
+            this.label_NewPassword_ID.TabIndex = 2;
+            this.label_NewPassword_ID.Text = "ID";
             // 
             // textBox_NewPassword_ID
             // 
@@ -125,14 +125,14 @@
             this.textBox_NewPassword_ID.Size = new System.Drawing.Size(210, 19);
             this.textBox_NewPassword_ID.TabIndex = 3;
             // 
-            // label3
+            // label_NewPassword_Password
             // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(12, 66);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(54, 12);
-            this.label3.TabIndex = 4;
-            this.label3.Text = "Password";
+            this.label_NewPassword_Password.AutoSize = true;
+            this.label_NewPassword_Password.Location = new System.Drawing.Point(12, 66);
+            this.label_NewPassword_Password.Name = "label_NewPassword_Password";
+            this.label_NewPassword_Password.Size = new System.Drawing.Size(54, 12);
+            this.label_NewPassword_Password.TabIndex = 4;
+            this.label_NewPassword_Password.Text = "Password";
             // 
             // textBox_NewPassword_Password
             // 
@@ -147,7 +147,7 @@
             this.groupBox_NewPassword_Randomize.Controls.Add(this.numericUpDown_NewPassword_Maxchars);
             this.groupBox_NewPassword_Randomize.Controls.Add(this.numericUpDown_NewPassword_Minchars);
             this.groupBox_NewPassword_Randomize.Controls.Add(this.groupBox_NewPassword_AllowedSymbols);
-            this.groupBox_NewPassword_Randomize.Controls.Add(this.label4);
+            this.groupBox_NewPassword_Randomize.Controls.Add(this.label_NewPassword_Hyphen);
             this.groupBox_NewPassword_Randomize.Controls.Add(this.label_NewPassword_MaxChars);
             this.groupBox_NewPassword_Randomize.Controls.Add(this.label_NewPassword_MinChars);
             this.groupBox_NewPassword_Randomize.Controls.Add(this.checkBox_NewPassword_UseSymbols);
@@ -574,14 +574,14 @@
             this.checkBox_NewPassword_LeftParenthesis.Text = "(";
             this.checkBox_NewPassword_LeftParenthesis.UseVisualStyleBackColor = true;
             // 
-            // label4
+            // label_NewPassword_Hyphen
             // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(73, 221);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(11, 12);
-            this.label4.TabIndex = 6;
-            this.label4.Text = "-";
+            this.label_NewPassword_Hyphen.AutoSize = true;
+            this.label_NewPassword_Hyphen.Location = new System.Drawing.Point(73, 221);
+            this.label_NewPassword_Hyphen.Name = "label_NewPassword_Hyphen";
+            this.label_NewPassword_Hyphen.Size = new System.Drawing.Size(11, 12);
+            this.label_NewPassword_Hyphen.TabIndex = 6;
+            this.label_NewPassword_Hyphen.Text = "-";
             // 
             // label_NewPassword_MaxChars
             // 
@@ -681,7 +681,7 @@
             this.label_NewPassword_Week.Name = "label_NewPassword_Week";
             this.label_NewPassword_Week.Size = new System.Drawing.Size(80, 18);
             this.label_NewPassword_Week.TabIndex = 0;
-            this.label_NewPassword_Week.Text = "Week";
+            this.label_NewPassword_Week.Text = "Weak";
             this.label_NewPassword_Week.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // button_NewPassword_OK
@@ -713,31 +713,31 @@
             this.textBox_NewPassword_Memo.Size = new System.Drawing.Size(558, 95);
             this.textBox_NewPassword_Memo.TabIndex = 10;
             // 
-            // label5
+            // label_NewPassword_Memo
             // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(12, 264);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(35, 12);
-            this.label5.TabIndex = 11;
-            this.label5.Text = "Memo";
+            this.label_NewPassword_Memo.AutoSize = true;
+            this.label_NewPassword_Memo.Location = new System.Drawing.Point(12, 264);
+            this.label_NewPassword_Memo.Name = "label_NewPassword_Memo";
+            this.label_NewPassword_Memo.Size = new System.Drawing.Size(35, 12);
+            this.label_NewPassword_Memo.TabIndex = 11;
+            this.label_NewPassword_Memo.Text = "Memo";
             // 
             // FormCreatePassword
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(584, 411);
-            this.Controls.Add(this.label5);
+            this.Controls.Add(this.label_NewPassword_Memo);
             this.Controls.Add(this.textBox_NewPassword_Memo);
             this.Controls.Add(this.button_NewPassword_Cancel);
             this.Controls.Add(this.button_NewPassword_OK);
             this.Controls.Add(this.groupBox_NewPassword_Test);
             this.Controls.Add(this.groupBox_NewPassword_Randomize);
             this.Controls.Add(this.textBox_NewPassword_Password);
-            this.Controls.Add(this.label3);
+            this.Controls.Add(this.label_NewPassword_Password);
             this.Controls.Add(this.textBox_NewPassword_ID);
-            this.Controls.Add(this.label2);
-            this.Controls.Add(this.label1);
+            this.Controls.Add(this.label_NewPassword_ID);
+            this.Controls.Add(this.label_NewPassword_Caption);
             this.Controls.Add(this.textBox_NewPassword_Caption);
             this.Name = "FormCreatePassword";
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
@@ -758,10 +758,10 @@
         #endregion
 
         private System.Windows.Forms.TextBox textBox_NewPassword_Caption;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label label_NewPassword_Caption;
+        private System.Windows.Forms.Label label_NewPassword_ID;
         private System.Windows.Forms.TextBox textBox_NewPassword_ID;
-        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Label label_NewPassword_Password;
         private System.Windows.Forms.TextBox textBox_NewPassword_Password;
         private System.Windows.Forms.GroupBox groupBox_NewPassword_Randomize;
         private System.Windows.Forms.GroupBox groupBox_NewPassword_Test;
@@ -769,7 +769,7 @@
         private System.Windows.Forms.Button button_NewPassword_Cancel;
         private System.Windows.Forms.CheckBox checkBox_NewPassword_UseSymbols;
         private System.Windows.Forms.CheckBox checkBox_NewPassword_UseNumerics;
-        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Label label_NewPassword_Hyphen;
         private System.Windows.Forms.Label label_NewPassword_MaxChars;
         private System.Windows.Forms.Label label_NewPassword_MinChars;
         private System.Windows.Forms.CheckBox checkBox_NewPassword_Exclamation;
@@ -814,6 +814,6 @@
         private System.Windows.Forms.Label label_NewPassword_Week;
         private System.Windows.Forms.TextBox textBox_NewPassword_strength;
         private System.Windows.Forms.TextBox textBox_NewPassword_Memo;
-        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Label label_NewPassword_Memo;
     }
 }
