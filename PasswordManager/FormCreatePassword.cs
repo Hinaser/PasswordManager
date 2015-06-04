@@ -103,6 +103,7 @@ namespace PasswordManager
             this.Password = new PasswordRecord();
             this.Password.SetHeaderData(this.textBox_NewPassword_Caption.Text, DateTime.UtcNow, DateTime.UtcNow);
             this.Password.SetPrivateData(this.textBox_NewPassword_ID.Text, this.textBox_NewPassword_Password.Text, this.textBox_NewPassword_Memo.Text);
+            this.DialogResult = DialogResult.OK;
             this.Close();
         }
 

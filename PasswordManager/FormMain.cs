@@ -219,7 +219,11 @@ namespace PasswordManager
             }
 
             FormCreatePassword form = new FormCreatePassword();
-            form.ShowDialog();
+            if (form.ShowDialog() != DialogResult.OK)
+            {
+                return;
+            }
+
             PasswordRecord record = form.GetPassword();
         }
         #endregion
