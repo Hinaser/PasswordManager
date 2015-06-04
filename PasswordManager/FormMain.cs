@@ -78,6 +78,7 @@ namespace PasswordManager
         #endregion
 
         #region Event
+
         #region listview event
         /// <summary>
         /// Adjust column size when parent listview size is changed
@@ -99,6 +100,7 @@ namespace PasswordManager
             this.AdjustColumnSize((ListView)sender, e);
         }
         #endregion
+
         #region toolstrip event
         /// <summary>
         /// Open and read password file and construct associated windows form.
@@ -132,6 +134,7 @@ namespace PasswordManager
             f.WritePasswordToFile(Utility.GetHash(new byte[] { 0xff, 0xfe, 0x00, 0x01, 0x02 }), this.PasswordData);
         }
         #endregion
+
         #region menuitem event
         /// <summary>
         /// Change language setting to Japanese
@@ -153,6 +156,7 @@ namespace PasswordManager
             this.SetupLanguage(InternalApplicationConfig.LocaleEnUS);
         }
         #endregion
+
         #region context menu event
         /// <summary>
         /// Add subfolder to current node
@@ -214,10 +218,12 @@ namespace PasswordManager
                 throw new InvalidOperationException();
             }
 
-            FormCreatePassword form = new FormCreatePassword((int)this.CurrentTreeNode.Tag);
+            FormCreatePassword form = new FormCreatePassword();
             form.ShowDialog();
+            PasswordRecord record = form.GetPassword();
         }
         #endregion
+
         #region treeview event
         /// <summary>
         /// Click event for Node on TreeView 
@@ -384,6 +390,7 @@ namespace PasswordManager
             }
         }
         #endregion
+
         #endregion
 
         #region Utility

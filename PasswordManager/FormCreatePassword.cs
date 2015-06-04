@@ -26,21 +26,164 @@ namespace PasswordManager
     public partial class FormCreatePassword : Form
     {
         #region Field
-        private int ParentContainerID;
+        private PasswordRecord Password = null;
         #endregion
 
         #region Constructor
-        private FormCreatePassword() { } // Disable default constructor
-
         /// <summary>
         /// After this class is instantiated, parentContainerID is always with the instance
         /// </summary>
         /// <param name="parentContainerID"></param>
-        public FormCreatePassword(int parentContainerID)
+        public FormCreatePassword()
         {
-            this.ParentContainerID = parentContainerID;
             InitializeComponent();
+
+            // Checkbox event
+            this.checkBox_NewPassword_UseSymbols.CheckedChanged += checkBox_NewPassword_UseSymbols_CheckedChanged;
+            // Button event
+            this.button_NewPassword_OK.Click += button_NewPassword_OK_Click;
+            this.button_NewPassword_GeneratePassword.Click += button_NewPassword_GeneratePassword_Click;
+            // Textbox event
+            this.textBox_NewPassword_Caption.TextChanged += textBox_NewPassword_Caption_TextChanged;
+
+            // Do initializing process
+            this.InitializeFormStatus();
         }
+        #endregion
+
+        #region Initialize
+        /// <summary>
+        /// Initialize form control status
+        /// </summary>
+        public void InitializeFormStatus()
+        {
+            this.checkBox_NewPassword_UseNumerics.Checked = true;
+            this.checkBox_NewPassword_UseSymbols.Checked = true;
+        }
+        #endregion
+
+        #region Getter method
+        /// <summary>
+        /// Get password object which user entered
+        /// </summary>
+        /// <returns></returns>
+        public PasswordRecord GetPassword()
+        {
+            return this.Password;
+        }
+        #endregion
+
+        #region Event
+
+        #region Checkbox event
+        /// <summary>
+        /// When UseSysmbols checkbox is checked/unchecked, associated symbol checkboxes are checked/unchecked as well.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        void checkBox_NewPassword_UseSymbols_CheckedChanged(object sender, EventArgs e)
+        {
+            foreach (CheckBox c in this.groupBox_NewPassword_AllowedSymbols.Controls)
+            {
+                c.Checked = this.checkBox_NewPassword_UseSymbols.Checked;
+            }
+        }
+        #endregion
+
+        #region Button event
+        /// <summary>
+        /// If OK button is clicked, try to make 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        void button_NewPassword_OK_Click(object sender, EventArgs e)
+        {
+            // Set dialog input values to PasswordRecord object
+            this.Password = new PasswordRecord();
+            this.Password.SetHeaderData(this.textBox_NewPassword_Caption.Text, DateTime.UtcNow, DateTime.UtcNow);
+            this.Password.SetPrivateData(this.textBox_NewPassword_ID.Text, this.textBox_NewPassword_Password.Text, this.textBox_NewPassword_Memo.Text);
+            this.Close();
+        }
+
+        /// <summary>
+        /// Generate password text stream
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        void button_NewPassword_GeneratePassword_Click(object sender, EventArgs e)
+        {
+            var aaa = this.GeneratePasswordCharacterPool();
+            int a = 0;
+        }
+        #endregion
+
+        #region Textbox event
+        /// <summary>
+        /// When user enters some chars to Caption textbox and the textbox is not empty, enable OK button on the dialog.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        void textBox_NewPassword_Caption_TextChanged(object sender, EventArgs e)
+        {
+            if (String.IsNullOrEmpty(this.textBox_NewPassword_Caption.Text) || this.textBox_NewPassword_Caption.Text.Length < 1)
+            {
+                if (this.button_NewPassword_OK.Enabled)
+                {
+                    this.button_NewPassword_OK.Enabled = false;
+                }
+
+                return;
+            }
+
+            this.button_NewPassword_OK.Enabled = true;
+        }
+        #endregion
+
+        #endregion
+
+        #region Utility
+        /// <summary>
+        /// Return character pool which can be used to construct actual password string
+        /// </summary>
+        /// <returns></returns>
+        public char[] GeneratePasswordCharacterPool()
+        {
+            List<char> pool = new List<char>();
+
+            // Alphabet characters are always used as password
+            pool.AddRange(Utility.Alphabet);
+            pool.AddRange(Utility.ALPHABET);
+
+            if (this.checkBox_NewPassword_UseNumerics.Checked)
+            {
+                pool.AddRange(Utility.Numeric);
+            }
+
+            if (this.checkBox_NewPassword_UseSymbols.Checked)
+            {
+                foreach (CheckBox c in this.groupBox_NewPassword_AllowedSymbols.Controls)
+                {
+                    if (c.Checked)
+                    {
+                        char symbol = c.Text.ToCharArray(0, 1)[0];
+                        if(c.Text == this.checkBox_NewPassword_Space.Text)
+                        {
+                            symbol = ' ';
+                        }
+                        pool.Add(symbol);
+                    }
+                }
+            }
+
+            return pool.ToArray();
+        }
+        #endregion
+
+        #region Setup language
+        /// <summary>
+        /// Setup language-variable text to this dialog
+        /// </summary>
+        public void SetupLanguage() { }
         #endregion
     }
 }

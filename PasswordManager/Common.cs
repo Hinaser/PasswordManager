@@ -46,6 +46,11 @@ namespace PasswordManager
         [DllImport("user32.dll", SetLastError = true)]
         public static extern int GetWindowLong(IntPtr hWnd, int nIndex);
 
+        // Password character resource
+        public static char[] ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".ToCharArray();
+        public static char[] Alphabet = "abcdefghijklmnopqrstuvwxyz".ToCharArray();
+        public static char[] Numeric = "0123456789".ToCharArray();
+
         /// <summary>
         /// This method is imitating Stream.CopyTo because .NET 3.5 does not implement the method.
         /// </summary>

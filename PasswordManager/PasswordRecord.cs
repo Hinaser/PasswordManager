@@ -26,7 +26,7 @@ namespace PasswordManager
         /// <summary>
         /// Header values, which can be seen without master password
         /// </summary>
-        private int RecordID; // This represent real record identity. This must be unique all over Password data
+        private int RecordID; // This represent real record identity. This must be unique all over the Password data
         private string Caption = String.Empty;
         private DateTime CreateDate;
         private DateTime LastUpdateDate;
@@ -42,11 +42,11 @@ namespace PasswordManager
         #endregion
 
         #region Constructor
-        private PasswordRecord() { } // Disable non-argument constructor.
-        public PasswordRecord(int recordID) { this.RecordID = recordID; } // Instance must be with Real ID
+        public PasswordRecord() { }
+        public PasswordRecord(int recordID) { this.SetRecordID(recordID); }
         public PasswordRecord(int recordID, string caption, DateTime createDate, DateTime lastUpdateDate, string id, string password, string description)
         {
-            this.RecordID = recordID;
+            this.SetRecordID(recordID);
             this.Caption = caption;
             this.CreateDate = createDate;
             this.LastUpdateDate = lastUpdateDate;
@@ -57,6 +57,15 @@ namespace PasswordManager
         #endregion
 
         #region Setter method
+        /// <summary>
+        /// Set record ID to instance field
+        /// </summary>
+        /// <param name="recordID"></param>
+        public void SetRecordID(int recordID)
+        {
+            this.RecordID = recordID;
+        }
+
         /// <summary>
         /// Set header values to instance
         /// </summary>
