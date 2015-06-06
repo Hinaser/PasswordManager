@@ -194,6 +194,8 @@ namespace PasswordManager
             this.groupBox_NewPassword_Randomize.Text = strings.Form_NewPassword_Randomize;
             this.checkBox_NewPassword_UseNumerics.Text = strings.Form_NewPassword_UseNumeric;
             this.checkBox_NewPassword_UseSymbols.Text = strings.Form_NewPassword_UseSymbolic;
+            this.checkBox_NewPassword_UseLowerCase.Text = strings.Form_NewPassword_UseLowercase;
+            this.checkBox_NewPassword_UseUpperCase.Text = strings.Form_NewPassword_UseUppercase;
             this.button_NewPassword_GeneratePassword.Text = strings.Form_NewPassword_Generate;
             this.groupBox_NewPassword_AllowedSymbols.Text = strings.Form_NewPassword_AllowedSymbols;
             this.label_NewPassword_MinChars.Text = strings.Form_NewPassword_MinChars;

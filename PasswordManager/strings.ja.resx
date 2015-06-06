@@ -198,11 +198,17 @@
   <data name="Form_NewPassword_StrengthTest" xml:space="preserve">
     <value>パスワード強度チェック</value>
   </data>
+  <data name="Form_NewPassword_UseLowercase" xml:space="preserve">
+    <value>英小文字を含める</value>
+  </data>
   <data name="Form_NewPassword_UseNumeric" xml:space="preserve">
     <value>数字を含める</value>
   </data>
   <data name="Form_NewPassword_UseSymbolic" xml:space="preserve">
     <value>記号を含める</value>
+  </data>
+  <data name="Form_NewPassword_UseUppercase" xml:space="preserve">
+    <value>英大文字を含める</value>
   </data>
   <data name="Form_NewPassword_WndTitle" xml:space="preserve">
     <value>新規パスワード作成</value>

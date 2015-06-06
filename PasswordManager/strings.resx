@@ -198,11 +198,17 @@
   <data name="Form_NewPassword_StrengthTest" xml:space="preserve">
     <value>Password strength test</value>
   </data>
+  <data name="Form_NewPassword_UseLowercase" xml:space="preserve">
+    <value>Use lower case</value>
+  </data>
   <data name="Form_NewPassword_UseNumeric" xml:space="preserve">
     <value>Use numeric</value>
   </data>
   <data name="Form_NewPassword_UseSymbolic" xml:space="preserve">
     <value>Use symbol</value>
+  </data>
+  <data name="Form_NewPassword_UseUppercase" xml:space="preserve">
+    <value>Use upper case</value>
   </data>
   <data name="Form_NewPassword_WndTitle" xml:space="preserve">
     <value>Create New Password</value>
