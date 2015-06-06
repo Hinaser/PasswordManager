@@ -196,7 +196,7 @@ namespace PasswordManager {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Generate password.
+        ///   Looks up a localized string similar to Generate.
         /// </summary>
         internal static string Form_NewPassword_Generate {
             get {

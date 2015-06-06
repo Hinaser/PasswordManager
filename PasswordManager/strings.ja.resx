@@ -163,7 +163,7 @@
     <value>タイトル</value>
   </data>
   <data name="Form_NewPassword_Generate" xml:space="preserve">
-    <value>ランダムパスワードを生成する</value>
+    <value>生成</value>
   </data>
   <data name="Form_NewPassword_ID" xml:space="preserve">
     <value>ID</value>

@@ -57,8 +57,10 @@ namespace PasswordManager
         /// </summary>
         public void InitializeFormStatus()
         {
+            this.checkBox_NewPassword_UseLowerCase.Checked = true;
+            this.checkBox_NewPassword_UseUpperCase.Checked = true;
             this.checkBox_NewPassword_UseNumerics.Checked = true;
-            this.checkBox_NewPassword_UseSymbols.Checked = true;
+            this.checkBox_NewPassword_UseSymbols.Checked = false;
             this.SetupLanguage();
         }
         #endregion

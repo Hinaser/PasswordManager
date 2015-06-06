@@ -163,7 +163,7 @@
     <value>Caption</value>
   </data>
   <data name="Form_NewPassword_Generate" xml:space="preserve">
-    <value>Generate password</value>
+    <value>Generate</value>
   </data>
   <data name="Form_NewPassword_ID" xml:space="preserve">
     <value>ID</value>
