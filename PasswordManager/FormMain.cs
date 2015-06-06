@@ -219,6 +219,8 @@ namespace PasswordManager
             }
 
             FormCreatePassword form = new FormCreatePassword();
+            form.StartPosition = FormStartPosition.Manual;
+            form.Location = this.Location;
             if (form.ShowDialog() != DialogResult.OK)
             {
                 return;
