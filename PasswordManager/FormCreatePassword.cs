@@ -90,6 +90,15 @@ namespace PasswordManager
         /// <param name="e"></param>
         void checkBox_NewPassword_UseSymbols_CheckedChanged(object sender, EventArgs e)
         {
+            // When even one of checkbox status is different from UseSymbols checkbox, do nothing
+            foreach (CheckBox c in this.groupBox_NewPassword_AllowedSymbols.Controls)
+            {
+                if (c.Checked != !this.checkBox_NewPassword_UseSymbols.Checked)
+                {
+                    return;
+                }
+            }
+
             foreach (CheckBox c in this.groupBox_NewPassword_AllowedSymbols.Controls)
             {
                 c.Checked = this.checkBox_NewPassword_UseSymbols.Checked;
