@@ -130,6 +130,7 @@ namespace PasswordManager
             {
                 MessageBox.Show(strings.Form_NewPassword_ErrorMinTooSmall, strings.Form_NewPassword_ErrorDialogCaption, MessageBoxButtons.OK, MessageBoxIcon.Error);
                 this.button_NewPassword_GeneratePassword.Enabled = true;
+                this.button_NewPassword_GeneratePassword.Focus();
                 return;
             }
             if (this.numericUpDown_NewPassword_Maxchars.Value > InternalApplicationConfig.passwordMaxLength
@@ -137,12 +138,14 @@ namespace PasswordManager
             {
                 MessageBox.Show(strings.Form_NewPassword_ErrorMaxTooLarge, strings.Form_NewPassword_ErrorDialogCaption, MessageBoxButtons.OK, MessageBoxIcon.Error);
                 this.button_NewPassword_GeneratePassword.Enabled = true;
+                this.button_NewPassword_GeneratePassword.Focus();
                 return;
             }
             if (this.numericUpDown_NewPassword_Minchars.Value > this.numericUpDown_NewPassword_Maxchars.Value)
             {
                 MessageBox.Show(strings.Form_NewPassword_ErrorMinLTMax, strings.Form_NewPassword_ErrorDialogCaption, MessageBoxButtons.OK, MessageBoxIcon.Error);
                 this.button_NewPassword_GeneratePassword.Enabled = true;
+                this.button_NewPassword_GeneratePassword.Focus();
                 return;
             }
             int minChars = (int)this.numericUpDown_NewPassword_Minchars.Value;
@@ -168,6 +171,7 @@ namespace PasswordManager
 
             // Enable button again
             this.button_NewPassword_GeneratePassword.Enabled = true;
+            this.button_NewPassword_GeneratePassword.Focus();
 
             return;
         }
