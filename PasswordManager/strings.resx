@@ -162,6 +162,18 @@
   <data name="Form_NewPassword_Caption" xml:space="preserve">
     <value>Caption</value>
   </data>
+  <data name="Form_NewPassword_ErrorDialogCaption" xml:space="preserve">
+    <value>Error</value>
+  </data>
+  <data name="Form_NewPassword_ErrorMaxTooLarge" xml:space="preserve">
+    <value>Max Chars is too large</value>
+  </data>
+  <data name="Form_NewPassword_ErrorMinLTMax" xml:space="preserve">
+    <value>Min Chars cannot exceed Max Chars</value>
+  </data>
+  <data name="Form_NewPassword_ErrorMinTooSmall" xml:space="preserve">
+    <value>Min Chars is too small</value>
+  </data>
   <data name="Form_NewPassword_Generate" xml:space="preserve">
     <value>Generate</value>
   </data>

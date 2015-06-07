@@ -61,6 +61,10 @@ namespace PasswordManager
             this.checkBox_NewPassword_UseUpperCase.Checked = true;
             this.checkBox_NewPassword_UseNumerics.Checked = true;
             this.checkBox_NewPassword_UseSymbols.Checked = false;
+            this.numericUpDown_NewPassword_Minchars.Minimum = InternalApplicationConfig.PasswordMinLength;
+            this.numericUpDown_NewPassword_Minchars.Maximum = InternalApplicationConfig.passwordMaxLength;
+            this.numericUpDown_NewPassword_Maxchars.Minimum = InternalApplicationConfig.PasswordMinLength;
+            this.numericUpDown_NewPassword_Maxchars.Maximum = InternalApplicationConfig.passwordMaxLength;
             this.SetupLanguage();
         }
         #endregion
@@ -116,8 +120,56 @@ namespace PasswordManager
         /// <param name="e"></param>
         void button_NewPassword_GeneratePassword_Click(object sender, EventArgs e)
         {
-            var aaa = this.GeneratePasswordCharacterPool();
-            int a = 0;
+            // Disable Generate button for a moment
+            this.button_NewPassword_GeneratePassword.Enabled = false;
+
+            // Check parameters
+            // Check min-max characters value
+            if (this.numericUpDown_NewPassword_Minchars.Value < InternalApplicationConfig.PasswordMinLength
+                || this.numericUpDown_NewPassword_Minchars.Value < Int32.MinValue)
+            {
+                MessageBox.Show(strings.Form_NewPassword_ErrorMinTooSmall, strings.Form_NewPassword_ErrorDialogCaption, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                this.button_NewPassword_GeneratePassword.Enabled = true;
+                return;
+            }
+            if (this.numericUpDown_NewPassword_Maxchars.Value > InternalApplicationConfig.passwordMaxLength
+                || this.numericUpDown_NewPassword_Maxchars.Value > Int32.MaxValue)
+            {
+                MessageBox.Show(strings.Form_NewPassword_ErrorMaxTooLarge, strings.Form_NewPassword_ErrorDialogCaption, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                this.button_NewPassword_GeneratePassword.Enabled = true;
+                return;
+            }
+            if (this.numericUpDown_NewPassword_Minchars.Value > this.numericUpDown_NewPassword_Maxchars.Value)
+            {
+                MessageBox.Show(strings.Form_NewPassword_ErrorMinLTMax, strings.Form_NewPassword_ErrorDialogCaption, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                this.button_NewPassword_GeneratePassword.Enabled = true;
+                return;
+            }
+            int minChars = (int)this.numericUpDown_NewPassword_Minchars.Value;
+            int maxChars = (int)this.numericUpDown_NewPassword_Maxchars.Value;
+
+            // Decide password length between min and max
+            int passwordLength = GetRandomInt(minChars, maxChars, 0);
+            char[] password = new char[passwordLength];
+            char[] passwordPool = this.GeneratePasswordCharacterPool();
+
+            // Randome seed
+            int seed = this.Location.X * this.Location.Y;
+
+            // Pick up random characters from password pool
+            for (int i = 0; i < password.Length; i++)
+            {
+                password[i] = passwordPool[GetRandomInt(passwordPool.Length - 1, seed)];
+            }
+
+            this.textBox_NewPassword_Password.Text = new String(password);
+            // Clear password data from temporary variable
+            for (int i = 0; i < password.Length; i++) password[i] = (char)0;
+
+            // Enable button again
+            this.button_NewPassword_GeneratePassword.Enabled = true;
+
+            return;
         }
         #endregion
 
@@ -154,15 +206,23 @@ namespace PasswordManager
         {
             List<char> pool = new List<char>();
 
-            // Alphabet characters are always used as password
-            pool.AddRange(Utility.Alphabet);
-            pool.AddRange(Utility.ALPHABET);
+            // Check alphabet characters are indicated to be used
+            if (this.checkBox_NewPassword_UseLowerCase.Checked)
+            {
+                pool.AddRange(Utility.Alphabet);
+            }
+            if (this.checkBox_NewPassword_UseUpperCase.Checked)
+            {
+                pool.AddRange(Utility.ALPHABET);
+            }
 
+            // Check numerics are indicated to be used
             if (this.checkBox_NewPassword_UseNumerics.Checked)
             {
                 pool.AddRange(Utility.Numeric);
             }
 
+            // Check symbol characters are indicated to be used
             if (this.checkBox_NewPassword_UseSymbols.Checked)
             {
                 foreach (CheckBox c in this.groupBox_NewPassword_AllowedSymbols.Controls)
@@ -180,6 +240,50 @@ namespace PasswordManager
             }
 
             return pool.ToArray();
+        }
+
+        /// <summary>
+        /// Get randomized integer between 0 and specified max value
+        /// </summary>
+        /// <param name="max"></param>
+        /// <returns></returns>
+        public static int GetRandomInt(int max, int seed)
+        {
+            if (max <= 0)
+            {
+                return 0;
+            }
+
+            System.Threading.Thread.Sleep(1 + Math.Abs(seed) % 10);
+            Random rand = new Random((int)(DateTime.Now.Ticks & 0x0000FFFF));
+            return rand.Next() % (max + 1);
+        }
+
+        /// <summary>
+        /// Get randomized integer between specified min value and specified max value
+        /// </summary>
+        /// <param name="max"></param>
+        /// <returns></returns>
+        public static int GetRandomInt(int min, int max, int seed)
+        {
+            if (max <= 0)
+            {
+                return 0;
+            }
+
+            if (min < 0)
+            {
+                min = 0;
+            }
+
+            if (min > max)
+            {
+                return max;
+            }
+
+            System.Threading.Thread.Sleep(1 + Math.Abs(seed) % 10);
+            Random rand = new Random((int)(DateTime.Now.Ticks & 0x0000FFFF));
+            return rand.Next() % (max - min + 1) + min;
         }
         #endregion
 

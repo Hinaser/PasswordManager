@@ -196,6 +196,42 @@ namespace PasswordManager {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Error.
+        /// </summary>
+        internal static string Form_NewPassword_ErrorDialogCaption {
+            get {
+                return ResourceManager.GetString("Form_NewPassword_ErrorDialogCaption", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Max Chars is too large.
+        /// </summary>
+        internal static string Form_NewPassword_ErrorMaxTooLarge {
+            get {
+                return ResourceManager.GetString("Form_NewPassword_ErrorMaxTooLarge", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Min Chars cannot exceed Max Chars.
+        /// </summary>
+        internal static string Form_NewPassword_ErrorMinLTMax {
+            get {
+                return ResourceManager.GetString("Form_NewPassword_ErrorMinLTMax", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Min Chars is too small.
+        /// </summary>
+        internal static string Form_NewPassword_ErrorMinTooSmall {
+            get {
+                return ResourceManager.GetString("Form_NewPassword_ErrorMinTooSmall", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Generate.
         /// </summary>
         internal static string Form_NewPassword_Generate {

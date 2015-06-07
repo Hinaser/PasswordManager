@@ -35,6 +35,8 @@
             this.label_NewPassword_Password = new System.Windows.Forms.Label();
             this.textBox_NewPassword_Password = new System.Windows.Forms.TextBox();
             this.groupBox_NewPassword_Randomize = new System.Windows.Forms.GroupBox();
+            this.checkBox_NewPassword_UseUpperCase = new System.Windows.Forms.CheckBox();
+            this.checkBox_NewPassword_UseLowerCase = new System.Windows.Forms.CheckBox();
             this.button_NewPassword_GeneratePassword = new System.Windows.Forms.Button();
             this.numericUpDown_NewPassword_Maxchars = new System.Windows.Forms.NumericUpDown();
             this.numericUpDown_NewPassword_Minchars = new System.Windows.Forms.NumericUpDown();
@@ -86,8 +88,6 @@
             this.button_NewPassword_Cancel = new System.Windows.Forms.Button();
             this.textBox_NewPassword_Memo = new System.Windows.Forms.TextBox();
             this.label_NewPassword_Memo = new System.Windows.Forms.Label();
-            this.checkBox_NewPassword_UseLowerCase = new System.Windows.Forms.CheckBox();
-            this.checkBox_NewPassword_UseUpperCase = new System.Windows.Forms.CheckBox();
             this.groupBox_NewPassword_Randomize.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_NewPassword_Maxchars)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_NewPassword_Minchars)).BeginInit();
@@ -163,6 +163,26 @@
             this.groupBox_NewPassword_Randomize.TabStop = false;
             this.groupBox_NewPassword_Randomize.Text = "Randomize password";
             // 
+            // checkBox_NewPassword_UseUpperCase
+            // 
+            this.checkBox_NewPassword_UseUpperCase.AutoSize = true;
+            this.checkBox_NewPassword_UseUpperCase.Location = new System.Drawing.Point(6, 19);
+            this.checkBox_NewPassword_UseUpperCase.Name = "checkBox_NewPassword_UseUpperCase";
+            this.checkBox_NewPassword_UseUpperCase.Size = new System.Drawing.Size(104, 16);
+            this.checkBox_NewPassword_UseUpperCase.TabIndex = 0;
+            this.checkBox_NewPassword_UseUpperCase.Text = "Use upper case";
+            this.checkBox_NewPassword_UseUpperCase.UseVisualStyleBackColor = true;
+            // 
+            // checkBox_NewPassword_UseLowerCase
+            // 
+            this.checkBox_NewPassword_UseLowerCase.AutoSize = true;
+            this.checkBox_NewPassword_UseLowerCase.Location = new System.Drawing.Point(118, 19);
+            this.checkBox_NewPassword_UseLowerCase.Name = "checkBox_NewPassword_UseLowerCase";
+            this.checkBox_NewPassword_UseLowerCase.Size = new System.Drawing.Size(103, 16);
+            this.checkBox_NewPassword_UseLowerCase.TabIndex = 1;
+            this.checkBox_NewPassword_UseLowerCase.Text = "Use lower case";
+            this.checkBox_NewPassword_UseLowerCase.UseVisualStyleBackColor = true;
+            // 
             // button_NewPassword_GeneratePassword
             // 
             this.button_NewPassword_GeneratePassword.Location = new System.Drawing.Point(189, 220);
@@ -175,6 +195,11 @@
             // numericUpDown_NewPassword_Maxchars
             // 
             this.numericUpDown_NewPassword_Maxchars.Location = new System.Drawing.Point(101, 221);
+            this.numericUpDown_NewPassword_Maxchars.Maximum = new decimal(new int[] {
+            128,
+            0,
+            0,
+            0});
             this.numericUpDown_NewPassword_Maxchars.Minimum = new decimal(new int[] {
             1,
             0,
@@ -192,6 +217,11 @@
             // numericUpDown_NewPassword_Minchars
             // 
             this.numericUpDown_NewPassword_Minchars.Location = new System.Drawing.Point(11, 221);
+            this.numericUpDown_NewPassword_Minchars.Maximum = new decimal(new int[] {
+            128,
+            0,
+            0,
+            0});
             this.numericUpDown_NewPassword_Minchars.Minimum = new decimal(new int[] {
             1,
             0,
@@ -759,26 +789,6 @@
             this.label_NewPassword_Memo.Size = new System.Drawing.Size(35, 12);
             this.label_NewPassword_Memo.TabIndex = 11;
             this.label_NewPassword_Memo.Text = "Memo";
-            // 
-            // checkBox_NewPassword_UseLowerCase
-            // 
-            this.checkBox_NewPassword_UseLowerCase.AutoSize = true;
-            this.checkBox_NewPassword_UseLowerCase.Location = new System.Drawing.Point(118, 19);
-            this.checkBox_NewPassword_UseLowerCase.Name = "checkBox_NewPassword_UseLowerCase";
-            this.checkBox_NewPassword_UseLowerCase.Size = new System.Drawing.Size(103, 16);
-            this.checkBox_NewPassword_UseLowerCase.TabIndex = 1;
-            this.checkBox_NewPassword_UseLowerCase.Text = "Use lower case";
-            this.checkBox_NewPassword_UseLowerCase.UseVisualStyleBackColor = true;
-            // 
-            // checkBox_NewPassword_UseUpperCase
-            // 
-            this.checkBox_NewPassword_UseUpperCase.AutoSize = true;
-            this.checkBox_NewPassword_UseUpperCase.Location = new System.Drawing.Point(6, 19);
-            this.checkBox_NewPassword_UseUpperCase.Name = "checkBox_NewPassword_UseUpperCase";
-            this.checkBox_NewPassword_UseUpperCase.Size = new System.Drawing.Size(104, 16);
-            this.checkBox_NewPassword_UseUpperCase.TabIndex = 0;
-            this.checkBox_NewPassword_UseUpperCase.Text = "Use upper case";
-            this.checkBox_NewPassword_UseUpperCase.UseVisualStyleBackColor = true;
             // 
             // FormCreatePassword
             // 

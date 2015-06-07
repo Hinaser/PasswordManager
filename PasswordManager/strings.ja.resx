@@ -162,6 +162,18 @@
   <data name="Form_NewPassword_Caption" xml:space="preserve">
     <value>タイトル</value>
   </data>
+  <data name="Form_NewPassword_ErrorDialogCaption" xml:space="preserve">
+    <value>エラー</value>
+  </data>
+  <data name="Form_NewPassword_ErrorMaxTooLarge" xml:space="preserve">
+    <value>最大文字数が大きすぎます</value>
+  </data>
+  <data name="Form_NewPassword_ErrorMinLTMax" xml:space="preserve">
+    <value>最小文字数は最大文字数を上回ることはできません</value>
+  </data>
+  <data name="Form_NewPassword_ErrorMinTooSmall" xml:space="preserve">
+    <value>最小文字数が小さすぎます</value>
+  </data>
   <data name="Form_NewPassword_Generate" xml:space="preserve">
     <value>生成</value>
   </data>
