@@ -185,9 +185,9 @@
             // 
             // button_NewPassword_GeneratePassword
             // 
-            this.button_NewPassword_GeneratePassword.Location = new System.Drawing.Point(189, 220);
+            this.button_NewPassword_GeneratePassword.Location = new System.Drawing.Point(170, 206);
             this.button_NewPassword_GeneratePassword.Name = "button_NewPassword_GeneratePassword";
-            this.button_NewPassword_GeneratePassword.Size = new System.Drawing.Size(79, 21);
+            this.button_NewPassword_GeneratePassword.Size = new System.Drawing.Size(98, 35);
             this.button_NewPassword_GeneratePassword.TabIndex = 6;
             this.button_NewPassword_GeneratePassword.Text = "Generate";
             this.button_NewPassword_GeneratePassword.UseVisualStyleBackColor = true;

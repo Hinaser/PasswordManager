@@ -175,7 +175,7 @@
     <value>Min Chars is too small</value>
   </data>
   <data name="Form_NewPassword_Generate" xml:space="preserve">
-    <value>Generate</value>
+    <value>Generate(&amp;G)</value>
   </data>
   <data name="Form_NewPassword_ID" xml:space="preserve">
     <value>ID</value>

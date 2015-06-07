@@ -175,7 +175,7 @@
     <value>最小文字数が小さすぎます</value>
   </data>
   <data name="Form_NewPassword_Generate" xml:space="preserve">
-    <value>生成</value>
+    <value>生成(&amp;G)</value>
   </data>
   <data name="Form_NewPassword_ID" xml:space="preserve">
     <value>ID</value>
