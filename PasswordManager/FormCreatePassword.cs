@@ -217,9 +217,6 @@ namespace PasswordManager
         void textBox_NewPassword_Password_TextChanged(object sender, EventArgs e)
         {
             TextBox t = sender as TextBox;
-            double adjustedPasswordLength = this.AdjustPasswordStrength(t.Text);
-
-            double strength = FormCreatePassword.CalculatePasswordStrength(t.Text, adjustedPasswordLength);
 
             // Reset label color
             this.label_NewPassword_Weak.BackColor = Color.Transparent;
@@ -228,6 +225,19 @@ namespace PasswordManager
             this.label_NewPassword_Normal.ForeColor = Color.DarkGray;
             this.label_NewPassword_Secure.BackColor = Color.Transparent;
             this.label_NewPassword_Secure.ForeColor = Color.DarkGray;
+
+            // Reset strength notification textarea
+            this.richTextBox_NewPassword_Strength.Clear();
+
+            // Do nothing if textbox is empty
+            if (String.IsNullOrEmpty(t.Text))
+            {
+                return;
+            }
+
+            // Calculate password strength
+            double adjustedPasswordLength = this.AdjustPasswordStrength(t.Text);
+            double strength = FormCreatePassword.CalculatePasswordStrength(t.Text, adjustedPasswordLength);
 
             // When judged as a weak password
             if (strength <= InternalApplicationConfig.MaxWeakPasswordStrength)
