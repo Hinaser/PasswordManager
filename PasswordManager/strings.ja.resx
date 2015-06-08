@@ -190,7 +190,7 @@
     <value>最小文字数</value>
   </data>
   <data name="Form_NewPassword_OK" xml:space="preserve">
-    <value>OK</value>
+    <value>保存</value>
   </data>
   <data name="Form_NewPassword_PasswdNormal" xml:space="preserve">
     <value>普通</value>
@@ -232,7 +232,7 @@
     <value>ファイルに保存する</value>
   </data>
   <data name="General_NewPassword_Strength_TypeGood" xml:space="preserve">
-    <value>[強い]</value>
+    <value>[安全]</value>
   </data>
   <data name="General_NewPassword_Strength_AllDifferent" xml:space="preserve">
     <value>全ての文字が互いに異なっている</value>
@@ -247,7 +247,7 @@
     <value>同一文字種が{0}文字以上連続していない</value>
   </data>
   <data name="General_NewPassword_Strength_TypeBad" xml:space="preserve">
-    <value>[弱い]</value>
+    <value>[不十分]</value>
   </data>
   <data name="General_NewPassword_Strength_TypeResult" xml:space="preserve">
     <value>&lt;スコア&gt;</value>

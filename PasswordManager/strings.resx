@@ -190,7 +190,7 @@
     <value>Min chars</value>
   </data>
   <data name="Form_NewPassword_OK" xml:space="preserve">
-    <value>OK</value>
+    <value>Save</value>
   </data>
   <data name="Form_NewPassword_PasswdNormal" xml:space="preserve">
     <value>Normal</value>
