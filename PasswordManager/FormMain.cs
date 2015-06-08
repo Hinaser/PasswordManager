@@ -33,7 +33,7 @@ namespace PasswordManager
         public MainForm_PasswordManager()
         {
             InitializeComponent();
-
+            
             // ListView event
             this.listView_PasswordItems.SizeChanged += listView_PasswordItems_SizeChanged;
             this.listView_PasswordItems.ColumnWidthChanged += listView_PasswordItems_ColumnWidthChanged;

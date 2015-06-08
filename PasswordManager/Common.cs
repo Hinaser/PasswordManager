@@ -39,6 +39,8 @@ namespace PasswordManager
         public static decimal passwordMaxLength = 128;
         public static double MaxWeakPasswordStrength = FormCreatePassword.CalculatePasswordStrength("aaAA00", 6);
         public static double MaxNormalPasswordStrength = FormCreatePassword.CalculatePasswordStrength("aaAA00Abc1", 10);
+        public static int PasswordStrengthNoticeHeaderSize = 8;
+        public static string PasswordStrengthNoticeFormat = String.Format("{0}{1}{2}{3}", "{0, -", PasswordStrengthNoticeHeaderSize, "} {1}", Environment.NewLine);
     }
 
     public static class Utility

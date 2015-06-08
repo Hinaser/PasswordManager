@@ -231,7 +231,76 @@
   <data name="Form_Tooltip_SaveFile" xml:space="preserve">
     <value>ファイルに保存する</value>
   </data>
+  <data name="General_NewPassword_Strength_TypeGood" xml:space="preserve">
+    <value>[強い]</value>
+  </data>
+  <data name="General_NewPassword_Strength_AllDifferent" xml:space="preserve">
+    <value>全ての文字が互いに異なっている</value>
+  </data>
+  <data name="General_NewPassword_Strength_SameCharInARow" xml:space="preserve">
+    <value>同一文字が連続している</value>
+  </data>
+  <data name="General_NewPassword_Strength_SameClassInARow" xml:space="preserve">
+    <value>同一文字種が{0}文字連続している</value>
+  </data>
+  <data name="General_NewPassword_Strength_SameClassNotInARow" xml:space="preserve">
+    <value>同一文字種が{0}文字以上連続していない</value>
+  </data>
+  <data name="General_NewPassword_Strength_TypeBad" xml:space="preserve">
+    <value>[弱い]</value>
+  </data>
+  <data name="General_NewPassword_Strength_TypeResult" xml:space="preserve">
+    <value>&lt;スコア&gt;</value>
+  </data>
   <data name="Status_Ready" xml:space="preserve">
     <value>準備完了</value>
+  </data>
+  <data name="General_NewPassword_Strength_L" xml:space="preserve">
+    <value>英小文字のみ</value>
+  </data>
+  <data name="General_NewPassword_Strength_LN" xml:space="preserve">
+    <value>英小文字/数字の組み合わせ</value>
+  </data>
+  <data name="General_NewPassword_Strength_LNS" xml:space="preserve">
+    <value>英小文字/数字/記号の組み合わせ</value>
+  </data>
+  <data name="General_NewPassword_Strength_LS" xml:space="preserve">
+    <value>英小文字/記号の組み合わせ</value>
+  </data>
+  <data name="General_NewPassword_Strength_LU" xml:space="preserve">
+    <value>英小文字/大文字の組み合わせ</value>
+  </data>
+  <data name="General_NewPassword_Strength_LUN" xml:space="preserve">
+    <value>英小文字/大文字/数字の組み合わせ</value>
+  </data>
+  <data name="General_NewPassword_Strength_LUNS" xml:space="preserve">
+    <value>英小文字/大文字/数字/記号の組み合わせ</value>
+  </data>
+  <data name="General_NewPassword_Strength_LUS" xml:space="preserve">
+    <value>英小文字/大文字/記号の組み合わせ</value>
+  </data>
+  <data name="General_NewPassword_Strength_N" xml:space="preserve">
+    <value>数字のみ</value>
+  </data>
+  <data name="General_NewPassword_Strength_NS" xml:space="preserve">
+    <value>数字/記号の組み合わせ</value>
+  </data>
+  <data name="General_NewPassword_Strength_S" xml:space="preserve">
+    <value>記号のみ</value>
+  </data>
+  <data name="General_NewPassword_Strength_TypePassClass" xml:space="preserve">
+    <value>&lt;クラス&gt;</value>
+  </data>
+  <data name="General_NewPassword_Strength_U" xml:space="preserve">
+    <value>英大文字のみ</value>
+  </data>
+  <data name="General_NewPassword_Strength_UN" xml:space="preserve">
+    <value>英大文字/数字の組み合わせ</value>
+  </data>
+  <data name="General_NewPassword_Strength_UNS" xml:space="preserve">
+    <value>英大文字/数字/記号の組み合わせ</value>
+  </data>
+  <data name="General_NewPassword_Strength_US" xml:space="preserve">
+    <value>英大文字/記号の組み合わせ</value>
   </data>
 </root>

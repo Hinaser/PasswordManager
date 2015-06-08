@@ -403,6 +403,213 @@ namespace PasswordManager {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to All characters are different each other.
+        /// </summary>
+        internal static string General_NewPassword_Strength_AllDifferent {
+            get {
+                return ResourceManager.GetString("General_NewPassword_Strength_AllDifferent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Lower case only.
+        /// </summary>
+        internal static string General_NewPassword_Strength_L {
+            get {
+                return ResourceManager.GetString("General_NewPassword_Strength_L", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Combination of lower case / number.
+        /// </summary>
+        internal static string General_NewPassword_Strength_LN {
+            get {
+                return ResourceManager.GetString("General_NewPassword_Strength_LN", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Combination of lower case / number / symbol.
+        /// </summary>
+        internal static string General_NewPassword_Strength_LNS {
+            get {
+                return ResourceManager.GetString("General_NewPassword_Strength_LNS", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Combination of lower case / symbol.
+        /// </summary>
+        internal static string General_NewPassword_Strength_LS {
+            get {
+                return ResourceManager.GetString("General_NewPassword_Strength_LS", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Combination of lower case / upper case.
+        /// </summary>
+        internal static string General_NewPassword_Strength_LU {
+            get {
+                return ResourceManager.GetString("General_NewPassword_Strength_LU", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Combination of lower case / upper case / number.
+        /// </summary>
+        internal static string General_NewPassword_Strength_LUN {
+            get {
+                return ResourceManager.GetString("General_NewPassword_Strength_LUN", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Combination of lower case / upper case / number / symbol.
+        /// </summary>
+        internal static string General_NewPassword_Strength_LUNS {
+            get {
+                return ResourceManager.GetString("General_NewPassword_Strength_LUNS", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Combination of lower case / upper case / symbol.
+        /// </summary>
+        internal static string General_NewPassword_Strength_LUS {
+            get {
+                return ResourceManager.GetString("General_NewPassword_Strength_LUS", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Number only.
+        /// </summary>
+        internal static string General_NewPassword_Strength_N {
+            get {
+                return ResourceManager.GetString("General_NewPassword_Strength_N", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Combination of number / symbol.
+        /// </summary>
+        internal static string General_NewPassword_Strength_NS {
+            get {
+                return ResourceManager.GetString("General_NewPassword_Strength_NS", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Symbol only.
+        /// </summary>
+        internal static string General_NewPassword_Strength_S {
+            get {
+                return ResourceManager.GetString("General_NewPassword_Strength_S", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The same characters are in a row.
+        /// </summary>
+        internal static string General_NewPassword_Strength_SameCharInARow {
+            get {
+                return ResourceManager.GetString("General_NewPassword_Strength_SameCharInARow", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} chars of the same type are in a row.
+        /// </summary>
+        internal static string General_NewPassword_Strength_SameClassInARow {
+            get {
+                return ResourceManager.GetString("General_NewPassword_Strength_SameClassInARow", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Types of consecutive {0} chars are different.
+        /// </summary>
+        internal static string General_NewPassword_Strength_SameClassNotInARow {
+            get {
+                return ResourceManager.GetString("General_NewPassword_Strength_SameClassNotInARow", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to [Bad].
+        /// </summary>
+        internal static string General_NewPassword_Strength_TypeBad {
+            get {
+                return ResourceManager.GetString("General_NewPassword_Strength_TypeBad", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to [Good].
+        /// </summary>
+        internal static string General_NewPassword_Strength_TypeGood {
+            get {
+                return ResourceManager.GetString("General_NewPassword_Strength_TypeGood", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;Class&gt;.
+        /// </summary>
+        internal static string General_NewPassword_Strength_TypePassClass {
+            get {
+                return ResourceManager.GetString("General_NewPassword_Strength_TypePassClass", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;SCORE&gt;.
+        /// </summary>
+        internal static string General_NewPassword_Strength_TypeResult {
+            get {
+                return ResourceManager.GetString("General_NewPassword_Strength_TypeResult", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Upper case only.
+        /// </summary>
+        internal static string General_NewPassword_Strength_U {
+            get {
+                return ResourceManager.GetString("General_NewPassword_Strength_U", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Combination of upper case / number.
+        /// </summary>
+        internal static string General_NewPassword_Strength_UN {
+            get {
+                return ResourceManager.GetString("General_NewPassword_Strength_UN", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Combination of upper case / number / symbol.
+        /// </summary>
+        internal static string General_NewPassword_Strength_UNS {
+            get {
+                return ResourceManager.GetString("General_NewPassword_Strength_UNS", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Combination of upper case / symbol.
+        /// </summary>
+        internal static string General_NewPassword_Strength_US {
+            get {
+                return ResourceManager.GetString("General_NewPassword_Strength_US", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Ready.
         /// </summary>
         internal static string Status_Ready {

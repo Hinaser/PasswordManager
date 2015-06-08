@@ -231,6 +231,75 @@
   <data name="Form_Tooltip_SaveFile" xml:space="preserve">
     <value>Save file</value>
   </data>
+  <data name="General_NewPassword_Strength_AllDifferent" xml:space="preserve">
+    <value>All characters are different each other</value>
+  </data>
+  <data name="General_NewPassword_Strength_L" xml:space="preserve">
+    <value>Lower case only</value>
+  </data>
+  <data name="General_NewPassword_Strength_LN" xml:space="preserve">
+    <value>Combination of lower case / number</value>
+  </data>
+  <data name="General_NewPassword_Strength_LNS" xml:space="preserve">
+    <value>Combination of lower case / number / symbol</value>
+  </data>
+  <data name="General_NewPassword_Strength_LS" xml:space="preserve">
+    <value>Combination of lower case / symbol</value>
+  </data>
+  <data name="General_NewPassword_Strength_LU" xml:space="preserve">
+    <value>Combination of lower case / upper case</value>
+  </data>
+  <data name="General_NewPassword_Strength_LUN" xml:space="preserve">
+    <value>Combination of lower case / upper case / number</value>
+  </data>
+  <data name="General_NewPassword_Strength_LUNS" xml:space="preserve">
+    <value>Combination of lower case / upper case / number / symbol</value>
+  </data>
+  <data name="General_NewPassword_Strength_LUS" xml:space="preserve">
+    <value>Combination of lower case / upper case / symbol</value>
+  </data>
+  <data name="General_NewPassword_Strength_N" xml:space="preserve">
+    <value>Number only</value>
+  </data>
+  <data name="General_NewPassword_Strength_NS" xml:space="preserve">
+    <value>Combination of number / symbol</value>
+  </data>
+  <data name="General_NewPassword_Strength_S" xml:space="preserve">
+    <value>Symbol only</value>
+  </data>
+  <data name="General_NewPassword_Strength_SameCharInARow" xml:space="preserve">
+    <value>The same characters are in a row</value>
+  </data>
+  <data name="General_NewPassword_Strength_SameClassInARow" xml:space="preserve">
+    <value>{0} chars of the same type are in a row</value>
+  </data>
+  <data name="General_NewPassword_Strength_SameClassNotInARow" xml:space="preserve">
+    <value>Types of consecutive {0} chars are different</value>
+  </data>
+  <data name="General_NewPassword_Strength_TypeBad" xml:space="preserve">
+    <value>[Bad]</value>
+  </data>
+  <data name="General_NewPassword_Strength_TypeGood" xml:space="preserve">
+    <value>[Good]</value>
+  </data>
+  <data name="General_NewPassword_Strength_TypePassClass" xml:space="preserve">
+    <value>&lt;Class&gt;</value>
+  </data>
+  <data name="General_NewPassword_Strength_TypeResult" xml:space="preserve">
+    <value>&lt;SCORE&gt;</value>
+  </data>
+  <data name="General_NewPassword_Strength_U" xml:space="preserve">
+    <value>Upper case only</value>
+  </data>
+  <data name="General_NewPassword_Strength_UN" xml:space="preserve">
+    <value>Combination of upper case / number</value>
+  </data>
+  <data name="General_NewPassword_Strength_UNS" xml:space="preserve">
+    <value>Combination of upper case / number / symbol</value>
+  </data>
+  <data name="General_NewPassword_Strength_US" xml:space="preserve">
+    <value>Combination of upper case / symbol</value>
+  </data>
   <data name="Status_Ready" xml:space="preserve">
     <value>Ready</value>
   </data>

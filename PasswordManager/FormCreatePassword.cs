@@ -235,9 +235,14 @@ namespace PasswordManager
                 return;
             }
 
+            // Analyze password class and show on strength report text area
+            PasswordTextClass c = GetPasswordClass(t.Text);
+            this.richTextBox_NewPassword_Strength.AppendText(String.Format(InternalApplicationConfig.PasswordStrengthNoticeFormat, strings.General_NewPassword_Strength_TypePassClass, this.GetPasswordClassText(c)));
+
             // Calculate password strength
             double adjustedPasswordLength = this.AdjustPasswordStrength(t.Text);
             double strength = FormCreatePassword.CalculatePasswordStrength(t.Text, adjustedPasswordLength);
+            this.richTextBox_NewPassword_Strength.AppendText(String.Format(InternalApplicationConfig.PasswordStrengthNoticeFormat, strings.General_NewPassword_Strength_TypeResult, Math.Round(strength, 2).ToString()));
 
             // When judged as a weak password
             if (strength <= InternalApplicationConfig.MaxWeakPasswordStrength)
@@ -385,7 +390,7 @@ namespace PasswordManager
             string lower = "a-z";
             string upper = "A-Z";
             string number = "0-9";
-            string symbol = Regex.Escape("#$()^\\|[{+*.? ") + "!\"%&'-=~@`;:\\]},<>/_";
+            string symbol = @"\W|_";
             if ((new Regex(String.Format("^[{0}]+$", lower))).IsMatch(password)) return PasswordTextClass.UseLowercaseOnly;
             if ((new Regex(String.Format("^[{0}]+$", upper))).IsMatch(password)) return PasswordTextClass.UseUppercaseOnly;
             if ((new Regex(String.Format("^[{0}]+$", number))).IsMatch(password)) return PasswordTextClass.UseNumberOnly;
@@ -403,6 +408,52 @@ namespace PasswordManager
             if ((new Regex(String.Format("^[{0}{1}{2}{3}]+$", lower, upper, number, symbol))).IsMatch(password)) return PasswordTextClass.UseLowerUpperNumberSymbol;
 
             return PasswordTextClass.Unknown;
+        }
+
+        /// <summary>
+        /// Convert class enum to its text
+        /// </summary>
+        /// <param name="c"></param>
+        /// <returns></returns>
+        private string GetPasswordClassText(PasswordTextClass c)
+        {
+            switch (c)
+            {
+                case PasswordTextClass.UseLowercaseOnly:
+                    return strings.General_NewPassword_Strength_L;
+                case PasswordTextClass.UseUppercaseOnly:
+                    return strings.General_NewPassword_Strength_U;
+                case PasswordTextClass.UseNumberOnly:
+                    return strings.General_NewPassword_Strength_N;
+                case PasswordTextClass.UseSymbolOnly:
+                    return strings.General_NewPassword_Strength_S;
+                case PasswordTextClass.UseLowerUpper:
+                    return strings.General_NewPassword_Strength_LU;
+                case PasswordTextClass.UseLowerNumber:
+                    return strings.General_NewPassword_Strength_LN;
+                case PasswordTextClass.UseLowerSymbol:
+                    return strings.General_NewPassword_Strength_LS;
+                case PasswordTextClass.UseUpperNumber:
+                    return strings.General_NewPassword_Strength_UN;
+                case PasswordTextClass.UseUpperSymbol:
+                    return strings.General_NewPassword_Strength_US;
+                case PasswordTextClass.UseNumberSymbol:
+                    return strings.General_NewPassword_Strength_NS;
+                case PasswordTextClass.UseLowerUpperNumber:
+                    return strings.General_NewPassword_Strength_LUN;
+                case PasswordTextClass.UseLowerUpperSymbol:
+                    return strings.General_NewPassword_Strength_LUS;
+                case PasswordTextClass.UseLowerNumberSymbol:
+                    return strings.General_NewPassword_Strength_LNS;
+                case PasswordTextClass.UseUpperNumberSymbol:
+                    return strings.General_NewPassword_Strength_UNS;
+                case PasswordTextClass.UseLowerUpperNumberSymbol:
+                    return strings.General_NewPassword_Strength_LUNS;
+                default:
+                    break;
+            }
+
+            return String.Empty;
         }
 
         /// <summary>
@@ -463,8 +514,6 @@ namespace PasswordManager
         /// <returns>Adjusted password character length</returns>
         private double AdjustPasswordStrength(string password)
         {
-            this.richTextBox_NewPassword_Strength.Clear();
-
             if (String.IsNullOrEmpty(password))
             {
                 return 0;
@@ -486,7 +535,9 @@ namespace PasswordManager
             }
             if (isAllDifferent)
             {
-                this.richTextBox_NewPassword_Strength.AppendText("All characters are different from each other: Length*1.2" + Environment.NewLine);
+                // Add strength adjustment report
+                this.AppendStrengthReport(strings.General_NewPassword_Strength_TypeGood, strings.General_NewPassword_Strength_AllDifferent, Color.Green);
+                // Modify adjust value
                 adjusted *= 1.2;
             }
 
@@ -495,7 +546,9 @@ namespace PasswordManager
             {
                 if (passwordChars[i - 1] == password[i])
                 {
-                    this.richTextBox_NewPassword_Strength.AppendText("Use the same character in a row: Length-0.5/count" + Environment.NewLine);
+                    // Add strength adjustment report
+                    this.AppendStrengthReport(strings.General_NewPassword_Strength_TypeBad, strings.General_NewPassword_Strength_SameCharInARow, Color.Red);
+                    // Modify adjust value
                     adjusted -= 0.5;
                 }
             }
@@ -522,7 +575,9 @@ namespace PasswordManager
                     }
                     if (isTheSameClassInARow)
                     {
-                        this.richTextBox_NewPassword_Strength.AppendText("Use the same kind of 5 characters in a row: Length-0.2" + Environment.NewLine);
+                        // Add strength adjustment report
+                        this.AppendStrengthReport(strings.General_NewPassword_Strength_TypeBad, String.Format(strings.General_NewPassword_Strength_SameClassInARow, 5), Color.Red);
+                        // Modify adjust value
                         adjusted -= 0.2;
                     }
                 }
@@ -553,12 +608,41 @@ namespace PasswordManager
 
                 if (areAllCharFrameNeverUsingTheSameClass)
                 {
-                    this.richTextBox_NewPassword_Strength.AppendText("Not Use the same kind of 4 characters in a row: Length*1.15" + Environment.NewLine);
+                    // Add strength adjustment report
+                    this.AppendStrengthReport(strings.General_NewPassword_Strength_TypeGood, String.Format(strings.General_NewPassword_Strength_SameClassNotInARow, 4), Color.Green);
+                    // Modify adjust value
                     adjusted *= 1.15;
                 }
             }
 
             return adjusted;
+        }
+
+        /// <summary>
+        /// Add password strength check record to text area with color
+        /// </summary>
+        /// <param name="header"></param>
+        /// <param name="text"></param>
+        private void AppendStrengthReport(string header, string text, Color headerColor)
+        {
+            // Save current text length
+            int selectionStart = this.richTextBox_NewPassword_Strength.TextLength;
+            this.richTextBox_NewPassword_Strength.SelectionLength = 0;
+
+            // Add text to form
+            this.richTextBox_NewPassword_Strength.AppendText(
+                String.Format(
+                InternalApplicationConfig.PasswordStrengthNoticeFormat,
+                header,
+                text));
+
+            // Paint color
+            this.richTextBox_NewPassword_Strength.SelectionStart = selectionStart;
+            this.richTextBox_NewPassword_Strength.SelectionLength = InternalApplicationConfig.PasswordStrengthNoticeHeaderSize;
+            this.richTextBox_NewPassword_Strength.SelectionColor = headerColor;
+
+            // Deselect in order not to remain color effect
+            this.richTextBox_NewPassword_Strength.DeselectAll();
         }
 
         /// <summary>
