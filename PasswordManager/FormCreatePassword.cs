@@ -232,19 +232,19 @@ namespace PasswordManager
             // When judged as a weak password
             if (strength <= InternalApplicationConfig.MaxWeakPasswordStrength)
             {
-                this.label_NewPassword_Weak.BackColor = Color.Red;
+                this.label_NewPassword_Weak.BackColor = Color.Orange;
                 this.label_NewPassword_Weak.ForeColor = Color.Black;
             }
             // When judged as a normal password
             else if (InternalApplicationConfig.MaxWeakPasswordStrength < strength && strength <= InternalApplicationConfig.MaxNormalPasswordStrength)
             {
-                this.label_NewPassword_Normal.BackColor = Color.Yellow;
+                this.label_NewPassword_Normal.BackColor = Color.LightSeaGreen;
                 this.label_NewPassword_Normal.ForeColor = Color.Black;
             }
             // When judged as a strong password
             else if (InternalApplicationConfig.MaxNormalPasswordStrength < strength)
             {
-                this.label_NewPassword_Secure.BackColor = Color.Green;
+                this.label_NewPassword_Secure.BackColor = Color.GreenYellow;
                 this.label_NewPassword_Secure.ForeColor = Color.Black;
             }
         }
@@ -453,7 +453,7 @@ namespace PasswordManager
         /// <returns>Adjusted password character length</returns>
         private double AdjustPasswordStrength(string password)
         {
-            this.textBox_NewPassword_strength.Clear();
+            this.richTextBox_NewPassword_Strength.Clear();
 
             if (String.IsNullOrEmpty(password))
             {
@@ -476,7 +476,7 @@ namespace PasswordManager
             }
             if (isAllDifferent)
             {
-                this.textBox_NewPassword_strength.AppendText("All characters are different from each other: Length*1.2" + Environment.NewLine);
+                this.richTextBox_NewPassword_Strength.AppendText("All characters are different from each other: Length*1.2" + Environment.NewLine);
                 adjusted *= 1.2;
             }
 
@@ -485,7 +485,7 @@ namespace PasswordManager
             {
                 if (passwordChars[i - 1] == password[i])
                 {
-                    this.textBox_NewPassword_strength.AppendText("Use the same character in a row: Length-0.5/count" + Environment.NewLine);
+                    this.richTextBox_NewPassword_Strength.AppendText("Use the same character in a row: Length-0.5/count" + Environment.NewLine);
                     adjusted -= 0.5;
                 }
             }
@@ -512,7 +512,7 @@ namespace PasswordManager
                     }
                     if (isTheSameClassInARow)
                     {
-                        this.textBox_NewPassword_strength.AppendText("Use the same kind of 5 characters in a row: Length-0.2" + Environment.NewLine);
+                        this.richTextBox_NewPassword_Strength.AppendText("Use the same kind of 5 characters in a row: Length-0.2" + Environment.NewLine);
                         adjusted -= 0.2;
                     }
                 }
@@ -543,7 +543,7 @@ namespace PasswordManager
 
                 if (areAllCharFrameNeverUsingTheSameClass)
                 {
-                    this.textBox_NewPassword_strength.AppendText("Not Use the same kind of 4 characters in a row: Length*1.15" + Environment.NewLine);
+                    this.richTextBox_NewPassword_Strength.AppendText("Not Use the same kind of 4 characters in a row: Length*1.15" + Environment.NewLine);
                     adjusted *= 1.15;
                 }
             }

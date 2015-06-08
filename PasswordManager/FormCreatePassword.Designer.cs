@@ -80,7 +80,6 @@
             this.checkBox_NewPassword_UseSymbols = new System.Windows.Forms.CheckBox();
             this.checkBox_NewPassword_UseNumerics = new System.Windows.Forms.CheckBox();
             this.groupBox_NewPassword_Test = new System.Windows.Forms.GroupBox();
-            this.textBox_NewPassword_strength = new System.Windows.Forms.TextBox();
             this.label_NewPassword_Secure = new System.Windows.Forms.Label();
             this.label_NewPassword_Normal = new System.Windows.Forms.Label();
             this.label_NewPassword_Weak = new System.Windows.Forms.Label();
@@ -88,6 +87,7 @@
             this.button_NewPassword_Cancel = new System.Windows.Forms.Button();
             this.textBox_NewPassword_Memo = new System.Windows.Forms.TextBox();
             this.label_NewPassword_Memo = new System.Windows.Forms.Label();
+            this.richTextBox_NewPassword_Strength = new System.Windows.Forms.RichTextBox();
             this.groupBox_NewPassword_Randomize.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_NewPassword_Maxchars)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_NewPassword_Minchars)).BeginInit();
@@ -690,7 +690,7 @@
             // 
             // groupBox_NewPassword_Test
             // 
-            this.groupBox_NewPassword_Test.Controls.Add(this.textBox_NewPassword_strength);
+            this.groupBox_NewPassword_Test.Controls.Add(this.richTextBox_NewPassword_Strength);
             this.groupBox_NewPassword_Test.Controls.Add(this.label_NewPassword_Secure);
             this.groupBox_NewPassword_Test.Controls.Add(this.label_NewPassword_Normal);
             this.groupBox_NewPassword_Test.Controls.Add(this.label_NewPassword_Weak);
@@ -700,18 +700,6 @@
             this.groupBox_NewPassword_Test.TabIndex = 7;
             this.groupBox_NewPassword_Test.TabStop = false;
             this.groupBox_NewPassword_Test.Text = "Password strength test";
-            // 
-            // textBox_NewPassword_strength
-            // 
-            this.textBox_NewPassword_strength.Location = new System.Drawing.Point(14, 40);
-            this.textBox_NewPassword_strength.Multiline = true;
-            this.textBox_NewPassword_strength.Name = "textBox_NewPassword_strength";
-            this.textBox_NewPassword_strength.ReadOnly = true;
-            this.textBox_NewPassword_strength.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.textBox_NewPassword_strength.Size = new System.Drawing.Size(242, 115);
-            this.textBox_NewPassword_strength.TabIndex = 3;
-            this.textBox_NewPassword_strength.TabStop = false;
-            this.textBox_NewPassword_strength.WordWrap = false;
             // 
             // label_NewPassword_Secure
             // 
@@ -790,6 +778,19 @@
             this.label_NewPassword_Memo.TabIndex = 11;
             this.label_NewPassword_Memo.Text = "Memo";
             // 
+            // richTextBox_NewPassword_Strength
+            // 
+            this.richTextBox_NewPassword_Strength.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.richTextBox_NewPassword_Strength.Location = new System.Drawing.Point(14, 42);
+            this.richTextBox_NewPassword_Strength.Name = "richTextBox_NewPassword_Strength";
+            this.richTextBox_NewPassword_Strength.ReadOnly = true;
+            this.richTextBox_NewPassword_Strength.ShortcutsEnabled = false;
+            this.richTextBox_NewPassword_Strength.Size = new System.Drawing.Size(242, 113);
+            this.richTextBox_NewPassword_Strength.TabIndex = 3;
+            this.richTextBox_NewPassword_Strength.TabStop = false;
+            this.richTextBox_NewPassword_Strength.Text = "";
+            this.richTextBox_NewPassword_Strength.WordWrap = false;
+            // 
             // FormCreatePassword
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -817,7 +818,6 @@
             this.groupBox_NewPassword_AllowedSymbols.ResumeLayout(false);
             this.groupBox_NewPassword_AllowedSymbols.PerformLayout();
             this.groupBox_NewPassword_Test.ResumeLayout(false);
-            this.groupBox_NewPassword_Test.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -880,10 +880,10 @@
         private System.Windows.Forms.Label label_NewPassword_Secure;
         private System.Windows.Forms.Label label_NewPassword_Normal;
         private System.Windows.Forms.Label label_NewPassword_Weak;
-        private System.Windows.Forms.TextBox textBox_NewPassword_strength;
         private System.Windows.Forms.TextBox textBox_NewPassword_Memo;
         private System.Windows.Forms.Label label_NewPassword_Memo;
         private System.Windows.Forms.CheckBox checkBox_NewPassword_UseUpperCase;
         private System.Windows.Forms.CheckBox checkBox_NewPassword_UseLowerCase;
+        private System.Windows.Forms.RichTextBox richTextBox_NewPassword_Strength;
     }
 }
