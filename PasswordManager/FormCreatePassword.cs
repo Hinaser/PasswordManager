@@ -16,6 +16,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using System.Text.RegularExpressions;
 #endregion
 
 namespace PasswordManager
@@ -45,6 +46,7 @@ namespace PasswordManager
             this.button_NewPassword_GeneratePassword.Click += button_NewPassword_GeneratePassword_Click;
             // Textbox event
             this.textBox_NewPassword_Caption.TextChanged += textBox_NewPassword_Caption_TextChanged;
+            this.textBox_NewPassword_Password.TextChanged += textBox_NewPassword_Password_TextChanged;
 
             // Do initializing process
             this.InitializeFormStatus();
@@ -206,6 +208,46 @@ namespace PasswordManager
 
             this.button_NewPassword_OK.Enabled = true;
         }
+
+        /// <summary>
+        /// At the moment password text is updated, validate the password text strength
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        void textBox_NewPassword_Password_TextChanged(object sender, EventArgs e)
+        {
+            TextBox t = sender as TextBox;
+            double adjustedPasswordLength = this.AdjustPasswordStrength(t.Text);
+
+            double strength = FormCreatePassword.CalculatePasswordStrength(t.Text, adjustedPasswordLength);
+
+            // Reset label color
+            this.label_NewPassword_Weak.BackColor = Color.Transparent;
+            this.label_NewPassword_Weak.ForeColor = Color.DarkGray;
+            this.label_NewPassword_Normal.BackColor = Color.Transparent;
+            this.label_NewPassword_Normal.ForeColor = Color.DarkGray;
+            this.label_NewPassword_Secure.BackColor = Color.Transparent;
+            this.label_NewPassword_Secure.ForeColor = Color.DarkGray;
+
+            // When judged as a weak password
+            if (strength <= InternalApplicationConfig.MaxWeakPasswordStrength)
+            {
+                this.label_NewPassword_Weak.BackColor = Color.Red;
+                this.label_NewPassword_Weak.ForeColor = Color.Black;
+            }
+            // When judged as a normal password
+            else if (InternalApplicationConfig.MaxWeakPasswordStrength < strength && strength <= InternalApplicationConfig.MaxNormalPasswordStrength)
+            {
+                this.label_NewPassword_Normal.BackColor = Color.Yellow;
+                this.label_NewPassword_Normal.ForeColor = Color.Black;
+            }
+            // When judged as a strong password
+            else if (InternalApplicationConfig.MaxNormalPasswordStrength < strength)
+            {
+                this.label_NewPassword_Secure.BackColor = Color.Green;
+                this.label_NewPassword_Secure.ForeColor = Color.Black;
+            }
+        }
         #endregion
 
         #endregion
@@ -215,7 +257,7 @@ namespace PasswordManager
         /// Return character pool which can be used to construct actual password string
         /// </summary>
         /// <returns></returns>
-        public char[] GeneratePasswordCharacterPool()
+        private char[] GeneratePasswordCharacterPool()
         {
             List<char> pool = new List<char>();
 
@@ -298,6 +340,239 @@ namespace PasswordManager
             Random rand = new Random((int)(DateTime.Now.Ticks & 0x0000FFFF));
             return rand.Next() % (max - min + 1) + min;
         }
+
+        /// <summary>
+        /// Calculate password strength value for specified password string.
+        /// </summary>
+        /// <param name="password"></param>
+        /// <returns></returns>
+        public static double CalculatePasswordStrength(string password, double adjustedPasswordLength)
+        {
+            if (String.IsNullOrEmpty(password))
+            {
+                return 0;
+            }
+
+            // Get password class
+            PasswordTextClass passClass = FormCreatePassword.GetPasswordClass(password);
+
+            // Get pattern number for the password class
+            int nPattern = FormCreatePassword.GetNumberOfPasswordPattern(passClass);
+
+            // Calculate password strength
+            double strength = adjustedPasswordLength * Math.Log((double)nPattern, 2);
+
+            return strength;
+        }
+
+        /// <summary>
+        /// Inspect and return password class for input password text
+        /// </summary>
+        /// <param name="password"></param>
+        /// <returns></returns>
+        public static PasswordTextClass GetPasswordClass(string password)
+        {
+            string lower = "a-z";
+            string upper = "A-Z";
+            string number = "0-9";
+            string symbol = Regex.Escape("#$()^\\|[{+*.? ") + "!\"%&'-=~@`;:\\]},<>/_";
+            if ((new Regex(String.Format("^[{0}]+$", lower))).IsMatch(password)) return PasswordTextClass.UseLowercaseOnly;
+            if ((new Regex(String.Format("^[{0}]+$", upper))).IsMatch(password)) return PasswordTextClass.UseUppercaseOnly;
+            if ((new Regex(String.Format("^[{0}]+$", number))).IsMatch(password)) return PasswordTextClass.UseNumberOnly;
+            if ((new Regex(String.Format("^[{0}]+$", symbol))).IsMatch(password)) return PasswordTextClass.UseSymbolOnly;
+            if ((new Regex(String.Format("^[{0}{1}]+$", lower, upper))).IsMatch(password)) return PasswordTextClass.UseLowerUpper;
+            if ((new Regex(String.Format("^[{0}{1}]+$", lower, number))).IsMatch(password)) return PasswordTextClass.UseLowerNumber;
+            if ((new Regex(String.Format("^[{0}{1}]+$", lower, symbol))).IsMatch(password)) return PasswordTextClass.UseLowerSymbol;
+            if ((new Regex(String.Format("^[{0}{1}]+$", upper, number))).IsMatch(password)) return PasswordTextClass.UseUpperNumber;
+            if ((new Regex(String.Format("^[{0}{1}]+$", upper, symbol))).IsMatch(password)) return PasswordTextClass.UseUpperSymbol;
+            if ((new Regex(String.Format("^[{0}{1}]+$", number, symbol))).IsMatch(password)) return PasswordTextClass.UseNumberSymbol;
+            if ((new Regex(String.Format("^[{0}{1}{2}]+$", lower, upper, number))).IsMatch(password)) return PasswordTextClass.UseLowerUpperNumber;
+            if ((new Regex(String.Format("^[{0}{1}{2}]+$", lower, upper, symbol))).IsMatch(password)) return PasswordTextClass.UseLowerUpperSymbol;
+            if ((new Regex(String.Format("^[{0}{1}{2}]+$", lower, number, symbol))).IsMatch(password)) return PasswordTextClass.UseLowerNumberSymbol;
+            if ((new Regex(String.Format("^[{0}{1}{2}]+$", upper, number, symbol))).IsMatch(password)) return PasswordTextClass.UseUpperNumberSymbol;
+            if ((new Regex(String.Format("^[{0}{1}{2}{3}]+$", lower, upper, number, symbol))).IsMatch(password)) return PasswordTextClass.UseLowerUpperNumberSymbol;
+
+            return PasswordTextClass.Unknown;
+        }
+
+        /// <summary>
+        /// Get pattern number for specified PasswordTextClass
+        /// </summary>
+        /// <param name="c"></param>
+        /// <returns></returns>
+        private static int GetNumberOfPasswordPattern(PasswordTextClass c)
+        {
+            int lowers = Utility.Alphabet.Length;
+            int uppers = Utility.ALPHABET.Length;
+            int numerics = Utility.Numeric.Length;
+            int symbols = Utility.Symbol.Length;
+
+            switch (c)
+            {
+                case PasswordTextClass.UseLowercaseOnly:
+                    return lowers;
+                case PasswordTextClass.UseUppercaseOnly:
+                    return uppers;
+                case PasswordTextClass.UseNumberOnly:
+                    return numerics;
+                case PasswordTextClass.UseSymbolOnly:
+                    return symbols;
+                case PasswordTextClass.UseLowerUpper:
+                    return lowers + uppers;
+                case PasswordTextClass.UseLowerNumber:
+                    return lowers + numerics;
+                case PasswordTextClass.UseLowerSymbol:
+                    return lowers + symbols;
+                case PasswordTextClass.UseUpperNumber:
+                    return uppers + numerics;
+                case PasswordTextClass.UseUpperSymbol:
+                    return uppers + symbols;
+                case PasswordTextClass.UseNumberSymbol:
+                    return numerics + symbols;
+                case PasswordTextClass.UseLowerUpperNumber:
+                    return lowers + uppers + numerics;
+                case PasswordTextClass.UseLowerUpperSymbol:
+                    return lowers + uppers + symbols;
+                case PasswordTextClass.UseLowerNumberSymbol:
+                    return lowers + numerics + symbols;
+                case PasswordTextClass.UseUpperNumberSymbol:
+                    return uppers + numerics + symbols;
+                case PasswordTextClass.UseLowerUpperNumberSymbol:
+                    return lowers + uppers + numerics + symbols;
+                default:
+                    break;
+            }
+
+            return 0;
+        }
+
+        /// <summary>
+        /// Adjust password following some adjustment rules
+        /// </summary>
+        /// <param name="password"></param>
+        /// <returns>Adjusted password character length</returns>
+        private double AdjustPasswordStrength(string password)
+        {
+            this.textBox_NewPassword_strength.Clear();
+
+            if (String.IsNullOrEmpty(password))
+            {
+                return 0;
+            }
+
+            char[] passwordChars = password.ToCharArray();
+            double adjusted = password.Length;
+
+            //All characters are different from each other: Length*1.2
+            HashSet<char> hash = new HashSet<char>();
+            bool isAllDifferent = true;
+            foreach (char c in passwordChars)
+            {
+                if (!hash.Add(c))
+                {
+                    isAllDifferent = false;
+                    break;
+                }
+            }
+            if (isAllDifferent)
+            {
+                this.textBox_NewPassword_strength.AppendText("All characters are different from each other: Length*1.2" + Environment.NewLine);
+                adjusted *= 1.2;
+            }
+
+            //Use the same character in a row: Length-0.5/count
+            for (int i = 1; i < passwordChars.Length; i++)
+            {
+                if (passwordChars[i - 1] == password[i])
+                {
+                    this.textBox_NewPassword_strength.AppendText("Use the same character in a row: Length-0.5/count" + Environment.NewLine);
+                    adjusted -= 0.5;
+                }
+            }
+
+            //Use the same kind of 5 characters in a row: Length-0.2
+            if (passwordChars.Length >= 5)
+            {
+                for (int i = 0; i < passwordChars.Length - 4; i++)
+                {
+                    PasswordTextClass[] pswdClass = new PasswordTextClass[5]
+                    {
+                        FormCreatePassword.GetPasswordClass(new String(passwordChars, i+0, 1)),
+                        FormCreatePassword.GetPasswordClass(new String(passwordChars, i+1, 1)),
+                        FormCreatePassword.GetPasswordClass(new String(passwordChars, i+2, 1)),
+                        FormCreatePassword.GetPasswordClass(new String(passwordChars, i+3, 1)),
+                        FormCreatePassword.GetPasswordClass(new String(passwordChars, i+4, 1))
+                    };
+
+                    bool isTheSameClassInARow = true;
+                    for (int j = 1; j < pswdClass.Length; j++)
+                    {
+                        isTheSameClassInARow = isTheSameClassInARow && (pswdClass[j] == pswdClass[0]);
+                        if (!isTheSameClassInARow) break;
+                    }
+                    if (isTheSameClassInARow)
+                    {
+                        this.textBox_NewPassword_strength.AppendText("Use the same kind of 5 characters in a row: Length-0.2" + Environment.NewLine);
+                        adjusted -= 0.2;
+                    }
+                }
+            }
+
+            //Not Use the same kind of 4 characters in a row: Length*1.15
+            if (passwordChars.Length >= 4)
+            {
+                bool areAllCharFrameNeverUsingTheSameClass = true;
+                for (int i = 0; i < passwordChars.Length - 3; i++)
+                {
+                    PasswordTextClass[] pswdClass = new PasswordTextClass[4]
+                    {
+                        FormCreatePassword.GetPasswordClass(new String(passwordChars, i+0, 1)),
+                        FormCreatePassword.GetPasswordClass(new String(passwordChars, i+1, 1)),
+                        FormCreatePassword.GetPasswordClass(new String(passwordChars, i+2, 1)),
+                        FormCreatePassword.GetPasswordClass(new String(passwordChars, i+3, 1))
+                    };
+
+                    bool isTheSameClassInARow = true;
+                    for (int j = 1; j < pswdClass.Length; j++)
+                    {
+                        isTheSameClassInARow = isTheSameClassInARow && (pswdClass[j] == pswdClass[0]);
+                        if (!isTheSameClassInARow) break;
+                    }
+                    areAllCharFrameNeverUsingTheSameClass = areAllCharFrameNeverUsingTheSameClass && !isTheSameClassInARow;
+                }
+
+                if (areAllCharFrameNeverUsingTheSameClass)
+                {
+                    this.textBox_NewPassword_strength.AppendText("Not Use the same kind of 4 characters in a row: Length*1.15" + Environment.NewLine);
+                    adjusted *= 1.15;
+                }
+            }
+
+            return adjusted;
+        }
+
+        /// <summary>
+        /// Classification for validating password strength
+        /// </summary>
+        public enum PasswordTextClass
+        {
+            Unknown,
+            UseLowercaseOnly,
+            UseUppercaseOnly,
+            UseNumberOnly,
+            UseSymbolOnly,
+            UseLowerUpper,
+            UseLowerNumber,
+            UseLowerSymbol,
+            UseUpperNumber,
+            UseUpperSymbol,
+            UseNumberSymbol,
+            UseLowerUpperNumber,
+            UseLowerUpperSymbol,
+            UseLowerNumberSymbol,
+            UseUpperNumberSymbol,
+            UseLowerUpperNumberSymbol
+        }
         #endregion
 
         #region Setup language
@@ -319,7 +594,7 @@ namespace PasswordManager
             this.groupBox_NewPassword_AllowedSymbols.Text = strings.Form_NewPassword_AllowedSymbols;
             this.label_NewPassword_MinChars.Text = strings.Form_NewPassword_MinChars;
             this.label_NewPassword_MaxChars.Text = strings.Form_NewPassword_MaxChars;
-            this.label_NewPassword_Week.Text = strings.Form_NewPassword_PasswdWeak;
+            this.label_NewPassword_Weak.Text = strings.Form_NewPassword_PasswdWeak;
             this.label_NewPassword_Normal.Text = strings.Form_NewPassword_PasswdNormal;
             this.label_NewPassword_Secure.Text = strings.Form_NewPassword_PasswdSecure;
             this.label_NewPassword_Memo.Text = strings.Form_NewPassword_Memo;

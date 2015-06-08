@@ -37,6 +37,8 @@ namespace PasswordManager
         public static int BitsPerAByte = 8;
         public static decimal PasswordMinLength = 1;
         public static decimal passwordMaxLength = 128;
+        public static double MaxWeakPasswordStrength = FormCreatePassword.CalculatePasswordStrength("aaAA00", 6);
+        public static double MaxNormalPasswordStrength = FormCreatePassword.CalculatePasswordStrength("aaAA00Abc1", 10);
     }
 
     public static class Utility
@@ -52,6 +54,7 @@ namespace PasswordManager
         public static char[] ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".ToCharArray();
         public static char[] Alphabet = "abcdefghijklmnopqrstuvwxyz".ToCharArray();
         public static char[] Numeric = "0123456789".ToCharArray();
+        public static char[] Symbol = "!\"#$%&'()-=^~\\|@`[{;+:*]},<.>/?_ ".ToCharArray();
 
         /// <summary>
         /// This method is imitating Stream.CopyTo because .NET 3.5 does not implement the method.

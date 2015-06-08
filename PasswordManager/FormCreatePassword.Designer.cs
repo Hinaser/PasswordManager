@@ -83,7 +83,7 @@
             this.textBox_NewPassword_strength = new System.Windows.Forms.TextBox();
             this.label_NewPassword_Secure = new System.Windows.Forms.Label();
             this.label_NewPassword_Normal = new System.Windows.Forms.Label();
-            this.label_NewPassword_Week = new System.Windows.Forms.Label();
+            this.label_NewPassword_Weak = new System.Windows.Forms.Label();
             this.button_NewPassword_OK = new System.Windows.Forms.Button();
             this.button_NewPassword_Cancel = new System.Windows.Forms.Button();
             this.textBox_NewPassword_Memo = new System.Windows.Forms.TextBox();
@@ -693,7 +693,7 @@
             this.groupBox_NewPassword_Test.Controls.Add(this.textBox_NewPassword_strength);
             this.groupBox_NewPassword_Test.Controls.Add(this.label_NewPassword_Secure);
             this.groupBox_NewPassword_Test.Controls.Add(this.label_NewPassword_Normal);
-            this.groupBox_NewPassword_Test.Controls.Add(this.label_NewPassword_Week);
+            this.groupBox_NewPassword_Test.Controls.Add(this.label_NewPassword_Weak);
             this.groupBox_NewPassword_Test.Location = new System.Drawing.Point(12, 100);
             this.groupBox_NewPassword_Test.Name = "groupBox_NewPassword_Test";
             this.groupBox_NewPassword_Test.Size = new System.Drawing.Size(270, 161);
@@ -739,18 +739,18 @@
             this.label_NewPassword_Normal.Text = "Normal";
             this.label_NewPassword_Normal.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // label_NewPassword_Week
+            // label_NewPassword_Weak
             // 
-            this.label_NewPassword_Week.BackColor = System.Drawing.Color.Transparent;
-            this.label_NewPassword_Week.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.label_NewPassword_Week.Font = new System.Drawing.Font("Verdana", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label_NewPassword_Week.ForeColor = System.Drawing.Color.DarkGray;
-            this.label_NewPassword_Week.Location = new System.Drawing.Point(14, 21);
-            this.label_NewPassword_Week.Name = "label_NewPassword_Week";
-            this.label_NewPassword_Week.Size = new System.Drawing.Size(80, 18);
-            this.label_NewPassword_Week.TabIndex = 0;
-            this.label_NewPassword_Week.Text = "Weak";
-            this.label_NewPassword_Week.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.label_NewPassword_Weak.BackColor = System.Drawing.Color.Transparent;
+            this.label_NewPassword_Weak.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.label_NewPassword_Weak.Font = new System.Drawing.Font("Verdana", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label_NewPassword_Weak.ForeColor = System.Drawing.Color.DarkGray;
+            this.label_NewPassword_Weak.Location = new System.Drawing.Point(14, 21);
+            this.label_NewPassword_Weak.Name = "label_NewPassword_Weak";
+            this.label_NewPassword_Weak.Size = new System.Drawing.Size(80, 18);
+            this.label_NewPassword_Weak.TabIndex = 0;
+            this.label_NewPassword_Weak.Text = "Weak";
+            this.label_NewPassword_Weak.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // button_NewPassword_OK
             // 
@@ -879,7 +879,7 @@
         private System.Windows.Forms.NumericUpDown numericUpDown_NewPassword_Minchars;
         private System.Windows.Forms.Label label_NewPassword_Secure;
         private System.Windows.Forms.Label label_NewPassword_Normal;
-        private System.Windows.Forms.Label label_NewPassword_Week;
+        private System.Windows.Forms.Label label_NewPassword_Weak;
         private System.Windows.Forms.TextBox textBox_NewPassword_strength;
         private System.Windows.Forms.TextBox textBox_NewPassword_Memo;
         private System.Windows.Forms.Label label_NewPassword_Memo;
