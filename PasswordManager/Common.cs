@@ -41,6 +41,16 @@ namespace PasswordManager
         public static double MaxNormalPasswordStrength = FormCreatePassword.CalculatePasswordStrength("aaAA00Abc1", 10);
         public static int PasswordStrengthNoticeHeaderSize = 8;
         public static string PasswordStrengthNoticeFormat = String.Format("{0}{1}{2}{3}", "{0, -", PasswordStrengthNoticeHeaderSize, "} {1}", Environment.NewLine);
+        public static string[] DangerousPasswordList = new String[] {
+            "password", "Password","Pass","pass","pswd","Pswd",
+            "aaa","aaaa",
+            "0","1","2","3","4","5","6","7","8","9",
+            "00","11","22","33","44","55","66","77","88","99",
+            "000","111","222","333","444","555","666","777","888","999",
+            "0000","1111","2222","3333","4444","5555","6666","7777","8888","9999"
+            ,"1234","2345","3456","4567","5678","6789",
+            "9876","8765","7654","6543","5432","4321",
+        };
     }
 
     public static class Utility

@@ -303,4 +303,10 @@
   <data name="General_NewPassword_Strength_US" xml:space="preserve">
     <value>英大文字/記号の組み合わせ</value>
   </data>
+  <data name="General_NewPassword_Strength_DangerousPassword" xml:space="preserve">
+    <value>容易に推測できる弱いパスワード</value>
+  </data>
+  <data name="General_NewPassword_Strength_TypeCritical" xml:space="preserve">
+    <value>[危険]</value>
+  </data>
 </root>

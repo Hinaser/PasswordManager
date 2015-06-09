@@ -31,6 +31,7 @@ namespace PasswordManager
             base.AddAdjusterMethod(this.CheckSameCharsInARow);
             base.AddAdjusterMethod(this.CheckUsingSameKindOfCharsInARow);
             base.AddAdjusterMethod(this.CheckNotUsingSameKindOfCharsInARow);
+            base.AddAdjusterMethod(this.CheckUsingDangerouslyTypicalWord);
         }
 
         /// <summary>
@@ -186,6 +187,27 @@ namespace PasswordManager
             }
 
             return returnValue;
+        }
+
+        /// <summary>
+        /// Check whether password contains a text which is very easy to expect.
+        /// Length penalty: =0
+        /// </summary>
+        /// <param name="password"></param>
+        /// <param name="charLength"></param>
+        /// <returns></returns>
+        protected double CheckUsingDangerouslyTypicalWord(string password, double charLength)
+        {
+            foreach (string word in InternalApplicationConfig.DangerousPasswordList)
+            {
+                if (password == word)
+                {
+                    this.Report(strings.General_NewPassword_Strength_TypeCritical, strings.General_NewPassword_Strength_DangerousPassword, Color.Red);
+                    return 0;
+                }
+            }
+
+            return charLength;
         }
     }
 }

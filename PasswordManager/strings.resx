@@ -234,6 +234,9 @@
   <data name="General_NewPassword_Strength_AllDifferent" xml:space="preserve">
     <value>All characters are different each other</value>
   </data>
+  <data name="General_NewPassword_Strength_DangerousPassword" xml:space="preserve">
+    <value>Password is easy to expect. This password is weak.</value>
+  </data>
   <data name="General_NewPassword_Strength_L" xml:space="preserve">
     <value>Lower case only</value>
   </data>
@@ -278,6 +281,9 @@
   </data>
   <data name="General_NewPassword_Strength_TypeBad" xml:space="preserve">
     <value>[Bad]</value>
+  </data>
+  <data name="General_NewPassword_Strength_TypeCritical" xml:space="preserve">
+    <value>[Risky]</value>
   </data>
   <data name="General_NewPassword_Strength_TypeGood" xml:space="preserve">
     <value>[Good]</value>
