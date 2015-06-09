@@ -37,6 +37,7 @@ namespace PasswordManager
             // ListView event
             this.listView_PasswordItems.SizeChanged += listView_PasswordItems_SizeChanged;
             this.listView_PasswordItems.ColumnWidthChanged += listView_PasswordItems_ColumnWidthChanged;
+            this.listView_PasswordItems.SelectedIndexChanged += listView_PasswordItems_SelectedIndexChanged;
             // TreeView event
             this.treeView_Folders.AfterSelect += treeView_Folders_AfterSelect;
             this.treeView_Folders.NodeMouseClick += treeView_Folders_NodeMouseClick;
@@ -98,6 +99,39 @@ namespace PasswordManager
         void listView_PasswordItems_ColumnWidthChanged(object sender, ColumnWidthChangedEventArgs e)
         {
             this.AdjustColumnSize((ListView)sender, e);
+        }
+
+        /// <summary>
+        /// When selected item is changed(not meaning deselected), show corresponding comment for selected password record
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        void listView_PasswordItems_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            // Get selected listview item collection
+            ListView.SelectedListViewItemCollection selectedItem = this.listView_PasswordItems.SelectedItems;
+
+            // When multiple items are selected or no items are selected, do nothing
+            if (selectedItem.Count != 1)
+            {
+                return;
+            }
+
+            // Get selected listview item
+            ListViewItem selectedListViewItem = selectedItem[0];
+            if (selectedListViewItem.Tag == null)
+            {
+                throw new InvalidOperationException();
+            }
+
+            int recordID = (int)selectedListViewItem.Tag;
+
+            string comment = this.PasswordData.Indexer.GetRecordByID(this.PasswordData.Records, recordID).GetDescription();
+            if (comment == null) comment = String.Empty;
+
+            this.textBox_ItemDescription.Text = comment;
+
+            return;
         }
         #endregion
 
@@ -302,6 +336,7 @@ namespace PasswordManager
                 lvi.Text = record.GetCaption();
                 lvi.SubItems.Add(record.GetID().ToString());
                 lvi.SubItems.Add(record.GetPassword());
+                lvi.Tag = record.GetRecordID();
 
                 this.listView_PasswordItems.Items.Add(lvi);
             }
