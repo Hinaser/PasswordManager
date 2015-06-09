@@ -227,6 +227,42 @@ namespace PasswordManager
             }
 
             PasswordRecord record = form.GetPassword();
+            form.Dispose();
+
+            // If caption is empty, do nothing
+            if (record == null || String.IsNullOrEmpty(record.GetCaption()))
+            {
+                return;
+            }
+
+            // Get selected container
+            // Throw an exception when CurrentTreeNode value is null. This should not be happend.
+            if (this.CurrentTreeNode == null || this.CurrentTreeNode.Tag == null)
+            {
+                //return;
+                throw new InvalidOperationException();
+            }
+
+            int containerID = (int)this.CurrentTreeNode.Tag;
+            int recordID = this.PasswordData.Indexer.GetUniqueRecordID();
+
+            // Set new unique recordID
+            record.SetRecordID(recordID);
+
+            // Update password index
+            if (!this.PasswordData.Indexer.AppendRecord(record.GetRecordID(), containerID))
+            {
+                throw new ApplicationException();
+            }
+
+            // Add password record to PasswordFile object
+            this.PasswordData.Records.Add(record);
+
+            // Refresh listview
+            TreeViewEventArgs tvea = new TreeViewEventArgs(this.CurrentTreeNode);
+            this.treeView_Folders_AfterSelect(null, tvea);
+
+            return;
         }
         #endregion
 
