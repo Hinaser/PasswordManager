@@ -88,11 +88,13 @@
             this.button_NewPassword_Cancel = new System.Windows.Forms.Button();
             this.textBox_NewPassword_Memo = new System.Windows.Forms.TextBox();
             this.label_NewPassword_Memo = new System.Windows.Forms.Label();
+            this.panel_NewPassword_Strength = new System.Windows.Forms.Panel();
             this.groupBox_NewPassword_Randomize.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_NewPassword_Maxchars)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_NewPassword_Minchars)).BeginInit();
             this.groupBox_NewPassword_AllowedSymbols.SuspendLayout();
             this.groupBox_NewPassword_Test.SuspendLayout();
+            this.panel_NewPassword_Strength.SuspendLayout();
             this.SuspendLayout();
             // 
             // textBox_NewPassword_Caption
@@ -690,7 +692,7 @@
             // 
             // groupBox_NewPassword_Test
             // 
-            this.groupBox_NewPassword_Test.Controls.Add(this.richTextBox_NewPassword_Strength);
+            this.groupBox_NewPassword_Test.Controls.Add(this.panel_NewPassword_Strength);
             this.groupBox_NewPassword_Test.Controls.Add(this.label_NewPassword_Secure);
             this.groupBox_NewPassword_Test.Controls.Add(this.label_NewPassword_Normal);
             this.groupBox_NewPassword_Test.Controls.Add(this.label_NewPassword_Weak);
@@ -703,12 +705,13 @@
             // 
             // richTextBox_NewPassword_Strength
             // 
-            this.richTextBox_NewPassword_Strength.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.richTextBox_NewPassword_Strength.Location = new System.Drawing.Point(14, 42);
+            this.richTextBox_NewPassword_Strength.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.richTextBox_NewPassword_Strength.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.richTextBox_NewPassword_Strength.Location = new System.Drawing.Point(5, 5);
             this.richTextBox_NewPassword_Strength.Name = "richTextBox_NewPassword_Strength";
             this.richTextBox_NewPassword_Strength.ReadOnly = true;
             this.richTextBox_NewPassword_Strength.ShortcutsEnabled = false;
-            this.richTextBox_NewPassword_Strength.Size = new System.Drawing.Size(242, 113);
+            this.richTextBox_NewPassword_Strength.Size = new System.Drawing.Size(229, 103);
             this.richTextBox_NewPassword_Strength.TabIndex = 3;
             this.richTextBox_NewPassword_Strength.TabStop = false;
             this.richTextBox_NewPassword_Strength.Text = "";
@@ -717,12 +720,12 @@
             // label_NewPassword_Secure
             // 
             this.label_NewPassword_Secure.BackColor = System.Drawing.Color.Transparent;
-            this.label_NewPassword_Secure.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.label_NewPassword_Secure.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.label_NewPassword_Secure.Font = new System.Drawing.Font("Verdana", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label_NewPassword_Secure.ForeColor = System.Drawing.Color.DarkGray;
-            this.label_NewPassword_Secure.Location = new System.Drawing.Point(176, 21);
+            this.label_NewPassword_Secure.Location = new System.Drawing.Point(174, 21);
             this.label_NewPassword_Secure.Name = "label_NewPassword_Secure";
-            this.label_NewPassword_Secure.Size = new System.Drawing.Size(80, 18);
+            this.label_NewPassword_Secure.Size = new System.Drawing.Size(81, 20);
             this.label_NewPassword_Secure.TabIndex = 2;
             this.label_NewPassword_Secure.Text = "Secure";
             this.label_NewPassword_Secure.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -730,12 +733,12 @@
             // label_NewPassword_Normal
             // 
             this.label_NewPassword_Normal.BackColor = System.Drawing.Color.Transparent;
-            this.label_NewPassword_Normal.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.label_NewPassword_Normal.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.label_NewPassword_Normal.Font = new System.Drawing.Font("Verdana", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label_NewPassword_Normal.ForeColor = System.Drawing.Color.DarkGray;
-            this.label_NewPassword_Normal.Location = new System.Drawing.Point(95, 21);
+            this.label_NewPassword_Normal.Location = new System.Drawing.Point(94, 21);
             this.label_NewPassword_Normal.Name = "label_NewPassword_Normal";
-            this.label_NewPassword_Normal.Size = new System.Drawing.Size(80, 18);
+            this.label_NewPassword_Normal.Size = new System.Drawing.Size(81, 20);
             this.label_NewPassword_Normal.TabIndex = 1;
             this.label_NewPassword_Normal.Text = "Normal";
             this.label_NewPassword_Normal.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -743,12 +746,12 @@
             // label_NewPassword_Weak
             // 
             this.label_NewPassword_Weak.BackColor = System.Drawing.Color.Transparent;
-            this.label_NewPassword_Weak.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.label_NewPassword_Weak.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.label_NewPassword_Weak.Font = new System.Drawing.Font("Verdana", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label_NewPassword_Weak.ForeColor = System.Drawing.Color.DarkGray;
             this.label_NewPassword_Weak.Location = new System.Drawing.Point(14, 21);
             this.label_NewPassword_Weak.Name = "label_NewPassword_Weak";
-            this.label_NewPassword_Weak.Size = new System.Drawing.Size(80, 18);
+            this.label_NewPassword_Weak.Size = new System.Drawing.Size(81, 20);
             this.label_NewPassword_Weak.TabIndex = 0;
             this.label_NewPassword_Weak.Text = "Weak";
             this.label_NewPassword_Weak.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -791,6 +794,16 @@
             this.label_NewPassword_Memo.TabIndex = 11;
             this.label_NewPassword_Memo.Text = "Memo";
             // 
+            // panel_NewPassword_Strength
+            // 
+            this.panel_NewPassword_Strength.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel_NewPassword_Strength.Controls.Add(this.richTextBox_NewPassword_Strength);
+            this.panel_NewPassword_Strength.Location = new System.Drawing.Point(14, 40);
+            this.panel_NewPassword_Strength.Name = "panel_NewPassword_Strength";
+            this.panel_NewPassword_Strength.Padding = new System.Windows.Forms.Padding(5);
+            this.panel_NewPassword_Strength.Size = new System.Drawing.Size(241, 115);
+            this.panel_NewPassword_Strength.TabIndex = 3;
+            // 
             // FormCreatePassword
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -818,6 +831,7 @@
             this.groupBox_NewPassword_AllowedSymbols.ResumeLayout(false);
             this.groupBox_NewPassword_AllowedSymbols.PerformLayout();
             this.groupBox_NewPassword_Test.ResumeLayout(false);
+            this.panel_NewPassword_Strength.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -885,5 +899,6 @@
         private System.Windows.Forms.CheckBox checkBox_NewPassword_UseUpperCase;
         private System.Windows.Forms.CheckBox checkBox_NewPassword_UseLowerCase;
         private System.Windows.Forms.RichTextBox richTextBox_NewPassword_Strength;
+        private System.Windows.Forms.Panel panel_NewPassword_Strength;
     }
 }
