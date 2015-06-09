@@ -141,6 +141,18 @@
   <data name="Form_MenuItem_About" xml:space="preserve">
     <value>About</value>
   </data>
+  <data name="Form_MenuItem_Edit" xml:space="preserve">
+    <value>Edit</value>
+  </data>
+  <data name="Form_MenuItem_File" xml:space="preserve">
+    <value>File</value>
+  </data>
+  <data name="Form_MenuItem_File_Open" xml:space="preserve">
+    <value>Open file</value>
+  </data>
+  <data name="Form_MenuItem_File_Save" xml:space="preserve">
+    <value>Save file</value>
+  </data>
   <data name="Form_MenuItem_Language" xml:space="preserve">
     <value>Language</value>
   </data>

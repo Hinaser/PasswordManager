@@ -133,6 +133,42 @@ namespace PasswordManager {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Edit.
+        /// </summary>
+        internal static string Form_MenuItem_Edit {
+            get {
+                return ResourceManager.GetString("Form_MenuItem_Edit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to File.
+        /// </summary>
+        internal static string Form_MenuItem_File {
+            get {
+                return ResourceManager.GetString("Form_MenuItem_File", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Open file.
+        /// </summary>
+        internal static string Form_MenuItem_File_Open {
+            get {
+                return ResourceManager.GetString("Form_MenuItem_File_Open", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Save file.
+        /// </summary>
+        internal static string Form_MenuItem_File_Save {
+            get {
+                return ResourceManager.GetString("Form_MenuItem_File_Save", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Language.
         /// </summary>
         internal static string Form_MenuItem_Language {

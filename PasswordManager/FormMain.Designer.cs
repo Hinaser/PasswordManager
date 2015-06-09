@@ -42,9 +42,18 @@
             this.ToolStripMenuItem_AddSubFolder = new System.Windows.Forms.ToolStripMenuItem();
             this.ToolStripMenuItem_RenameFolder = new System.Windows.Forms.ToolStripMenuItem();
             this.ToolStripMenuItem_DeleteFolder = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
+            this.ToolStripMenuItem_Seperator = new System.Windows.Forms.ToolStripSeparator();
             this.ToolStripMenuItem_AddPassword = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip_Main = new System.Windows.Forms.MenuStrip();
+            this.ToolStripMenuItem_File = new System.Windows.Forms.ToolStripMenuItem();
+            this.ToolStripMenuItem_File_Open = new System.Windows.Forms.ToolStripMenuItem();
+            this.ToolStripMenuItem_File_Save = new System.Windows.Forms.ToolStripMenuItem();
+            this.ToolStripMenuItem_Edit = new System.Windows.Forms.ToolStripMenuItem();
+            this.ToolStripMenuItem_Edit_AddSubFolder = new System.Windows.Forms.ToolStripMenuItem();
+            this.ToolStripMenuItem_Edit_RenameFolder = new System.Windows.Forms.ToolStripMenuItem();
+            this.ToolStripMenuItem_Edit_DeleteFolder = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem_Edit_Seperator = new System.Windows.Forms.ToolStripSeparator();
+            this.ToolStripMenuItem_Edit_AddPassword = new System.Windows.Forms.ToolStripMenuItem();
             this.ToolStripMenuItem_option = new System.Windows.Forms.ToolStripMenuItem();
             this.ToolStripMenuItem_Language = new System.Windows.Forms.ToolStripMenuItem();
             this.ToolStripMenuItem_Language_English = new System.Windows.Forms.ToolStripMenuItem();
@@ -162,7 +171,7 @@
             this.ToolStripMenuItem_AddSubFolder,
             this.ToolStripMenuItem_RenameFolder,
             this.ToolStripMenuItem_DeleteFolder,
-            this.toolStripMenuItem1,
+            this.ToolStripMenuItem_Seperator,
             this.ToolStripMenuItem_AddPassword});
             this.contextMenuStrip_TreeViewNode.Name = "contextMenuStrip_TreeView";
             this.contextMenuStrip_TreeViewNode.Size = new System.Drawing.Size(160, 98);
@@ -185,10 +194,10 @@
             this.ToolStripMenuItem_DeleteFolder.Size = new System.Drawing.Size(159, 22);
             this.ToolStripMenuItem_DeleteFolder.Text = "Delete folder";
             // 
-            // toolStripMenuItem1
+            // ToolStripMenuItem_Seperator
             // 
-            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(156, 6);
+            this.ToolStripMenuItem_Seperator.Name = "ToolStripMenuItem_Seperator";
+            this.ToolStripMenuItem_Seperator.Size = new System.Drawing.Size(156, 6);
             // 
             // ToolStripMenuItem_AddPassword
             // 
@@ -200,6 +209,8 @@
             // 
             this.menuStrip_Main.BackColor = System.Drawing.SystemColors.ButtonFace;
             this.menuStrip_Main.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.ToolStripMenuItem_File,
+            this.ToolStripMenuItem_Edit,
             this.ToolStripMenuItem_option,
             this.ToolStripMenuItem_about});
             this.menuStrip_Main.Location = new System.Drawing.Point(0, 0);
@@ -208,6 +219,68 @@
             this.menuStrip_Main.Size = new System.Drawing.Size(619, 24);
             this.menuStrip_Main.TabIndex = 2;
             this.menuStrip_Main.Text = "menuStrip1";
+            // 
+            // ToolStripMenuItem_File
+            // 
+            this.ToolStripMenuItem_File.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.ToolStripMenuItem_File_Open,
+            this.ToolStripMenuItem_File_Save});
+            this.ToolStripMenuItem_File.Name = "ToolStripMenuItem_File";
+            this.ToolStripMenuItem_File.Size = new System.Drawing.Size(39, 20);
+            this.ToolStripMenuItem_File.Text = "File";
+            // 
+            // ToolStripMenuItem_File_Open
+            // 
+            this.ToolStripMenuItem_File_Open.Name = "ToolStripMenuItem_File_Open";
+            this.ToolStripMenuItem_File_Open.Size = new System.Drawing.Size(152, 22);
+            this.ToolStripMenuItem_File_Open.Text = "Open file";
+            // 
+            // ToolStripMenuItem_File_Save
+            // 
+            this.ToolStripMenuItem_File_Save.Name = "ToolStripMenuItem_File_Save";
+            this.ToolStripMenuItem_File_Save.Size = new System.Drawing.Size(152, 22);
+            this.ToolStripMenuItem_File_Save.Text = "Save file";
+            // 
+            // ToolStripMenuItem_Edit
+            // 
+            this.ToolStripMenuItem_Edit.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.ToolStripMenuItem_Edit_AddSubFolder,
+            this.ToolStripMenuItem_Edit_RenameFolder,
+            this.ToolStripMenuItem_Edit_DeleteFolder,
+            this.toolStripMenuItem_Edit_Seperator,
+            this.ToolStripMenuItem_Edit_AddPassword});
+            this.ToolStripMenuItem_Edit.Name = "ToolStripMenuItem_Edit";
+            this.ToolStripMenuItem_Edit.Size = new System.Drawing.Size(41, 20);
+            this.ToolStripMenuItem_Edit.Text = "Edit";
+            // 
+            // ToolStripMenuItem_Edit_AddSubFolder
+            // 
+            this.ToolStripMenuItem_Edit_AddSubFolder.Name = "ToolStripMenuItem_Edit_AddSubFolder";
+            this.ToolStripMenuItem_Edit_AddSubFolder.Size = new System.Drawing.Size(159, 22);
+            this.ToolStripMenuItem_Edit_AddSubFolder.Text = "Add sub folder";
+            // 
+            // ToolStripMenuItem_Edit_RenameFolder
+            // 
+            this.ToolStripMenuItem_Edit_RenameFolder.Name = "ToolStripMenuItem_Edit_RenameFolder";
+            this.ToolStripMenuItem_Edit_RenameFolder.Size = new System.Drawing.Size(159, 22);
+            this.ToolStripMenuItem_Edit_RenameFolder.Text = "Rename folder";
+            // 
+            // ToolStripMenuItem_Edit_DeleteFolder
+            // 
+            this.ToolStripMenuItem_Edit_DeleteFolder.Name = "ToolStripMenuItem_Edit_DeleteFolder";
+            this.ToolStripMenuItem_Edit_DeleteFolder.Size = new System.Drawing.Size(159, 22);
+            this.ToolStripMenuItem_Edit_DeleteFolder.Text = "Delete folder";
+            // 
+            // toolStripMenuItem_Edit_Seperator
+            // 
+            this.toolStripMenuItem_Edit_Seperator.Name = "toolStripMenuItem_Edit_Seperator";
+            this.toolStripMenuItem_Edit_Seperator.Size = new System.Drawing.Size(156, 6);
+            // 
+            // ToolStripMenuItem_Edit_AddPassword
+            // 
+            this.ToolStripMenuItem_Edit_AddPassword.Name = "ToolStripMenuItem_Edit_AddPassword";
+            this.ToolStripMenuItem_Edit_AddPassword.Size = new System.Drawing.Size(159, 22);
+            this.ToolStripMenuItem_Edit_AddPassword.Text = "New password";
             // 
             // ToolStripMenuItem_option
             // 
@@ -224,7 +297,7 @@
             this.ToolStripMenuItem_Language_English,
             this.ToolStripMenuItem_Language_Japanese});
             this.ToolStripMenuItem_Language.Name = "ToolStripMenuItem_Language";
-            this.ToolStripMenuItem_Language.Size = new System.Drawing.Size(130, 22);
+            this.ToolStripMenuItem_Language.Size = new System.Drawing.Size(152, 22);
             this.ToolStripMenuItem_Language.Text = "Language";
             // 
             // ToolStripMenuItem_Language_English
@@ -351,7 +424,16 @@
         private System.Windows.Forms.ToolStripMenuItem ToolStripMenuItem_RenameFolder;
         private System.Windows.Forms.ToolStripMenuItem ToolStripMenuItem_DeleteFolder;
         private System.Windows.Forms.ToolStripMenuItem ToolStripMenuItem_AddPassword;
-        private System.Windows.Forms.ToolStripSeparator toolStripMenuItem1;
+        private System.Windows.Forms.ToolStripSeparator ToolStripMenuItem_Seperator;
+        private System.Windows.Forms.ToolStripMenuItem ToolStripMenuItem_File;
+        private System.Windows.Forms.ToolStripMenuItem ToolStripMenuItem_File_Open;
+        private System.Windows.Forms.ToolStripMenuItem ToolStripMenuItem_File_Save;
+        private System.Windows.Forms.ToolStripMenuItem ToolStripMenuItem_Edit;
+        private System.Windows.Forms.ToolStripMenuItem ToolStripMenuItem_Edit_AddSubFolder;
+        private System.Windows.Forms.ToolStripMenuItem ToolStripMenuItem_Edit_RenameFolder;
+        private System.Windows.Forms.ToolStripMenuItem ToolStripMenuItem_Edit_DeleteFolder;
+        private System.Windows.Forms.ToolStripSeparator toolStripMenuItem_Edit_Seperator;
+        private System.Windows.Forms.ToolStripMenuItem ToolStripMenuItem_Edit_AddPassword;
 
 
 

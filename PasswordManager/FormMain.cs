@@ -59,6 +59,12 @@ namespace PasswordManager
             this.ToolStripMenuItem_Language_English.Click += ToolStripMenuItem_Language_English_Click;
             this.ToolStripMenuItem_Language_Japanese.Click += ToolStripMenuItem_Language_Japanese_Click;
 
+            // Add common menu tool stript for editing to "Edit" menu
+            this.ToolStripMenuItem_Edit_AddSubFolder.Click += ToolStripMenuItem_AddSubFolder_Click;
+            this.ToolStripMenuItem_Edit_RenameFolder.Click += ToolStripMenuItem_RenameFolder_Click;
+            this.ToolStripMenuItem_Edit_DeleteFolder.Click += ToolStripMenuItem_DeleteFolder_Click;
+            this.ToolStripMenuItem_Edit_AddPassword.Click += ToolStripMenuItem_AddPassword_Click;
+
             // Apply language setting
             this.SetupLanguage(InternalApplicationConfig.DefaultLocale);
 
@@ -199,11 +205,10 @@ namespace PasswordManager
         /// <param name="e"></param>
         void ToolStripMenuItem_AddSubFolder_Click(object sender, EventArgs e)
         {
-            // Throw an exception when CurrentTreeNode value is null. This should not be happend.
+            // Do nothing if no tree nodes are selected
             if (this.CurrentTreeNode == null || this.CurrentTreeNode.Tag == null)
             {
-                //return;
-                throw new InvalidOperationException();
+                return;
             }
 
             // Add a child container to current selected container
@@ -226,10 +231,10 @@ namespace PasswordManager
         /// <param name="e"></param>
         void ToolStripMenuItem_RenameFolder_Click(object sender, EventArgs e)
         {
+            // Do nothing if no tree nodes are selected
             if (this.CurrentTreeNode == null)
             {
-                //return;
-                throw new InvalidOperationException();
+                return;
             }
 
             this.CurrentTreeNode.BeginEdit();
@@ -247,9 +252,10 @@ namespace PasswordManager
         /// <param name="e"></param>
         void ToolStripMenuItem_AddPassword_Click(object sender, EventArgs e)
         {
+            // Do nothing if no tree nodes are selected
             if (this.CurrentTreeNode.Tag == null)
             {
-                throw new InvalidOperationException();
+                return;
             }
 
             FormCreatePassword form = new FormCreatePassword();
@@ -652,6 +658,14 @@ namespace PasswordManager
             this.ToolStripMenuItem_RenameFolder.Text = strings.Form_ContextMenu_RenameContainer;
             this.ToolStripMenuItem_DeleteFolder.Text = strings.Form_ContextMenu_DeleteContainer;
             this.ToolStripMenuItem_AddPassword.Text = strings.Form_ContextMenu_AddPassword;
+            this.ToolStripMenuItem_File.Text = strings.Form_MenuItem_File;
+            this.ToolStripMenuItem_File_Open.Text = strings.Form_MenuItem_File_Open;
+            this.ToolStripMenuItem_File_Save.Text = strings.Form_MenuItem_File_Save;
+            this.ToolStripMenuItem_Edit.Text = strings.Form_MenuItem_Edit;
+            this.ToolStripMenuItem_Edit_AddSubFolder.Text = strings.Form_ContextMenu_AddContainer;
+            this.ToolStripMenuItem_Edit_RenameFolder.Text = strings.Form_ContextMenu_RenameContainer;
+            this.ToolStripMenuItem_Edit_DeleteFolder.Text = strings.Form_ContextMenu_DeleteContainer;
+            this.ToolStripMenuItem_Edit_AddPassword.Text = strings.Form_ContextMenu_AddPassword;
         }
         #endregion
     }

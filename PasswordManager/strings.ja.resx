@@ -303,6 +303,18 @@
   <data name="General_NewPassword_Strength_US" xml:space="preserve">
     <value>英大文字/記号の組み合わせ</value>
   </data>
+  <data name="Form_MenuItem_Edit" xml:space="preserve">
+    <value>編集</value>
+  </data>
+  <data name="Form_MenuItem_File" xml:space="preserve">
+    <value>ファイル</value>
+  </data>
+  <data name="Form_MenuItem_File_Open" xml:space="preserve">
+    <value>ファイルを開く</value>
+  </data>
+  <data name="Form_MenuItem_File_Save" xml:space="preserve">
+    <value>ファイルに保存する</value>
+  </data>
   <data name="General_NewPassword_Strength_DangerousPassword" xml:space="preserve">
     <value>容易に推測できる弱いパスワード</value>
   </data>
