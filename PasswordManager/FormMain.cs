@@ -453,7 +453,7 @@ namespace PasswordManager
             TreeNode targetNode = treeView_Folders.GetNodeAt(targetPoint);
             TreeNode draggedNode = (TreeNode)e.Data.GetData(typeof(TreeNode));
 
-            if(targetNode.Tag == null || draggedNode.Tag == null)
+            if (targetNode == null || draggedNode == null || targetNode.Tag == null || draggedNode.Tag == null)
             {
                 return;
             }
