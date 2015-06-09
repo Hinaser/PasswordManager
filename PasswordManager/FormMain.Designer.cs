@@ -151,6 +151,7 @@
             this.textBox_ItemDescription.Location = new System.Drawing.Point(0, 0);
             this.textBox_ItemDescription.Multiline = true;
             this.textBox_ItemDescription.Name = "textBox_ItemDescription";
+            this.textBox_ItemDescription.ReadOnly = true;
             this.textBox_ItemDescription.ScrollBars = System.Windows.Forms.ScrollBars.Both;
             this.textBox_ItemDescription.Size = new System.Drawing.Size(389, 117);
             this.textBox_ItemDescription.TabIndex = 0;
