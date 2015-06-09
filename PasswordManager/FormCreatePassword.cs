@@ -240,7 +240,8 @@ namespace PasswordManager
             this.richTextBox_NewPassword_Strength.AppendText(String.Format(InternalApplicationConfig.PasswordStrengthNoticeFormat, strings.General_NewPassword_Strength_TypePassClass, this.GetPasswordClassText(c)));
 
             // Calculate password strength
-            double adjustedPasswordLength = this.AdjustPasswordStrength(t.Text);
+            PasswordComplexityValidatorBase validator = new PasswordComplexityValidator();
+            double adjustedPasswordLength = validator.GetAdjustedCharLength(t.Text, t.Text.Length, this.AppendStrengthReport);
             double strength = FormCreatePassword.CalculatePasswordStrength(t.Text, adjustedPasswordLength);
             this.richTextBox_NewPassword_Strength.AppendText(String.Format(InternalApplicationConfig.PasswordStrengthNoticeFormat, strings.General_NewPassword_Strength_TypeResult, Math.Round(strength, 2).ToString()));
 
@@ -505,117 +506,6 @@ namespace PasswordManager
             }
 
             return 0;
-        }
-
-        /// <summary>
-        /// Adjust password following some adjustment rules
-        /// </summary>
-        /// <param name="password"></param>
-        /// <returns>Adjusted password character length</returns>
-        private double AdjustPasswordStrength(string password)
-        {
-            if (String.IsNullOrEmpty(password))
-            {
-                return 0;
-            }
-
-            char[] passwordChars = password.ToCharArray();
-            double adjusted = password.Length;
-
-            //All characters are different from each other: Length*1.2
-            HashSet<char> hash = new HashSet<char>();
-            bool isAllDifferent = true;
-            foreach (char c in passwordChars)
-            {
-                if (!hash.Add(c))
-                {
-                    isAllDifferent = false;
-                    break;
-                }
-            }
-            if (isAllDifferent)
-            {
-                // Add strength adjustment report
-                this.AppendStrengthReport(strings.General_NewPassword_Strength_TypeGood, strings.General_NewPassword_Strength_AllDifferent, Color.Green);
-                // Modify adjust value
-                adjusted *= 1.2;
-            }
-
-            //Use the same character in a row: Length-0.5/count
-            for (int i = 1; i < passwordChars.Length; i++)
-            {
-                if (passwordChars[i - 1] == password[i])
-                {
-                    // Add strength adjustment report
-                    this.AppendStrengthReport(strings.General_NewPassword_Strength_TypeBad, strings.General_NewPassword_Strength_SameCharInARow, Color.Red);
-                    // Modify adjust value
-                    adjusted -= 0.5;
-                }
-            }
-
-            //Use the same kind of 5 characters in a row: Length-0.2
-            if (passwordChars.Length >= 5)
-            {
-                for (int i = 0; i < passwordChars.Length - 4; i++)
-                {
-                    PasswordTextClass[] pswdClass = new PasswordTextClass[5]
-                    {
-                        FormCreatePassword.GetPasswordClass(new String(passwordChars, i+0, 1)),
-                        FormCreatePassword.GetPasswordClass(new String(passwordChars, i+1, 1)),
-                        FormCreatePassword.GetPasswordClass(new String(passwordChars, i+2, 1)),
-                        FormCreatePassword.GetPasswordClass(new String(passwordChars, i+3, 1)),
-                        FormCreatePassword.GetPasswordClass(new String(passwordChars, i+4, 1))
-                    };
-
-                    bool isTheSameClassInARow = true;
-                    for (int j = 1; j < pswdClass.Length; j++)
-                    {
-                        isTheSameClassInARow = isTheSameClassInARow && (pswdClass[j] == pswdClass[0]);
-                        if (!isTheSameClassInARow) break;
-                    }
-                    if (isTheSameClassInARow)
-                    {
-                        // Add strength adjustment report
-                        this.AppendStrengthReport(strings.General_NewPassword_Strength_TypeBad, String.Format(strings.General_NewPassword_Strength_SameClassInARow, 5), Color.Red);
-                        // Modify adjust value
-                        adjusted -= 0.2;
-                    }
-                }
-            }
-
-            //Not Use the same kind of 4 characters in a row: Length*1.15
-            if (passwordChars.Length >= 4)
-            {
-                bool areAllCharFrameNeverUsingTheSameClass = true;
-                for (int i = 0; i < passwordChars.Length - 3; i++)
-                {
-                    PasswordTextClass[] pswdClass = new PasswordTextClass[4]
-                    {
-                        FormCreatePassword.GetPasswordClass(new String(passwordChars, i+0, 1)),
-                        FormCreatePassword.GetPasswordClass(new String(passwordChars, i+1, 1)),
-                        FormCreatePassword.GetPasswordClass(new String(passwordChars, i+2, 1)),
-                        FormCreatePassword.GetPasswordClass(new String(passwordChars, i+3, 1))
-                    };
-
-                    bool isTheSameClassInARow = true;
-                    for (int j = 1; j < pswdClass.Length; j++)
-                    {
-                        isTheSameClassInARow = isTheSameClassInARow && (pswdClass[j] == pswdClass[0]);
-                        if (!isTheSameClassInARow) break;
-                    }
-                    areAllCharFrameNeverUsingTheSameClass = areAllCharFrameNeverUsingTheSameClass && !isTheSameClassInARow;
-                }
-
-                if (areAllCharFrameNeverUsingTheSameClass)
-                {
-                    // Add strength adjustment report
-                    this.AppendStrengthReport(strings.General_NewPassword_Strength_TypeGood, String.Format(strings.General_NewPassword_Strength_SameClassNotInARow, 4), Color.Green);
-                    // Modify adjust value
-                    adjusted *= 1.15;
-                }
-            }
-
-            return adjusted;
         }
 
         /// <summary>

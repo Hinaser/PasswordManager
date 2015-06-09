@@ -52,6 +52,20 @@ namespace PasswordManager
         private ReportComplexityResult ReportMethod = null;
 
         /// <summary>
+        /// This class calls Initialize() method. After Initialize() method is called,
+        /// if AdjusterMethods is empty, then the constructer throws an Exception.
+        /// </summary>
+        public PasswordComplexityValidatorBase()
+        {
+            this.OnInitialize();
+
+            if (this.AdjusterMethods == null)
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        /// <summary>
         /// Exposed method which is cosidered to be called by outside of this class.
         /// This class shall validate password and output the result through ReportComplexityResult delegate and returns adjusted password length
         /// </summary>
@@ -85,6 +99,11 @@ namespace PasswordManager
                 // Report exception throught reporting delegate
                 this.Report(String.Empty, e.Message, Color.Transparent);
                 this.Report(String.Empty, e.StackTrace, Color.Transparent);
+
+                // Reset all delegate
+                this.Initialize();
+
+                return 0;
             }
 
             return returnValue;
@@ -121,25 +140,20 @@ namespace PasswordManager
         }
 
         /// <summary>
+        /// Reset all adjustment delegate at once
+        /// </summary>
+        public void Initialize()
+        {
+            this.AdjusterMethods = null;
+            this.OnInitialize();
+        }
+
+        /// <summary>
         /// A method which is called in base constructor. Derived class must define this method to initialize AdjusterMethods delegate field.
         /// Derived class must implement custom complexity adjuster methods and
         /// must register those method to AdjusterMethods base field throught this Initialize method.
         /// </summary>
-        protected abstract void Initialize();
-
-        /// <summary>
-        /// This class calls Initialize() method. After Initialize() method is called,
-        /// if AdjusterMethods is empty, then the constructer throws an Exception.
-        /// </summary>
-        public PasswordComplexityValidatorBase()
-        {
-            this.Initialize();
-
-            if (this.AdjusterMethods == null)
-            {
-                throw new NotImplementedException();
-            }
-        }
+        protected abstract void OnInitialize();
     }
 
 

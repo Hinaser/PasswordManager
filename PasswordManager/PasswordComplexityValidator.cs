@@ -25,7 +25,7 @@ namespace PasswordManager
         /// <summary>
         /// Add complexity validation method one by one
         /// </summary>
-        protected override void Initialize()
+        protected override void OnInitialize()
         {
             base.AddAdjusterMethod(this.CheckPasswordCharsAreAllDifferent);
             base.AddAdjusterMethod(this.CheckSameCharsInARow);
