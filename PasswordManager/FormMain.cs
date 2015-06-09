@@ -373,7 +373,7 @@ namespace PasswordManager
             switch (e.KeyCode)
             {
                 case Keys.F2:
-                    this.CurrentTreeNode.BeginEdit();
+                    this.ToolStripMenuItem_RenameFolder_Click(null, null);
                     break;
                 default:
                     break;
