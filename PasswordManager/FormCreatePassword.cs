@@ -644,29 +644,6 @@ namespace PasswordManager
             // Deselect in order not to remain color effect
             this.richTextBox_NewPassword_Strength.DeselectAll();
         }
-
-        /// <summary>
-        /// Classification for validating password strength
-        /// </summary>
-        public enum PasswordTextClass
-        {
-            Unknown,
-            UseLowercaseOnly,
-            UseUppercaseOnly,
-            UseNumberOnly,
-            UseSymbolOnly,
-            UseLowerUpper,
-            UseLowerNumber,
-            UseLowerSymbol,
-            UseUpperNumber,
-            UseUpperSymbol,
-            UseNumberSymbol,
-            UseLowerUpperNumber,
-            UseLowerUpperSymbol,
-            UseLowerNumberSymbol,
-            UseUpperNumberSymbol,
-            UseLowerUpperNumberSymbol
-        }
         #endregion
 
         #region Setup language
