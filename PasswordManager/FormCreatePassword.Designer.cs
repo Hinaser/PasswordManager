@@ -140,8 +140,10 @@
             // 
             // textBox_NewPassword_Password
             // 
+            this.textBox_NewPassword_Password.ImeMode = System.Windows.Forms.ImeMode.Disable;
             this.textBox_NewPassword_Password.Location = new System.Drawing.Point(72, 63);
             this.textBox_NewPassword_Password.Name = "textBox_NewPassword_Password";
+            this.textBox_NewPassword_Password.ShortcutsEnabled = false;
             this.textBox_NewPassword_Password.Size = new System.Drawing.Size(210, 19);
             this.textBox_NewPassword_Password.TabIndex = 2;
             // 
