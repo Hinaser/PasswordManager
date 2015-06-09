@@ -43,7 +43,7 @@ namespace PasswordManager
         public static string PasswordStrengthNoticeFormat = String.Format("{0}{1}{2}{3}", "{0, -", PasswordStrengthNoticeHeaderSize, "} {1}", Environment.NewLine);
         public static string[] DangerousPasswordList = new String[] {
             "password", "Password","Pass","pass","pswd","Pswd",
-            "aaa","aaaa",
+            "a","aa","aaa","aaaa","aaaaa",
             "0","1","2","3","4","5","6","7","8","9",
             "00","11","22","33","44","55","66","77","88","99",
             "000","111","222","333","444","555","666","777","888","999",
