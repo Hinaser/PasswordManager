@@ -22,7 +22,7 @@ using System.Globalization;
 
 namespace PasswordManager
 {
-    public partial class MainForm_PasswordManager : Form
+    public partial class FormMain : Form
     {
         #region Fields
         private PasswordFileBody PasswordData = new PasswordFileBody();
@@ -30,7 +30,7 @@ namespace PasswordManager
         #endregion
 
         #region Constructor
-        public MainForm_PasswordManager()
+        public FormMain()
         {
             InitializeComponent();
 
@@ -86,6 +86,7 @@ namespace PasswordManager
         void Initialize()
         {
             this.InitializeTreeStructure(this.PasswordData.Containers, this.PasswordData.Indexer);
+            this.treeView_Folders.Invalidate();
             this.listView_PasswordItems.Invalidate();
         }
         #endregion
@@ -240,9 +241,26 @@ namespace PasswordManager
             this.treeView_Folders_AfterSelect(null, tvea);
         }
 
+        /// <summary>
+        /// Move selected password(s) to specified folder
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         void ToolStripMenuItem_ListViewItem_Move_Click(object sender, EventArgs e)
         {
-            throw new NotImplementedException();
+            // Do nothiing if no list item is selected
+            if (this.listView_PasswordItems.SelectedItems.Count < 1)
+            {
+                return;
+            }
+            int[] recordIDs = new int[this.listView_PasswordItems.SelectedItems.Count];
+            for(int i=0;i<recordIDs.Length;i++)
+            {
+                recordIDs[i] = (int)this.listView_PasswordItems.SelectedItems[i].Tag; // If tag is null, NullReferenceException will be thrown
+            }
+
+            FormMovePassword form = new FormMovePassword(this.PasswordData.Containers, this.PasswordData.Indexer);
+            form.ShowDialog();
         }
 
         /// <summary>
@@ -694,7 +712,11 @@ namespace PasswordManager
             this.treeView_Folders.Nodes.Clear();
 
             // Construct container tree
-            this.treeView_Folders.Nodes.Add(this.GetTreeViewNodeBuilt(containers, indexer));
+            TreeNode node = GetTreeViewNodeBuilt(containers, indexer, this.contextMenuStrip_TreeViewNode);
+            this.treeView_Folders.Nodes.Add(node);
+
+            // Expand firt level node
+            node.Expand();
         }
 
         /// <summary>
@@ -703,7 +725,7 @@ namespace PasswordManager
         /// <param name="containers"></param>
         /// <param name="indexer"></param>
         /// <returns></returns>
-        private TreeNode GetTreeViewNodeBuilt(ICollection<PasswordContainer> containers, PasswordIndexerBase indexer)
+        public static TreeNode GetTreeViewNodeBuilt(ICollection<PasswordContainer> containers, PasswordIndexerBase indexer, ContextMenuStrip context)
         {
             // Setup root parent container
             int rootContainerID = InternalApplicationConfig.RootContainerID;
@@ -711,10 +733,10 @@ namespace PasswordManager
             rootNode.Tag = rootContainerID;
 
             // Execute recursive tree method
-            this.AddContainerToTreeView(containers, indexer, rootContainerID, rootNode);
+            AddContainerToTreeView(containers, indexer, rootContainerID, rootNode, context);
 
             // Attach context menu strip
-            rootNode.ContextMenuStrip = this.contextMenuStrip_TreeViewNode;
+            rootNode.ContextMenuStrip = context;
 
             return rootNode;
         }
@@ -725,7 +747,7 @@ namespace PasswordManager
         /// <param name="parentContainerID"></param>
         /// <param name="containers"></param>
         /// <param name="indexer"></param>
-        private void AddContainerToTreeView(ICollection<PasswordContainer> containers, PasswordIndexerBase indexer, int parentContainerID, TreeNode parentNode)
+        public static void AddContainerToTreeView(ICollection<PasswordContainer> containers, PasswordIndexerBase indexer, int parentContainerID, TreeNode parentNode, ContextMenuStrip context)
         {
             ICollection<int> childrenContainers = indexer.GetChildContainers(parentContainerID);
 
@@ -741,11 +763,11 @@ namespace PasswordManager
                 PasswordContainer c = indexer.GetContainerByID(containers, childContainerID);
                 TreeNode node = new TreeNode(c.GetLabel());
                 node.Tag = childContainerID; // Store identification information
-                node.ContextMenuStrip = this.contextMenuStrip_TreeViewNode; // Attach context menu strip
+                node.ContextMenuStrip = context; // Attach context menu strip
 
                 parentNode.Nodes.Add(node); // Add the current node to parent node
 
-                this.AddContainerToTreeView(containers, indexer, childContainerID, node);
+                AddContainerToTreeView(containers, indexer, childContainerID, node, context);
             }
         }
 

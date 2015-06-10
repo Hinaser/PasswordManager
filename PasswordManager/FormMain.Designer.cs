@@ -1,6 +1,6 @@
 ﻿namespace PasswordManager
 {
-    partial class MainForm_PasswordManager
+    partial class FormMain
     {
         /// <summary>
         /// Required designer variable.
@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm_PasswordManager));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormMain));
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.treeView_Folders = new System.Windows.Forms.TreeView();
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
@@ -37,9 +37,9 @@
             this.columnHeader_caption = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader_ID = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader_password = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.textBox_ItemDescription = new System.Windows.Forms.TextBox();
             this.contextMenuStrip_ListView = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.ToolStripMenuItem_ListView_New = new System.Windows.Forms.ToolStripMenuItem();
-            this.textBox_ItemDescription = new System.Windows.Forms.TextBox();
             this.contextMenuStrip_TreeViewNode = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.ToolStripMenuItem_AddSubFolder = new System.Windows.Forms.ToolStripMenuItem();
             this.ToolStripMenuItem_RenameFolder = new System.Windows.Forms.ToolStripMenuItem();
@@ -163,6 +163,17 @@
             this.columnHeader_password.Text = "Password";
             this.columnHeader_password.Width = 106;
             // 
+            // textBox_ItemDescription
+            // 
+            this.textBox_ItemDescription.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.textBox_ItemDescription.Location = new System.Drawing.Point(0, 0);
+            this.textBox_ItemDescription.Multiline = true;
+            this.textBox_ItemDescription.Name = "textBox_ItemDescription";
+            this.textBox_ItemDescription.ReadOnly = true;
+            this.textBox_ItemDescription.ScrollBars = System.Windows.Forms.ScrollBars.Both;
+            this.textBox_ItemDescription.Size = new System.Drawing.Size(389, 117);
+            this.textBox_ItemDescription.TabIndex = 0;
+            // 
             // contextMenuStrip_ListView
             // 
             this.contextMenuStrip_ListView.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -175,17 +186,6 @@
             this.ToolStripMenuItem_ListView_New.Name = "ToolStripMenuItem_ListView_New";
             this.ToolStripMenuItem_ListView_New.Size = new System.Drawing.Size(100, 22);
             this.ToolStripMenuItem_ListView_New.Text = "New";
-            // 
-            // textBox_ItemDescription
-            // 
-            this.textBox_ItemDescription.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.textBox_ItemDescription.Location = new System.Drawing.Point(0, 0);
-            this.textBox_ItemDescription.Multiline = true;
-            this.textBox_ItemDescription.Name = "textBox_ItemDescription";
-            this.textBox_ItemDescription.ReadOnly = true;
-            this.textBox_ItemDescription.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.textBox_ItemDescription.Size = new System.Drawing.Size(389, 117);
-            this.textBox_ItemDescription.TabIndex = 0;
             // 
             // contextMenuStrip_TreeViewNode
             // 
@@ -423,7 +423,7 @@
             this.ToolStripMenuItem_ListViewItem_Delete.Size = new System.Drawing.Size(112, 22);
             this.ToolStripMenuItem_ListViewItem_Delete.Text = "Delete";
             // 
-            // MainForm_PasswordManager
+            // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -433,7 +433,7 @@
             this.Controls.Add(this.splitContainer1);
             this.Controls.Add(this.menuStrip_Main);
             this.MainMenuStrip = this.menuStrip_Main;
-            this.Name = "MainForm_PasswordManager";
+            this.Name = "FormMain";
             this.Text = "PasswordManager";
             this.splitContainer1.Panel1.ResumeLayout(false);
             this.splitContainer1.Panel2.ResumeLayout(false);

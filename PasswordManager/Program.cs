@@ -15,7 +15,7 @@ namespace PasswordManager
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new MainForm_PasswordManager());
+            Application.Run(new FormMain());
         }
     }
 }
