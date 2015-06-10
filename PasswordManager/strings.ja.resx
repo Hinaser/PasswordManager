@@ -327,6 +327,12 @@
   <data name="Form_UpdatePassword_Title" xml:space="preserve">
     <value>パスワードの更新</value>
   </data>
+  <data name="General_DeletePassword_Caption" xml:space="preserve">
+    <value>パスワードを削除しようとしています</value>
+  </data>
+  <data name="General_DeletePassword_Text" xml:space="preserve">
+    <value>本当にパスワード"{0}"を削除してよろしいですか ?</value>
+  </data>
   <data name="General_NewPassword_Strength_DangerousPassword" xml:space="preserve">
     <value>容易に推測できる弱いパスワード</value>
   </data>

@@ -245,9 +245,60 @@ namespace PasswordManager
             throw new NotImplementedException();
         }
 
+        /// <summary>
+        /// Delete selected password record
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         void ToolStripMenuItem_ListViewItem_Delete_Click(object sender, EventArgs e)
         {
-            throw new NotImplementedException();
+            // Check current folder
+            if (this.CurrentTreeNode == null || this.CurrentTreeNode.Tag == null)
+            {
+                return;
+            }
+            int containerID = (int)this.CurrentTreeNode.Tag;
+
+            // Check selected record
+            if (this.listView_PasswordItems.SelectedItems.Count != 1 || this.listView_PasswordItems.SelectedItems[0].Tag == null)
+            {
+                return;
+            }
+            int recordID = (int)this.listView_PasswordItems.SelectedItems[0].Tag;
+
+            PasswordIndexerBase indexer = this.PasswordData.Indexer;
+            PasswordRecord deletingRecord = indexer.GetRecordByID(this.PasswordData.Records, recordID);
+
+            if (deletingRecord == null)
+            {
+                throw new InvalidOperationException();
+            }
+
+            // Confirm really want to delete
+            DialogResult dresult = MessageBox.Show(String.Format(strings.General_DeletePassword_Text, deletingRecord.GetCaption()), strings.General_DeletePassword_Caption, MessageBoxButtons.OKCancel, MessageBoxIcon.Warning);
+            if (dresult != DialogResult.OK)
+            {
+                return;
+            }
+
+            // Remove target password record from indexer.
+            // If it fails to remove record from index, exit.
+            if (!indexer.RemoveRecord(recordID))
+            {
+                return;
+            }
+
+            // Remove target password record from the list in password data
+            if (!this.PasswordData.Records.Remove(deletingRecord))
+            {
+                throw new Exception();
+            }
+
+            // Refresh listview
+            TreeViewEventArgs tvea = new TreeViewEventArgs(this.CurrentTreeNode);
+            this.treeView_Folders_AfterSelect(null, tvea);
+
+            return;
         }
         #endregion
 

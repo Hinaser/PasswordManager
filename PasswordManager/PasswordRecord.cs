@@ -20,7 +20,7 @@ namespace PasswordManager
     /// This represents one password item.
     /// </summary>
     [Serializable]
-    public class PasswordRecord
+    public class PasswordRecord : IEquatable<PasswordRecord>
     {
         #region Member field
         /// <summary>
@@ -53,6 +53,13 @@ namespace PasswordManager
             this.ID = id;
             this.Password = password;
             this.Descriptioin = description;
+        }
+        #endregion
+
+        #region Method for IEquatable<T>
+        public bool Equals(PasswordRecord rec)
+        {
+            return rec != null && this.RecordID == rec.GetRecordID();
         }
         #endregion
 

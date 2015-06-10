@@ -475,6 +475,24 @@ namespace PasswordManager {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to You are about to delete a password.
+        /// </summary>
+        internal static string General_DeletePassword_Caption {
+            get {
+                return ResourceManager.GetString("General_DeletePassword_Caption", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Are you sure to delete &quot;{0}&quot; ?.
+        /// </summary>
+        internal static string General_DeletePassword_Text {
+            get {
+                return ResourceManager.GetString("General_DeletePassword_Text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to All characters are different each other.
         /// </summary>
         internal static string General_NewPassword_Strength_AllDifferent {
