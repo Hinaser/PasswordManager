@@ -54,6 +54,8 @@ namespace PasswordManager
             // Tooltip menu botton event
             this.toolStripButton_Open.Click += toolStripButton_Open_Click;
             this.toolStripButton_Save.Click += toolStripButton_Save_Click;
+            this.toolStripButton_ExpandTree.Click += toolStripButton_ExpandTree_Click;
+            this.toolStripButton_CollapseTree.Click += toolStripButton_CollapseTree_Click;
             // Context menu event
             this.ToolStripMenuItem_AddSubFolder.Click += ToolStripMenuItem_AddSubFolder_Click;
             this.ToolStripMenuItem_RenameFolder.Click += ToolStripMenuItem_RenameFolder_Click;
@@ -351,6 +353,30 @@ namespace PasswordManager
             f.AddFilterOrder(df.ToString());
 
             f.WritePasswordToFile(Utility.GetHash(new byte[] { 0xff, 0xfe, 0x00, 0x01, 0x02 }), this.PasswordData);
+        }
+
+        /// <summary>
+        /// Expand all node on treeview
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        void toolStripButton_ExpandTree_Click(object sender, EventArgs e)
+        {
+            this.treeView_Folders.BeginUpdate();
+            this.treeView_Folders.ExpandAll();
+            this.treeView_Folders.EndUpdate();
+        }
+
+        /// <summary>
+        /// Collapse all node on treeview
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        void toolStripButton_CollapseTree_Click(object sender, EventArgs e)
+        {
+            this.treeView_Folders.BeginUpdate();
+            this.treeView_Folders.CollapseAll();
+            this.treeView_Folders.EndUpdate();
         }
         #endregion
 
@@ -824,6 +850,8 @@ namespace PasswordManager
             this.toolStripStatusLabel1.Text = strings.Status_Ready;
             this.toolStripButton_Open.ToolTipText = strings.Form_Tooltip_OpenFile;
             this.toolStripButton_Save.ToolTipText = strings.Form_Tooltip_SaveFile;
+            this.toolStripButton_ExpandTree.ToolTipText = strings.Form_Tooltip_ExpandTree;
+            this.toolStripButton_CollapseTree.ToolTipText = strings.Form_Tooltip_CollapseTree;
             this.columnHeader_caption.Text = strings.Form_Listview_Caption;
             this.columnHeader_ID.Text = strings.Form_Listview_ID;
             this.columnHeader_password.Text = strings.Form_Listview_Password;

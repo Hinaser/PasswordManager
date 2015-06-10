@@ -448,6 +448,24 @@ namespace PasswordManager {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Collapse all nodes.
+        /// </summary>
+        internal static string Form_Tooltip_CollapseTree {
+            get {
+                return ResourceManager.GetString("Form_Tooltip_CollapseTree", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Expand all nodes.
+        /// </summary>
+        internal static string Form_Tooltip_ExpandTree {
+            get {
+                return ResourceManager.GetString("Form_Tooltip_ExpandTree", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Open file.
         /// </summary>
         internal static string Form_Tooltip_OpenFile {

@@ -246,6 +246,12 @@
   <data name="Form_NewPassword_WndTitle" xml:space="preserve">
     <value>Create New Password</value>
   </data>
+  <data name="Form_Tooltip_CollapseTree" xml:space="preserve">
+    <value>Collapse all nodes</value>
+  </data>
+  <data name="Form_Tooltip_ExpandTree" xml:space="preserve">
+    <value>Expand all nodes</value>
+  </data>
   <data name="Form_Tooltip_OpenFile" xml:space="preserve">
     <value>Open file</value>
   </data>

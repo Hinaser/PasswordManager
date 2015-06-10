@@ -324,6 +324,12 @@
   <data name="Form_MenuItem_File_Save" xml:space="preserve">
     <value>ファイルに保存する</value>
   </data>
+  <data name="Form_Tooltip_CollapseTree" xml:space="preserve">
+    <value>ツリー上の全ノードを折りたたむ</value>
+  </data>
+  <data name="Form_Tooltip_ExpandTree" xml:space="preserve">
+    <value>ツリー上の全ノードを展開する</value>
+  </data>
   <data name="Form_UpdatePassword_Title" xml:space="preserve">
     <value>パスワードの更新</value>
   </data>
@@ -338,8 +344,5 @@
   </data>
   <data name="General_NewPassword_Strength_TypeCritical" xml:space="preserve">
     <value>[危険]</value>
-  </data>
-  <data name="String1" xml:space="preserve">
-    <value />
   </data>
 </root>
