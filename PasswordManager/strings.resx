@@ -267,6 +267,12 @@
   <data name="General_DeletePassword_Text" xml:space="preserve">
     <value>Are you sure to delete "{0}" ?</value>
   </data>
+  <data name="General_MovePassword_Fail_Caption" xml:space="preserve">
+    <value>Warning</value>
+  </data>
+  <data name="General_MovePassword_Fail_Text" xml:space="preserve">
+    <value>Failed to move {0} to {1}</value>
+  </data>
   <data name="General_MovePassword_NotSelected_Caption" xml:space="preserve">
     <value>Please select a folder</value>
   </data>

@@ -51,6 +51,7 @@ namespace PasswordManager
             ,"1234","2345","3456","4567","5678","6789",
             "9876","8765","7654","6543","5432","4321",
         };
+        public static string Separater1 = ",";
     }
 
     public static class Utility

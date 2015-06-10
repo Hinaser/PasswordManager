@@ -351,4 +351,10 @@
   <data name="General_MovePassword_NotSelected_Text" xml:space="preserve">
     <value>移動先のフォルダーが指定されていません</value>
   </data>
+  <data name="General_MovePassword_Fail_Caption" xml:space="preserve">
+    <value>警告</value>
+  </data>
+  <data name="General_MovePassword_Fail_Text" xml:space="preserve">
+    <value>{0} を {1}に移動することに失敗しました</value>
+  </data>
 </root>

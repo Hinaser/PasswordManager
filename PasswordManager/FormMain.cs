@@ -270,6 +270,45 @@ namespace PasswordManager
             {
                 return;
             }
+
+            // This may throw when targetContainerID is not set
+            int destContainerID = form.GetTargetContainerID();
+
+            // Move all records to designated folder
+            List<string> failedRecordCaptions = new List<string>();
+            foreach (int recordID in recordIDs)
+            {
+                // In case current selected containerID = destination containerID, skip it
+                int currentContainerID = this.PasswordData.Indexer.GetParentContainerOfRecord(recordID);
+                if (destContainerID == currentContainerID)
+                {
+                    continue;
+                }
+
+                // If it fails to move, save the record information
+                if (!this.PasswordData.Indexer.MoveRecord(recordID, destContainerID))
+                {
+                    string caption = this.PasswordData.Indexer.GetRecordByID(this.PasswordData.Records, recordID).GetCaption();
+                    if (String.IsNullOrEmpty(caption))
+                    {
+                        caption = recordID.ToString();
+                    }
+                    failedRecordCaptions.Add(caption);
+                }
+            }
+
+            // If some of records were failed to move, show warning message
+            if (failedRecordCaptions.Count > 1)
+            {
+                string recordList = String.Join(InternalApplicationConfig.Separater1, failedRecordCaptions.ToArray());
+                string destContainerCaption = this.PasswordData.Indexer.GetContainerByID(this.PasswordData.Containers, destContainerID).GetLabel();
+                string warnText = String.Format(strings.General_MovePassword_Fail_Text, recordList, destContainerCaption);
+                MessageBox.Show(warnText, strings.General_MovePassword_Fail_Caption, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+
+            // Refresh listview
+            TreeViewEventArgs tvea = new TreeViewEventArgs(this.CurrentTreeNode);
+            this.treeView_Folders_AfterSelect(null, tvea);
         }
 
         /// <summary>

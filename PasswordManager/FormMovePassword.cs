@@ -12,8 +12,8 @@ namespace PasswordManager
     public partial class FormMovePassword : Form
     {
         #region Fields
-        private int DestinationContainerID = ContainerIDNotYetSpecified;
-        public static readonly int ContainerIDNotYetSpecified = -1;
+        private int DestinationContainerID = ContainerIDUnSet;
+        private static readonly int ContainerIDUnSet = -1;
         #endregion
 
         #region Constructor
@@ -39,6 +39,11 @@ namespace PasswordManager
         /// <returns></returns>
         public int GetTargetContainerID()
         {
+            if (this.DestinationContainerID == ContainerIDUnSet)
+            {
+                throw new InvalidOperationException();
+            }
+
             return this.DestinationContainerID;
         }
         #endregion
