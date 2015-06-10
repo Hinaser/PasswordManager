@@ -67,6 +67,15 @@ namespace PasswordManager
         }
 
         /// <summary>
+        /// Set caption to instance field
+        /// </summary>
+        /// <param name="caption"></param>
+        public void SetCaption(string caption)
+        {
+            this.Caption = caption;
+        }
+
+        /// <summary>
         /// Set header values to instance
         /// </summary>
         /// <param name="parentID">Parent container id</param>

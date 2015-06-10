@@ -33,11 +33,15 @@ namespace PasswordManager
         public MainForm_PasswordManager()
         {
             InitializeComponent();
-            
+
+            // Initialize form element
+            this.Initialize();
+
             // ListView event
             this.listView_PasswordItems.SizeChanged += listView_PasswordItems_SizeChanged;
             this.listView_PasswordItems.ColumnWidthChanged += listView_PasswordItems_ColumnWidthChanged;
             this.listView_PasswordItems.SelectedIndexChanged += listView_PasswordItems_SelectedIndexChanged;
+            this.listView_PasswordItems.MouseUp += listView_PasswordItems_MouseUp;
             // TreeView event
             this.treeView_Folders.AfterSelect += treeView_Folders_AfterSelect;
             this.treeView_Folders.NodeMouseClick += treeView_Folders_NodeMouseClick;
@@ -55,6 +59,11 @@ namespace PasswordManager
             this.ToolStripMenuItem_RenameFolder.Click += ToolStripMenuItem_RenameFolder_Click;
             this.ToolStripMenuItem_DeleteFolder.Click += ToolStripMenuItem_DeleteFolder_Click;
             this.ToolStripMenuItem_AddPassword.Click += ToolStripMenuItem_AddPassword_Click;
+            this.ToolStripMenuItem_ListView_New.Click += ToolStripMenuItem_AddPassword_Click;
+            this.ToolStripMenuItem_ListViewItem_New.Click += ToolStripMenuItem_AddPassword_Click;
+            this.ToolStripMenuItem_ListViewItem_Edit.Click += ToolStripMenuItem_ListViewItem_Edit_Click;
+            this.ToolStripMenuItem_ListViewItem_Move.Click += ToolStripMenuItem_ListViewItem_Move_Click;
+            this.ToolStripMenuItem_ListViewItem_Delete.Click += ToolStripMenuItem_ListViewItem_Delete_Click;
             // Menu item click event
             this.ToolStripMenuItem_Language_English.Click += ToolStripMenuItem_Language_English_Click;
             this.ToolStripMenuItem_Language_Japanese.Click += ToolStripMenuItem_Language_Japanese_Click;
@@ -67,9 +76,6 @@ namespace PasswordManager
 
             // Apply language setting
             this.SetupLanguage(InternalApplicationConfig.DefaultLocale);
-
-            // Initialize form element
-            this.Initialize();
         }
         #endregion
 
@@ -138,6 +144,110 @@ namespace PasswordManager
             this.textBox_ItemDescription.Text = comment;
 
             return;
+        }
+
+        /// <summary>
+        /// For right click context menu for list view.
+        /// This method is writter in order to separete menu content between clicked on empty area on listview or selected listview item.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        void listView_PasswordItems_MouseUp(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right)
+            {
+                // When any records are not focused
+                if (this.listView_PasswordItems.FocusedItem == null)
+                {
+                    contextMenuStrip_ListView.Show(Cursor.Position);
+                    return;
+                }
+
+                if (this.listView_PasswordItems.FocusedItem.Bounds.Contains(e.Location) == true)
+                {
+                    contextMenuStrip_ListViewItem.Show(Cursor.Position);
+                }
+                else
+                {
+                    contextMenuStrip_ListView.Show(Cursor.Position);
+                }
+            }
+
+            return;
+        }
+
+        /// <summary>
+        /// Edit existing password record
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        void ToolStripMenuItem_ListViewItem_Edit_Click(object sender, EventArgs e)
+        {
+            // Do nothing if no tree nodes are selected
+            if (this.CurrentTreeNode == null || this.CurrentTreeNode.Tag == null || this.CurrentTreeNode.Tag == null)
+            {
+                return;
+            }
+
+            // Do nothiing if no list item is selected or multiple items are selected
+            if (this.listView_PasswordItems.SelectedItems.Count != 1)
+            {
+                return;
+            }
+            ListViewItem item = this.listView_PasswordItems.SelectedItems[0];
+            if (this.listView_PasswordItems.SelectedItems[0].Tag == null)
+            {
+                return;
+            }
+            int recordID = (int)this.listView_PasswordItems.SelectedItems[0].Tag;
+
+            PasswordRecord record = this.PasswordData.Indexer.GetRecordByID(this.PasswordData.Records, recordID);
+            if (record == null)
+            {
+                throw new InvalidOperationException();
+            }
+
+            // Create form instance
+            FormCreatePassword form = new FormCreatePassword();
+            form.StartPosition = FormStartPosition.Manual;
+            form.Location = this.Location;
+            form.Text = strings.Form_UpdatePassword_Title;
+
+            // Set current password record values
+            form.SetPasswordData(record);
+
+            // Save caption string for it is cleared by unknown reason
+            string caption = String.Copy(record.GetCaption());
+
+            // Activate dialog
+            if (form.ShowDialog() != DialogResult.OK)
+            {
+                return;
+            }
+
+            //record = form.GetPassword(); // For C#, this would be redundant because all object arguments are passed by reference
+            form.Dispose();
+
+            // If caption is empty, recover saved caption text and exit
+            if (String.IsNullOrEmpty(record.GetCaption()))
+            {
+                record.SetCaption(caption);
+                return;
+            }
+
+            // Refresh listview
+            TreeViewEventArgs tvea = new TreeViewEventArgs(this.CurrentTreeNode);
+            this.treeView_Folders_AfterSelect(null, tvea);
+        }
+
+        void ToolStripMenuItem_ListViewItem_Move_Click(object sender, EventArgs e)
+        {
+            throw new NotImplementedException();
+        }
+
+        void ToolStripMenuItem_ListViewItem_Delete_Click(object sender, EventArgs e)
+        {
+            throw new NotImplementedException();
         }
         #endregion
 
@@ -253,7 +363,7 @@ namespace PasswordManager
         void ToolStripMenuItem_AddPassword_Click(object sender, EventArgs e)
         {
             // Do nothing if no tree nodes are selected
-            if (this.CurrentTreeNode.Tag == null)
+            if (this.CurrentTreeNode.Tag == null || this.CurrentTreeNode.Tag == null)
             {
                 return;
             }
@@ -276,13 +386,6 @@ namespace PasswordManager
             }
 
             // Get selected container
-            // Throw an exception when CurrentTreeNode value is null. This should not be happend.
-            if (this.CurrentTreeNode == null || this.CurrentTreeNode.Tag == null)
-            {
-                //return;
-                throw new InvalidOperationException();
-            }
-
             int containerID = (int)this.CurrentTreeNode.Tag;
             int recordID = this.PasswordData.Indexer.GetUniqueRecordID();
 
@@ -315,7 +418,7 @@ namespace PasswordManager
         void treeView_Folders_AfterSelect(object sender, TreeViewEventArgs e)
         {
             // When tag contains no information about actual pointer to internal PasswordObjects, stop processing.
-            if (e.Node.Tag == null)
+            if (e == null || e.Node == null || e.Node.Tag == null)
             {
                 return;
             }
@@ -388,7 +491,7 @@ namespace PasswordManager
         void treeView_Folders_AfterLabelEdit(object sender, NodeLabelEditEventArgs e)
         {
             // When the user presses ESC to cancel edit or pressed ENTER without modifying label text, e.Label is null.
-            if (e.Label == null || e.Node.Tag == null)
+            if (e == null || e.Label == null || e.Node.Tag == null)
             {
                 return;
             }
@@ -666,6 +769,10 @@ namespace PasswordManager
             this.ToolStripMenuItem_Edit_RenameFolder.Text = strings.Form_ContextMenu_RenameContainer;
             this.ToolStripMenuItem_Edit_DeleteFolder.Text = strings.Form_ContextMenu_DeleteContainer;
             this.ToolStripMenuItem_Edit_AddPassword.Text = strings.Form_ContextMenu_AddPassword;
+            this.ToolStripMenuItem_ListView_New.Text = strings.Form_ContextMenu_AddPassword;
+            this.ToolStripMenuItem_ListViewItem_Edit.Text = strings.Form_ContextMenu_EditPassword;
+            this.ToolStripMenuItem_ListViewItem_Delete.Text = strings.Form_ContextMenu_DeletePassword;
+            this.ToolStripMenuItem_ListViewItem_Move.Text = strings.Form_ContextMenu_MovePassword;
         }
         #endregion
     }

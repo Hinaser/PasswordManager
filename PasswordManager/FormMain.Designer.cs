@@ -37,6 +37,8 @@
             this.columnHeader_caption = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader_ID = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader_password = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.contextMenuStrip_ListView = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.ToolStripMenuItem_ListView_New = new System.Windows.Forms.ToolStripMenuItem();
             this.textBox_ItemDescription = new System.Windows.Forms.TextBox();
             this.contextMenuStrip_TreeViewNode = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.ToolStripMenuItem_AddSubFolder = new System.Windows.Forms.ToolStripMenuItem();
@@ -64,16 +66,23 @@
             this.toolStripButton_Save = new System.Windows.Forms.ToolStripButton();
             this.statusStrip_Main = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
+            this.contextMenuStrip_ListViewItem = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.ToolStripMenuItem_ListViewItem_New = new System.Windows.Forms.ToolStripMenuItem();
+            this.ToolStripMenuItem_ListViewItem_Edit = new System.Windows.Forms.ToolStripMenuItem();
+            this.ToolStripMenuItem_ListViewItem_Move = new System.Windows.Forms.ToolStripMenuItem();
+            this.ToolStripMenuItem_ListViewItem_Delete = new System.Windows.Forms.ToolStripMenuItem();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
             this.splitContainer2.Panel1.SuspendLayout();
             this.splitContainer2.Panel2.SuspendLayout();
             this.splitContainer2.SuspendLayout();
+            this.contextMenuStrip_ListView.SuspendLayout();
             this.contextMenuStrip_TreeViewNode.SuspendLayout();
             this.menuStrip_Main.SuspendLayout();
             this.toolStrip_Main.SuspendLayout();
             this.statusStrip_Main.SuspendLayout();
+            this.contextMenuStrip_ListViewItem.SuspendLayout();
             this.SuspendLayout();
             // 
             // splitContainer1
@@ -154,6 +163,19 @@
             this.columnHeader_password.Text = "Password";
             this.columnHeader_password.Width = 106;
             // 
+            // contextMenuStrip_ListView
+            // 
+            this.contextMenuStrip_ListView.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.ToolStripMenuItem_ListView_New});
+            this.contextMenuStrip_ListView.Name = "contextMenuStrip_ListViewItem";
+            this.contextMenuStrip_ListView.Size = new System.Drawing.Size(101, 26);
+            // 
+            // ToolStripMenuItem_ListView_New
+            // 
+            this.ToolStripMenuItem_ListView_New.Name = "ToolStripMenuItem_ListView_New";
+            this.ToolStripMenuItem_ListView_New.Size = new System.Drawing.Size(100, 22);
+            this.ToolStripMenuItem_ListView_New.Text = "New";
+            // 
             // textBox_ItemDescription
             // 
             this.textBox_ItemDescription.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -232,13 +254,13 @@
             // ToolStripMenuItem_File_Open
             // 
             this.ToolStripMenuItem_File_Open.Name = "ToolStripMenuItem_File_Open";
-            this.ToolStripMenuItem_File_Open.Size = new System.Drawing.Size(152, 22);
+            this.ToolStripMenuItem_File_Open.Size = new System.Drawing.Size(125, 22);
             this.ToolStripMenuItem_File_Open.Text = "Open file";
             // 
             // ToolStripMenuItem_File_Save
             // 
             this.ToolStripMenuItem_File_Save.Name = "ToolStripMenuItem_File_Save";
-            this.ToolStripMenuItem_File_Save.Size = new System.Drawing.Size(152, 22);
+            this.ToolStripMenuItem_File_Save.Size = new System.Drawing.Size(125, 22);
             this.ToolStripMenuItem_File_Save.Text = "Save file";
             // 
             // ToolStripMenuItem_Edit
@@ -297,7 +319,7 @@
             this.ToolStripMenuItem_Language_English,
             this.ToolStripMenuItem_Language_Japanese});
             this.ToolStripMenuItem_Language.Name = "ToolStripMenuItem_Language";
-            this.ToolStripMenuItem_Language.Size = new System.Drawing.Size(152, 22);
+            this.ToolStripMenuItem_Language.Size = new System.Drawing.Size(130, 22);
             this.ToolStripMenuItem_Language.Text = "Language";
             // 
             // ToolStripMenuItem_Language_English
@@ -367,6 +389,40 @@
             this.toolStripStatusLabel1.Size = new System.Drawing.Size(43, 17);
             this.toolStripStatusLabel1.Text = "Ready";
             // 
+            // contextMenuStrip_ListViewItem
+            // 
+            this.contextMenuStrip_ListViewItem.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.ToolStripMenuItem_ListViewItem_New,
+            this.ToolStripMenuItem_ListViewItem_Edit,
+            this.ToolStripMenuItem_ListViewItem_Move,
+            this.ToolStripMenuItem_ListViewItem_Delete});
+            this.contextMenuStrip_ListViewItem.Name = "contextMenuStrip_ListViewItem";
+            this.contextMenuStrip_ListViewItem.Size = new System.Drawing.Size(113, 92);
+            // 
+            // ToolStripMenuItem_ListViewItem_New
+            // 
+            this.ToolStripMenuItem_ListViewItem_New.Name = "ToolStripMenuItem_ListViewItem_New";
+            this.ToolStripMenuItem_ListViewItem_New.Size = new System.Drawing.Size(112, 22);
+            this.ToolStripMenuItem_ListViewItem_New.Text = "New";
+            // 
+            // ToolStripMenuItem_ListViewItem_Edit
+            // 
+            this.ToolStripMenuItem_ListViewItem_Edit.Name = "ToolStripMenuItem_ListViewItem_Edit";
+            this.ToolStripMenuItem_ListViewItem_Edit.Size = new System.Drawing.Size(112, 22);
+            this.ToolStripMenuItem_ListViewItem_Edit.Text = "Edit";
+            // 
+            // ToolStripMenuItem_ListViewItem_Move
+            // 
+            this.ToolStripMenuItem_ListViewItem_Move.Name = "ToolStripMenuItem_ListViewItem_Move";
+            this.ToolStripMenuItem_ListViewItem_Move.Size = new System.Drawing.Size(112, 22);
+            this.ToolStripMenuItem_ListViewItem_Move.Text = "Move";
+            // 
+            // ToolStripMenuItem_ListViewItem_Delete
+            // 
+            this.ToolStripMenuItem_ListViewItem_Delete.Name = "ToolStripMenuItem_ListViewItem_Delete";
+            this.ToolStripMenuItem_ListViewItem_Delete.Size = new System.Drawing.Size(112, 22);
+            this.ToolStripMenuItem_ListViewItem_Delete.Text = "Delete";
+            // 
             // MainForm_PasswordManager
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -386,6 +442,7 @@
             this.splitContainer2.Panel2.ResumeLayout(false);
             this.splitContainer2.Panel2.PerformLayout();
             this.splitContainer2.ResumeLayout(false);
+            this.contextMenuStrip_ListView.ResumeLayout(false);
             this.contextMenuStrip_TreeViewNode.ResumeLayout(false);
             this.menuStrip_Main.ResumeLayout(false);
             this.menuStrip_Main.PerformLayout();
@@ -393,6 +450,7 @@
             this.toolStrip_Main.PerformLayout();
             this.statusStrip_Main.ResumeLayout(false);
             this.statusStrip_Main.PerformLayout();
+            this.contextMenuStrip_ListViewItem.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -434,6 +492,13 @@
         private System.Windows.Forms.ToolStripMenuItem ToolStripMenuItem_Edit_DeleteFolder;
         private System.Windows.Forms.ToolStripSeparator toolStripMenuItem_Edit_Seperator;
         private System.Windows.Forms.ToolStripMenuItem ToolStripMenuItem_Edit_AddPassword;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStrip_ListView;
+        private System.Windows.Forms.ToolStripMenuItem ToolStripMenuItem_ListView_New;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStrip_ListViewItem;
+        private System.Windows.Forms.ToolStripMenuItem ToolStripMenuItem_ListViewItem_New;
+        private System.Windows.Forms.ToolStripMenuItem ToolStripMenuItem_ListViewItem_Edit;
+        private System.Windows.Forms.ToolStripMenuItem ToolStripMenuItem_ListViewItem_Move;
+        private System.Windows.Forms.ToolStripMenuItem ToolStripMenuItem_ListViewItem_Delete;
 
 
 

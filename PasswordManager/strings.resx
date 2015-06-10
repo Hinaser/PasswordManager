@@ -126,6 +126,15 @@
   <data name="Form_ContextMenu_DeleteContainer" xml:space="preserve">
     <value>Delete folder</value>
   </data>
+  <data name="Form_ContextMenu_DeletePassword" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="Form_ContextMenu_EditPassword" xml:space="preserve">
+    <value>Edit</value>
+  </data>
+  <data name="Form_ContextMenu_MovePassword" xml:space="preserve">
+    <value>Move</value>
+  </data>
   <data name="Form_ContextMenu_RenameContainer" xml:space="preserve">
     <value>Rename folder</value>
   </data>
@@ -242,6 +251,9 @@
   </data>
   <data name="Form_Tooltip_SaveFile" xml:space="preserve">
     <value>Save file</value>
+  </data>
+  <data name="Form_UpdatePassword_Title" xml:space="preserve">
+    <value>Update password</value>
   </data>
   <data name="General_NewPassword_Strength_AllDifferent" xml:space="preserve">
     <value>All characters are different each other</value>

@@ -88,6 +88,33 @@ namespace PasswordManager {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Delete.
+        /// </summary>
+        internal static string Form_ContextMenu_DeletePassword {
+            get {
+                return ResourceManager.GetString("Form_ContextMenu_DeletePassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Edit.
+        /// </summary>
+        internal static string Form_ContextMenu_EditPassword {
+            get {
+                return ResourceManager.GetString("Form_ContextMenu_EditPassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Move.
+        /// </summary>
+        internal static string Form_ContextMenu_MovePassword {
+            get {
+                return ResourceManager.GetString("Form_ContextMenu_MovePassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Rename folder.
         /// </summary>
         internal static string Form_ContextMenu_RenameContainer {
@@ -435,6 +462,15 @@ namespace PasswordManager {
         internal static string Form_Tooltip_SaveFile {
             get {
                 return ResourceManager.GetString("Form_Tooltip_SaveFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Update password.
+        /// </summary>
+        internal static string Form_UpdatePassword_Title {
+            get {
+                return ResourceManager.GetString("Form_UpdatePassword_Title", resourceCulture);
             }
         }
         

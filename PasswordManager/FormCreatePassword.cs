@@ -71,6 +71,28 @@ namespace PasswordManager
         }
         #endregion
 
+        #region Setter method
+        // Set caption/id/password/description from outside caller
+        public void SetCaption(string caption) { this.textBox_NewPassword_Caption.Text = caption; }
+        public void SetID(string id) { this.textBox_NewPassword_ID.Text = id; }
+        public void SetPassword(string password) { this.textBox_NewPassword_Password.Text = password; }
+        public void SetDescription(string description) { this.textBox_NewPassword_Memo.Text = description; }
+
+        /// <summary>
+        /// Set password data for update
+        /// </summary>
+        /// <param name="record"></param>
+        public void SetPasswordData(PasswordRecord record)
+        {
+            this.Password = record;
+            this.SetCaption(record.GetCaption());
+            this.SetID(record.GetID());
+            this.SetPassword(record.GetPassword());
+            this.SetDescription(record.GetDescription());
+        }
+
+        #endregion
+
         #region Getter method
         /// <summary>
         /// Get password object which user entered
@@ -116,9 +138,17 @@ namespace PasswordManager
         /// <param name="e"></param>
         void button_NewPassword_OK_Click(object sender, EventArgs e)
         {
-            // Set dialog input values to PasswordRecord object
-            this.Password = new PasswordRecord();
-            this.Password.SetHeaderData(this.textBox_NewPassword_Caption.Text, DateTime.UtcNow, DateTime.UtcNow);
+            // If password is being newly created
+            if (this.Password == null)
+            {
+                this.Password = new PasswordRecord();
+                this.Password.SetHeaderData(this.textBox_NewPassword_Caption.Text, DateTime.UtcNow, DateTime.UtcNow);
+            }
+            // If password is being updated
+            else
+            {
+                this.Password.SetHeaderData(this.textBox_NewPassword_Caption.Text, this.Password.GetCreateDate(), DateTime.UtcNow);
+            }
             this.Password.SetPrivateData(this.textBox_NewPassword_ID.Text, this.textBox_NewPassword_Password.Text, this.textBox_NewPassword_Memo.Text);
             this.DialogResult = DialogResult.OK;
             this.Close();
