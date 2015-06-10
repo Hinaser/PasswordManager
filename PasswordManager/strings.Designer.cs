@@ -511,6 +511,24 @@ namespace PasswordManager {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Please select a folder.
+        /// </summary>
+        internal static string General_MovePassword_NotSelected_Caption {
+            get {
+                return ResourceManager.GetString("General_MovePassword_NotSelected_Caption", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No destination folder is selected..
+        /// </summary>
+        internal static string General_MovePassword_NotSelected_Text {
+            get {
+                return ResourceManager.GetString("General_MovePassword_NotSelected_Text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to All characters are different each other.
         /// </summary>
         internal static string General_NewPassword_Strength_AllDifferent {

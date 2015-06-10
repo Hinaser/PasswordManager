@@ -267,6 +267,12 @@
   <data name="General_DeletePassword_Text" xml:space="preserve">
     <value>Are you sure to delete "{0}" ?</value>
   </data>
+  <data name="General_MovePassword_NotSelected_Caption" xml:space="preserve">
+    <value>Please select a folder</value>
+  </data>
+  <data name="General_MovePassword_NotSelected_Text" xml:space="preserve">
+    <value>No destination folder is selected.</value>
+  </data>
   <data name="General_NewPassword_Strength_AllDifferent" xml:space="preserve">
     <value>All characters are different each other</value>
   </data>

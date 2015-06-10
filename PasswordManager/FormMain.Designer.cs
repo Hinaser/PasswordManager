@@ -64,6 +64,8 @@
             this.toolStrip_Main = new System.Windows.Forms.ToolStrip();
             this.toolStripButton_Open = new System.Windows.Forms.ToolStripButton();
             this.toolStripButton_Save = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButton_ExpandTree = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButton_CollapseTree = new System.Windows.Forms.ToolStripButton();
             this.statusStrip_Main = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.contextMenuStrip_ListViewItem = new System.Windows.Forms.ContextMenuStrip(this.components);
@@ -71,8 +73,6 @@
             this.ToolStripMenuItem_ListViewItem_Edit = new System.Windows.Forms.ToolStripMenuItem();
             this.ToolStripMenuItem_ListViewItem_Move = new System.Windows.Forms.ToolStripMenuItem();
             this.ToolStripMenuItem_ListViewItem_Delete = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripButton_ExpandTree = new System.Windows.Forms.ToolStripButton();
-            this.toolStripButton_CollapseTree = new System.Windows.Forms.ToolStripButton();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
@@ -111,6 +111,7 @@
             // 
             this.treeView_Folders.AllowDrop = true;
             this.treeView_Folders.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.treeView_Folders.HideSelection = false;
             this.treeView_Folders.LabelEdit = true;
             this.treeView_Folders.Location = new System.Drawing.Point(0, 0);
             this.treeView_Folders.Name = "treeView_Folders";
@@ -373,6 +374,22 @@
             this.toolStripButton_Save.Name = "toolStripButton_Save";
             this.toolStripButton_Save.Size = new System.Drawing.Size(23, 22);
             // 
+            // toolStripButton_ExpandTree
+            // 
+            this.toolStripButton_ExpandTree.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButton_ExpandTree.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton_ExpandTree.Image")));
+            this.toolStripButton_ExpandTree.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButton_ExpandTree.Name = "toolStripButton_ExpandTree";
+            this.toolStripButton_ExpandTree.Size = new System.Drawing.Size(23, 22);
+            // 
+            // toolStripButton_CollapseTree
+            // 
+            this.toolStripButton_CollapseTree.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButton_CollapseTree.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton_CollapseTree.Image")));
+            this.toolStripButton_CollapseTree.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButton_CollapseTree.Name = "toolStripButton_CollapseTree";
+            this.toolStripButton_CollapseTree.Size = new System.Drawing.Size(23, 22);
+            // 
             // statusStrip_Main
             // 
             this.statusStrip_Main.BackColor = System.Drawing.Color.Transparent;
@@ -424,22 +441,6 @@
             this.ToolStripMenuItem_ListViewItem_Delete.Name = "ToolStripMenuItem_ListViewItem_Delete";
             this.ToolStripMenuItem_ListViewItem_Delete.Size = new System.Drawing.Size(112, 22);
             this.ToolStripMenuItem_ListViewItem_Delete.Text = "Delete";
-            // 
-            // toolStripButton_ExpandTree
-            // 
-            this.toolStripButton_ExpandTree.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButton_ExpandTree.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton_ExpandTree.Image")));
-            this.toolStripButton_ExpandTree.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButton_ExpandTree.Name = "toolStripButton_ExpandTree";
-            this.toolStripButton_ExpandTree.Size = new System.Drawing.Size(23, 22);
-            // 
-            // toolStripButton_CollapseTree
-            // 
-            this.toolStripButton_CollapseTree.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButton_CollapseTree.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton_CollapseTree.Image")));
-            this.toolStripButton_CollapseTree.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButton_CollapseTree.Name = "toolStripButton_CollapseTree";
-            this.toolStripButton_CollapseTree.Size = new System.Drawing.Size(23, 22);
             // 
             // FormMain
             // 

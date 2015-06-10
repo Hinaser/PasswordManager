@@ -262,7 +262,13 @@ namespace PasswordManager
             }
 
             FormMovePassword form = new FormMovePassword(this.PasswordData.Containers, this.PasswordData.Indexer);
-            form.ShowDialog();
+            form.Location = this.Location;
+
+            // Show dialog. When result is not OK, then exit
+            if (form.ShowDialog() != DialogResult.OK)
+            {
+                return;
+            }
         }
 
         /// <summary>

@@ -345,4 +345,10 @@
   <data name="General_NewPassword_Strength_TypeCritical" xml:space="preserve">
     <value>[危険]</value>
   </data>
+  <data name="General_MovePassword_NotSelected_Caption" xml:space="preserve">
+    <value>フォルダーを選択してください</value>
+  </data>
+  <data name="General_MovePassword_NotSelected_Text" xml:space="preserve">
+    <value>移動先のフォルダーが指定されていません</value>
+  </data>
 </root>

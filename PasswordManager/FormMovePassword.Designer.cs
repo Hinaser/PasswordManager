@@ -29,10 +29,10 @@
         private void InitializeComponent()
         {
             this.panel_MovePassword_TreeView = new System.Windows.Forms.Panel();
-            this.panel_MovePassword_Button = new System.Windows.Forms.Panel();
-            this.button_MovePassword_OK = new System.Windows.Forms.Button();
-            this.button_MovePassword_Cancel = new System.Windows.Forms.Button();
             this.treeView_MovePassword_Folders = new System.Windows.Forms.TreeView();
+            this.panel_MovePassword_Button = new System.Windows.Forms.Panel();
+            this.button_MovePassword_Cancel = new System.Windows.Forms.Button();
+            this.button_MovePassword_OK = new System.Windows.Forms.Button();
             this.panel_MovePassword_TreeView.SuspendLayout();
             this.panel_MovePassword_Button.SuspendLayout();
             this.SuspendLayout();
@@ -46,6 +46,15 @@
             this.panel_MovePassword_TreeView.Size = new System.Drawing.Size(246, 257);
             this.panel_MovePassword_TreeView.TabIndex = 0;
             // 
+            // treeView_MovePassword_Folders
+            // 
+            this.treeView_MovePassword_Folders.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.treeView_MovePassword_Folders.HideSelection = false;
+            this.treeView_MovePassword_Folders.Location = new System.Drawing.Point(0, 0);
+            this.treeView_MovePassword_Folders.Name = "treeView_MovePassword_Folders";
+            this.treeView_MovePassword_Folders.Size = new System.Drawing.Size(246, 257);
+            this.treeView_MovePassword_Folders.TabIndex = 0;
+            // 
             // panel_MovePassword_Button
             // 
             this.panel_MovePassword_Button.Controls.Add(this.button_MovePassword_Cancel);
@@ -56,19 +65,10 @@
             this.panel_MovePassword_Button.Size = new System.Drawing.Size(246, 36);
             this.panel_MovePassword_Button.TabIndex = 1;
             // 
-            // button_MovePassword_OK
-            // 
-            this.button_MovePassword_OK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.button_MovePassword_OK.Location = new System.Drawing.Point(12, 6);
-            this.button_MovePassword_OK.Name = "button_MovePassword_OK";
-            this.button_MovePassword_OK.Size = new System.Drawing.Size(75, 23);
-            this.button_MovePassword_OK.TabIndex = 0;
-            this.button_MovePassword_OK.Text = "OK";
-            this.button_MovePassword_OK.UseVisualStyleBackColor = true;
-            // 
             // button_MovePassword_Cancel
             // 
             this.button_MovePassword_Cancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.button_MovePassword_Cancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.button_MovePassword_Cancel.Location = new System.Drawing.Point(93, 6);
             this.button_MovePassword_Cancel.Name = "button_MovePassword_Cancel";
             this.button_MovePassword_Cancel.Size = new System.Drawing.Size(75, 23);
@@ -76,13 +76,16 @@
             this.button_MovePassword_Cancel.Text = "Cancel";
             this.button_MovePassword_Cancel.UseVisualStyleBackColor = true;
             // 
-            // treeView_MovePassword_Folders
+            // button_MovePassword_OK
             // 
-            this.treeView_MovePassword_Folders.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.treeView_MovePassword_Folders.Location = new System.Drawing.Point(0, 0);
-            this.treeView_MovePassword_Folders.Name = "treeView_MovePassword_Folders";
-            this.treeView_MovePassword_Folders.Size = new System.Drawing.Size(246, 257);
-            this.treeView_MovePassword_Folders.TabIndex = 0;
+            this.button_MovePassword_OK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.button_MovePassword_OK.Enabled = false;
+            this.button_MovePassword_OK.Location = new System.Drawing.Point(12, 6);
+            this.button_MovePassword_OK.Name = "button_MovePassword_OK";
+            this.button_MovePassword_OK.Size = new System.Drawing.Size(75, 23);
+            this.button_MovePassword_OK.TabIndex = 0;
+            this.button_MovePassword_OK.Text = "OK";
+            this.button_MovePassword_OK.UseVisualStyleBackColor = true;
             // 
             // FormMovePassword
             // 
