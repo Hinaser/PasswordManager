@@ -325,40 +325,63 @@ namespace PasswordManager
                 return;
             }
             int containerID = (int)this.CurrentTreeNode.Tag;
+            PasswordIndexerBase indexer = this.PasswordData.Indexer;
 
             // Check selected record
-            if (this.listView_PasswordItems.SelectedItems.Count != 1 || this.listView_PasswordItems.SelectedItems[0].Tag == null)
+            if (this.listView_PasswordItems.SelectedItems.Count < 1)
             {
                 return;
             }
-            int recordID = (int)this.listView_PasswordItems.SelectedItems[0].Tag;
 
-            PasswordIndexerBase indexer = this.PasswordData.Indexer;
-            PasswordRecord deletingRecord = indexer.GetRecordByID(this.PasswordData.Records, recordID);
+            // Check and get deleting pasword records
+            List<PasswordRecord> deletingRecords = new List<PasswordRecord>();
+            List<string> deletingRecordsCaptions = new List<string>();
+            foreach (ListViewItem lvi in this.listView_PasswordItems.SelectedItems)
+            {
+                if (lvi.Tag == null)
+                {
+                    throw new NullReferenceException();
+                }
 
-            if (deletingRecord == null)
+                int recordID = (int)lvi.Tag;
+                PasswordRecord deletingRecord = indexer.GetRecordByID(this.PasswordData.Records, recordID);
+                if (deletingRecord == null)
+                {
+                    throw new InvalidOperationException();
+                }
+
+                deletingRecords.Add(deletingRecord);
+                deletingRecordsCaptions.Add(deletingRecord.GetCaption());
+            }
+
+            if (deletingRecords.Count != deletingRecordsCaptions.Count || deletingRecords.Count != this.listView_PasswordItems.SelectedItems.Count)
             {
                 throw new InvalidOperationException();
             }
 
             // Confirm really want to delete
-            DialogResult dresult = MessageBox.Show(String.Format(strings.General_DeletePassword_Text, deletingRecord.GetCaption()), strings.General_DeletePassword_Caption, MessageBoxButtons.OKCancel, MessageBoxIcon.Warning);
+            string concatenatedCaption = String.Join(Environment.NewLine, deletingRecordsCaptions.ToArray());
+            DialogResult dresult = MessageBox.Show(String.Format(strings.General_DeletePassword_Text, concatenatedCaption), strings.General_DeletePassword_Caption, MessageBoxButtons.OKCancel, MessageBoxIcon.Warning);
             if (dresult != DialogResult.OK)
             {
                 return;
             }
 
-            // Remove target password record from indexer.
-            // If it fails to remove record from index, exit.
-            if (!indexer.RemoveRecord(recordID))
+            // Delete all selected records
+            foreach(PasswordRecord record in deletingRecords)
             {
-                return;
-            }
+                // Remove target password record from indexer.
+                // If it fails to remove record from index, exit.
+                if (!indexer.RemoveRecord(record.GetRecordID()))
+                {
+                    return;
+                }
 
-            // Remove target password record from the list in password data
-            if (!this.PasswordData.Records.Remove(deletingRecord))
-            {
-                throw new Exception();
+                // Remove target password record from the list in password data
+                if (!this.PasswordData.Records.Remove(record))
+                {
+                    throw new Exception();
+                }
             }
 
             // Refresh listview
@@ -706,6 +729,9 @@ namespace PasswordManager
             // Select the node at the mouse position.
             this.treeView_Folders.SelectedNode = this.treeView_Folders.GetNodeAt(targetPoint);
             this.CurrentTreeNode = this.treeView_Folders.SelectedNode;
+
+            // Expand the node
+            this.CurrentTreeNode.Expand();
         }
 
         /// <summary>

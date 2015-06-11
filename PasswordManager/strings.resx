@@ -262,10 +262,12 @@
     <value>Update password</value>
   </data>
   <data name="General_DeletePassword_Caption" xml:space="preserve">
-    <value>You are about to delete a password</value>
+    <value>You are about to delete password(s)</value>
   </data>
   <data name="General_DeletePassword_Text" xml:space="preserve">
-    <value>Are you sure to delete "{0}" ?</value>
+    <value>Are you sure to delete the following password?
+
+{0}</value>
   </data>
   <data name="General_MovePassword_Fail_Caption" xml:space="preserve">
     <value>Warning</value>

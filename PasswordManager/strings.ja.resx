@@ -337,7 +337,9 @@
     <value>パスワードを削除しようとしています</value>
   </data>
   <data name="General_DeletePassword_Text" xml:space="preserve">
-    <value>本当にパスワード"{0}"を削除してよろしいですか ?</value>
+    <value>本当に下記のパスワードを削除してもよろしいですか？
+
+{0}</value>
   </data>
   <data name="General_NewPassword_Strength_DangerousPassword" xml:space="preserve">
     <value>容易に推測できる弱いパスワード</value>
