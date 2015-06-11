@@ -42,6 +42,7 @@ namespace PasswordManager
             this.listView_PasswordItems.ColumnWidthChanged += listView_PasswordItems_ColumnWidthChanged;
             this.listView_PasswordItems.SelectedIndexChanged += listView_PasswordItems_SelectedIndexChanged;
             this.listView_PasswordItems.MouseUp += listView_PasswordItems_MouseUp;
+            this.listView_PasswordItems.KeyUp += listView_PasswordItems_KeyUp;
             // TreeView event
             this.treeView_Folders.AfterSelect += treeView_Folders_AfterSelect;
             this.treeView_Folders.NodeMouseClick += treeView_Folders_NodeMouseClick;
@@ -366,6 +367,26 @@ namespace PasswordManager
 
             return;
         }
+
+        /// <summary>
+        /// Keyboard event
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        void listView_PasswordItems_KeyUp(object sender, KeyEventArgs e)
+        {
+            switch (e.KeyCode)
+            {
+                // Delete operation
+                case Keys.Delete:
+                    this.ToolStripMenuItem_ListViewItem_Delete_Click(null, null);
+                    break;
+                default:
+                    break;
+            }
+
+            return;
+        }
         #endregion
 
         #region toolstrip event
@@ -616,6 +637,7 @@ namespace PasswordManager
 
             switch (e.KeyCode)
             {
+                // Rename operation
                 case Keys.F2:
                     this.ToolStripMenuItem_RenameFolder_Click(null, null);
                     break;
