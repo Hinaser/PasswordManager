@@ -57,11 +57,11 @@ namespace PasswordManager
 
         #region Setter method
         /// <summary>
-        /// Append container to target container. If appending container already exists in target container, it does not actuall append container and returns false.
+        /// Append container to target container. If appending container already exists in target container, it does nothing but returns false.
         /// </summary>
-        /// <param name="destContainerID"></param>
-        /// <param name="containerID"></param>
-        /// <returns></returns>
+        /// <param name="destContainerID">Destination container id</param>
+        /// <param name="containerID">New container id on appending</param>
+        /// <returns>The result of process. If false, it means no appending was performed. If true, appending was successful.</returns>
         public override bool AppendContainer(int containerID, int destContainerID)
         {
             if (!this.ContainerIndexes.ContainsKey(destContainerID))
@@ -84,12 +84,13 @@ namespace PasswordManager
         }
 
         /// <summary>
-        /// Remove specified container from parent container. If removing container does not exist in the parent container, it does nothing but returns false.
+        /// Cut loose specified container from parent container. If releaing container does not exist in the parent container, it does nothing but returns false.
         /// </summary>
-        /// <param name="containerID"></param>
-        /// <param name="parentContainerID"></param>
-        /// <returns></returns>
-        public override bool RemoveContainer(int containerID, int parentContainerID)
+        /// <param name="containerID">Container id to be removed</param>
+        /// <param name="parentContainerID">Parent container id which has removing container</param>
+        /// <remarks>This function does not affect sub container of target container to be released</remarks>
+        /// <returns>True if it was successfully removed, and false if not.</returns>
+        public override bool ReleaseContainer(int containerID, int parentContainerID)
         {
             // Check dest container exists
             if (!this.ContainerIndexes.ContainsKey(parentContainerID))
@@ -101,11 +102,13 @@ namespace PasswordManager
         }
 
         /// <summary>
-        /// Remove specified container from parent container without specifying parent container id.
+        /// Cut loose specified container from parent container without specifying parent container id.
         /// </summary>
-        /// <param name="containerID"></param>
-        /// <returns></returns>
-        public override bool RemoveContainer(int containerID)
+        /// <param name="containerID">Container id to be removed</param>
+        /// <remarks>This method can be executed even if caller do not know which is the source parent container</remarks>
+        /// <remarks>This function does not affect sub container of target container to be released</remarks>
+        /// <returns>True if it successfully removed, and false if it did not.</returns>
+        public override bool ReleaseContainer(int containerID)
         {
             int parentContainerID;
 
@@ -118,27 +121,125 @@ namespace PasswordManager
                 return false;
             }
 
-            return this.RemoveContainer(containerID, parentContainerID);
+            return this.ReleaseContainer(containerID, parentContainerID);
         }
 
         /// <summary>
-        /// Move container from src parent container to dest parent container
+        /// Delete specified container and its sub containers/records from parent container in indexer object.
+        /// If removing container does not exist in the parent container, it does nothing but returns null.
         /// </summary>
-        /// <param name="containerID"></param>
-        /// <param name="srcContainerID"></param>
-        /// <param name="destContainerID"></param>
-        /// <returns></returns>
+        /// <param name="containerID">Container id to be removed</param>
+        /// <param name="parentContainerID">Parent container id which has removing container</param>
+        /// <remarks>This function removes all child password records/containers in removing container</remarks>
+        /// <returns>List of removed containers/records. It returns null if removing was not done successfully</returns>
+        public override RemovedObjects RemoveAllContainers(int containerID, int parentContainerID)
+        {
+            // Check dest container exists
+            if (!this.ContainerIndexes.ContainsKey(parentContainerID))
+            {
+                return null;
+            }
+
+            RemovedObjects removedObj = new RemovedObjects();
+
+            // Remove all child password records
+            ICollection<int> removingRecordCollection = this.GetChildRecords(containerID);
+            if (removingRecordCollection != null)
+            {
+                // Since removingRecordCollection is a "Reference Type", values within the variable will be deleted at the same time original value is removed
+                // Here copies actual value to new variable, which is independent to original reference
+                int[] removingRecords = new int[removingRecordCollection.Count];
+                for (int i = 0; i < removingRecordCollection.Count; i++)
+                {
+                    removingRecords[i] = removingRecordCollection.ElementAt(i);
+                }
+
+                // Remove records here
+                for (int i = 0; i < removingRecords.Length; i++)
+                {
+                    this.RemoveRecord(removingRecords[i]);
+                    removedObj.Removed[typeof(PasswordRecord)].Add(removingRecords[i]);
+                }
+            }
+
+            // Remove all child containers
+            ICollection<int> removingContainerCollection = this.GetChildContainers(containerID);
+            if (removingContainerCollection != null)
+            {
+                // Since removingContainerCollection is a "Reference Type", values within the variable will be deleted at the same time original value is removed
+                // Here copies actual value to new variable, which is independent to original reference
+                int[] removingContainers = new int[removingContainerCollection.Count];
+                for (int i = 0; i < removingContainerCollection.Count; i++)
+                {
+                    removingContainers[i] = removingContainerCollection.ElementAt(i);
+                }
+
+                for (int i = 0; i < removingContainers.Length; i++)
+                {
+                    RemovedObjects removedChildren = this.RemoveAllContainers(removingContainers[i], containerID); // Recursive call
+                    removedObj.Removed[typeof(PasswordContainer)].Add(removingContainers[i]);
+
+                    // Add up removed sub container ids
+                    foreach (int removedContainerID in removedChildren.Removed[typeof(PasswordContainer)])
+                    {
+                        removedObj.Removed[typeof(PasswordContainer)].Add(removedContainerID);
+                    }
+
+                    // Add up removed record ids in sub containers
+                    foreach (int removedRecordID in removedChildren.Removed[typeof(PasswordRecord)])
+                    {
+                        removedObj.Removed[typeof(PasswordRecord)].Add(removedRecordID);
+                    }
+                }
+            }
+
+            this.ContainerIndexes[parentContainerID].Remove(containerID);
+            this.ContainerReverseIndexes.Remove(containerID);
+
+            return removedObj;
+        }
+
+        /// <summary>
+        /// Delete specified container and its sub containers/records from parent container in indexer object without specifying parent container id.
+        /// </summary>
+        /// <param name="containerID">Container id to be removed</param>
+        /// <remarks>This method can be executed even if caller do not know which is the source parent container</remarks>
+        /// <returns>List of removed containers/records. It returns null if removing was not done successfully</returns>
+        public override RemovedObjects RemoveAllContainers(int containerID)
+        {
+            int parentContainerID;
+
+            try
+            {
+                parentContainerID = this.GetParentContainerOfContainer(containerID);
+            }
+            catch
+            {
+                return null;
+            }
+
+            return this.RemoveAllContainers(containerID, parentContainerID);
+        }
+
+        /// <summary>
+        /// Move container from source parent container to destination parent container
+        /// </summary>
+        /// <param name="containerID">Container id to be moved</param>
+        /// <param name="srcContainerID">Original parent container id</param>
+        /// <param name="destContainerID">Destination target container id</param>
+        /// <returns>True if it was successfully moved, and false if not.</returns>
         public override bool MoveContainer(int containerID, int srcContainerID, int destContainerID)
         {
-            return this.RemoveContainer(containerID, srcContainerID) && this.AppendContainer(containerID, destContainerID);
+            return this.ReleaseContainer(containerID, srcContainerID) && this.AppendContainer(containerID, destContainerID);
         }
 
         /// <summary>
         /// Move container from current parent container to another container without specifying current parent container ID.
         /// </summary>
-        /// <param name="containerID"></param>
-        /// <param name="destContainerID"></param>
-        /// <returns></returns>
+        /// <param name="containerID">Container id to be moved</param>
+        /// <param name="destContainerID">Destination target container id</param>
+        /// <remarks>This method can be executed even if caller do not know whichi is the source parent container</remarks>
+        /// <returns>True if it was successfully moved, and false if not.</returns>
         public override bool MoveContainer(int containerID, int destContainerID)
         {
             int srcContainerID;
@@ -156,11 +257,11 @@ namespace PasswordManager
         }
 
         /// <summary>
-        /// Append record to target container. If appending record already exists in target container, it does not actuall append record and returns false.
+        /// Append record to target container. If the appending record already exists in target container, it does nothing but returns false.
         /// </summary>
-        /// <param name="destContainerID"></param>
-        /// <param name="recordID"></param>
-        /// <returns></returns>
+        /// <param name="recordID">Record id to be appended</param>
+        /// <param name="destContainerID">Destination target container id</param>
+        /// <returns>True if it was successfully appended, and false if not.</returns>
         public override bool AppendRecord(int recordID, int destContainerID)
         {
             if (!this.RecordIndexes.ContainsKey(destContainerID))
@@ -185,9 +286,9 @@ namespace PasswordManager
         /// <summary>
         /// Remove specified record from parent container. If removing record does not exist in the parent container, it does nothing but returns false.
         /// </summary>
-        /// <param name="recordID"></param>
-        /// <param name="parentContainerID"></param>
-        /// <returns></returns>
+        /// <param name="recordID">Record id to be removed</param>
+        /// <param name="parentContainerID">Parent container id which has removing record</param>
+        /// <returns>True if it was removed removed, and false if not.</returns>
         public override bool RemoveRecord(int recordID, int parentContainerID)
         {
             // Check dest container exists
@@ -202,8 +303,9 @@ namespace PasswordManager
         /// <summary>
         /// Remove specified record from parent container without specifying parent container id.
         /// </summary>
-        /// <param name="containerID"></param>
-        /// <returns></returns>
+        /// <param name="recordID">Record id to be removed</param>
+        /// <remarks>This method can be executed even if caller do not know which is the source parent container</remarks>
+        /// <returns>True if it was removed appended, and false if not.</returns>
         public override bool RemoveRecord(int recordID)
         {
             int parentContainerID;
@@ -223,10 +325,10 @@ namespace PasswordManager
         /// <summary>
         /// Move record from current parent container to another container.
         /// </summary>
-        /// <param name="recordID"></param>
-        /// <param name="srcContainerID"></param>
-        /// <param name="destContainerID"></param>
-        /// <returns></returns>
+        /// <param name="recordID">Record id to be moved</param>
+        /// <param name="srcContainerID">Original parent container which has moving record</param>
+        /// <param name="destContainerID">Destination target container</param>
+        /// <returns>True if it was moved appended, and false if not.</returns>
         public override bool MoveRecord(int recordID, int srcContainerID, int destContainerID)
         {
             return this.RemoveRecord(recordID, srcContainerID) && this.AppendRecord(recordID, destContainerID);
@@ -235,9 +337,10 @@ namespace PasswordManager
         /// <summary>
         /// Move record from current parent container to another container without specifying current parent container ID.
         /// </summary>
-        /// <param name="recordID"></param>
-        /// <param name="destContainerID"></param>
-        /// <returns></returns>
+        /// <param name="recordID">Record id to be moved</param>
+        /// <param name="destContainerID">Destination target container</param>
+        /// <remarks>This method can be executed even if caller do not know whichi is the source parent container</remarks>
+        /// <returns>True if it was moved appended, and false if not.</returns>
         public override bool MoveRecord(int recordID, int destContainerID)
         {
             int srcContainerID;
@@ -259,8 +362,8 @@ namespace PasswordManager
         /// <summary>
         /// Get associated child containers of specified container. If no child container is found, then it returns null.
         /// </summary>
-        /// <param name="containerID"></param>
-        /// <returns></returns>
+        /// <param name="containerID">Container id to be inspected</param>
+        /// <returns>Collection of child container ids. Null if no children were found</returns>
         public override ICollection<int> GetChildContainers(int containerID)
         {
             if (!this.ContainerIndexes.ContainsKey(containerID))
@@ -274,8 +377,8 @@ namespace PasswordManager
         /// <summary>
         /// Get associated child records of specified container. If no child record is found, then it returns null.
         /// </summary>
-        /// <param name="containerID"></param>
-        /// <returns></returns>
+        /// <param name="containerID">Container id to be inspected</param>
+        /// <returns>Collection of child record ids. Null if no children were found</returns>
         public override ICollection<int> GetChildRecords(int containerID)
         {
             if (!this.RecordIndexes.ContainsKey(containerID))
@@ -290,8 +393,9 @@ namespace PasswordManager
         /// Get parent container id for child container. This method might throw exception.
         /// </summary>
         /// <exception cref="KeyNotFoundException">When unknown child container ID is passed to this method, it will throw this exception</exception>
-        /// <param name="childContainerID"></param>
-        /// <returns></returns>
+        /// <param name="childContainerID">Container id which you want to examine its parent contaier</param>
+        /// <remarks>Since returning type is not reference type but value type, it is not evitable to throw exception when parent container is not found</remarks>
+        /// <returns>Parent container id</returns>
         public override int GetParentContainerOfContainer(int childContainerID)
         {
             return this.ContainerReverseIndexes[childContainerID];
@@ -301,8 +405,9 @@ namespace PasswordManager
         /// Get parent container id for child record. This method might throw exception.
         /// </summary>
         /// <exception cref="KeyNotFoundException">When unknown child record ID is passed to this method, it will throw this exception</exception>
-        /// <param name="childContainerID"></param>
-        /// <returns></returns>
+        /// <param name="childRecordID">Record id which you want to examine its parent container</param>
+        /// <remarks>Since returning type is not reference type but value type, it is not evitable to throw exception when parent container is not found</remarks>
+        /// <returns>Parent container id</returns>
         public override int GetParentContainerOfRecord(int childRecordID)
         {
             return this.RecordReverseIndexes[childRecordID];
@@ -310,11 +415,11 @@ namespace PasswordManager
 
 
         /// <summary>
-        /// Get container object with the specified by container ID
+        /// Get container object by container ID
         /// </summary>
-        /// <param name="containers"></param>
-        /// <param name="containerID"></param>
-        /// <returns></returns>
+        /// <param name="containers">Collection of containers which seems to have target container</param>
+        /// <param name="containerID">Target container id</param>
+        /// <returns>Container object associated with specified container id</returns>
         public override PasswordContainer GetContainerByID(ICollection<PasswordContainer> containers, int containerID)
         {
             // Pick up child container by its ID. This is a liner search which average search performance would be O(n). 
@@ -331,11 +436,11 @@ namespace PasswordManager
         }
 
         /// <summary>
-        /// Get record object with the specified by record ID
+        /// Get record object by record ID
         /// </summary>
-        /// <param name="containers"></param>
-        /// <param name="containerID"></param>
-        /// <returns></returns>
+        /// <param name="containers">Collection of containers which seems to have target container</param>
+        /// <param name="recordID">Target record id</param>
+        /// <returns>Record object associated with specified record id</returns>
         public override PasswordRecord GetRecordByID(ICollection<PasswordRecord> records, int recordID)
         {
             // Pick up child container by its ID. This is a liner search which average search performance would be O(n). 
@@ -358,9 +463,10 @@ namespace PasswordManager
 
         #region Utility
         /// <summary>
-        /// Get unique container ID. Unique key would be the maximum number of curret IDs added by 1.
+        /// Get unique container ID.
         /// </summary>
-        /// <returns></returns>
+        /// <remarks> Unique key would be the maximum number of curret IDs added by 1.</remarks>
+        /// <returns>Unique container id which is not overlapped between existing container ids indexer object knows</returns>
         public override int GetUniqueContainerID()
         {
             if (this.ContainerReverseIndexes.Count < 1)
@@ -372,9 +478,10 @@ namespace PasswordManager
         }
 
         /// <summary>
-        /// Get unique record ID. Unique key would be the maximum number of curret IDs added by 1.
+        /// Get unique record ID.
         /// </summary>
-        /// <returns></returns>
+        /// <remarks>Unique key would be the maximum number of curret IDs added by 1.</remarks>
+        /// <returns>Unique container id which is not overlapped between existing record ids indexer object knows</returns>
         public override int GetUniqueRecordID()
         {
             if (this.RecordReverseIndexes.Count < 1)

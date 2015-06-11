@@ -20,7 +20,7 @@ namespace PasswordManager
     /// Minimal unit for PasswordContainer. This looks like each folder for password records.
     /// </summary>
     [Serializable]
-    public class PasswordContainer
+    public class PasswordContainer : IEquatable<PasswordContainer>
     {
         #region Field
         private int ContainerID = 0;
@@ -36,6 +36,13 @@ namespace PasswordManager
         private PasswordContainer() { } // Making default constructor private in order to gurantee all PasswordContainer class exists with its UnitID.
         public PasswordContainer(int containerID) { this.ContainerID = containerID; }
         public PasswordContainer(int containerID, string label) { this.ContainerID = containerID; this.Label = label; }
+        #endregion
+
+        #region Method for IEquatable<T>
+        public bool Equals(PasswordContainer con)
+        {
+            return con != null && this.ContainerID == con.GetContainerID();
+        }
         #endregion
 
         #region Setter method

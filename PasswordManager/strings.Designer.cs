@@ -493,6 +493,44 @@ namespace PasswordManager {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Error.
+        /// </summary>
+        internal static string General_DeleteContainer_CannotDeleteRoot_Caption {
+            get {
+                return ResourceManager.GetString("General_DeleteContainer_CannotDeleteRoot_Caption", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Root folder cannot be deleted.
+        /// </summary>
+        internal static string General_DeleteContainer_CannotDeleteRoot_Text {
+            get {
+                return ResourceManager.GetString("General_DeleteContainer_CannotDeleteRoot_Text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Warning.
+        /// </summary>
+        internal static string General_DeleteContainer_Caption {
+            get {
+                return ResourceManager.GetString("General_DeleteContainer_Caption", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Are you sure to delete this folder with all subfolders/records?
+        ///
+        ///{0}.
+        /// </summary>
+        internal static string General_DeleteContainer_Text {
+            get {
+                return ResourceManager.GetString("General_DeleteContainer_Text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to You are about to delete password(s).
         /// </summary>
         internal static string General_DeletePassword_Caption {

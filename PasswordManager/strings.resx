@@ -261,6 +261,20 @@
   <data name="Form_UpdatePassword_Title" xml:space="preserve">
     <value>Update password</value>
   </data>
+  <data name="General_DeleteContainer_CannotDeleteRoot_Caption" xml:space="preserve">
+    <value>Error</value>
+  </data>
+  <data name="General_DeleteContainer_CannotDeleteRoot_Text" xml:space="preserve">
+    <value>Root folder cannot be deleted</value>
+  </data>
+  <data name="General_DeleteContainer_Caption" xml:space="preserve">
+    <value>Warning</value>
+  </data>
+  <data name="General_DeleteContainer_Text" xml:space="preserve">
+    <value>Are you sure to delete this folder with all subfolders/records?
+
+{0}</value>
+  </data>
   <data name="General_DeletePassword_Caption" xml:space="preserve">
     <value>You are about to delete password(s)</value>
   </data>

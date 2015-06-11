@@ -561,9 +561,55 @@ namespace PasswordManager
             this.CurrentTreeNode.BeginEdit();
         }
 
+        /// <summary>
+        /// Delete selected folder and its subfolders
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         void ToolStripMenuItem_DeleteFolder_Click(object sender, EventArgs e)
         {
-            throw new NotImplementedException();
+            if (this.CurrentTreeNode == null)
+            {
+                return;
+            }
+
+            TreeNode targetNode = this.CurrentTreeNode;
+            int containerID = (int)targetNode.Tag;
+
+            // If root folder is the target, exit with error message
+            if (containerID == InternalApplicationConfig.RootContainerID)
+            {
+                MessageBox.Show(strings.General_DeleteContainer_CannotDeleteRoot_Text, strings.General_DeleteContainer_CannotDeleteRoot_Caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            // Show warning message dialog
+            string warningText = String.Format(strings.General_DeleteContainer_Text, this.PasswordData.Indexer.GetContainerByID(this.PasswordData.Containers, containerID).GetLabel());
+            DialogResult res = MessageBox.Show(warningText, strings.General_DeleteContainer_Caption, MessageBoxButtons.OKCancel, MessageBoxIcon.Warning);
+            if (res != DialogResult.OK)
+            {
+                return;
+            }
+
+            // Delete associated container/record index with target container id
+            PasswordIndexerBase.RemovedObjects removedObj = this.PasswordData.Indexer.RemoveAllContainers(containerID);
+
+            // Delete actual Password records
+            foreach (int removedRecordID in removedObj.Removed[typeof(PasswordRecord)])
+            {
+                this.PasswordData.Records.Remove(this.PasswordData.Indexer.GetRecordByID(this.PasswordData.Records, removedRecordID));
+            }
+
+            // Delete actual Password containers
+            foreach (int removedContainerID in removedObj.Removed[typeof(PasswordContainer)])
+            {
+                this.PasswordData.Containers.Remove(this.PasswordData.Indexer.GetContainerByID(this.PasswordData.Containers, removedContainerID));
+            }
+
+            // Delete treeview node
+            this.treeView_Folders.BeginUpdate();
+            targetNode.Remove();
+            this.treeView_Folders.EndUpdate();
         }
 
         /// <summary>
@@ -686,9 +732,13 @@ namespace PasswordManager
 
             switch (e.KeyCode)
             {
-                // Rename operation
+                // Rename folder
                 case Keys.F2:
                     this.ToolStripMenuItem_RenameFolder_Click(null, null);
+                    break;
+                // Delete folder
+                case Keys.Delete:
+                    this.ToolStripMenuItem_DeleteFolder_Click(null, null);
                     break;
                 default:
                     break;
@@ -815,7 +865,7 @@ namespace PasswordManager
                 if (e.Effect == DragDropEffects.Move)
                 {
                     srcNode.Remove();
-                    this.PasswordData.Indexer.RemoveContainer((int)srcNode.Tag);
+                    this.PasswordData.Indexer.ReleaseContainer((int)srcNode.Tag);
 
                     dstNode.Nodes.Add(srcNode);
                     this.PasswordData.Indexer.AppendContainer((int)srcNode.Tag, (int)dstNode.Tag);

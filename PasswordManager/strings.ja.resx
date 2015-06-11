@@ -359,4 +359,18 @@
   <data name="General_MovePassword_Fail_Text" xml:space="preserve">
     <value>{0} を {1}に移動することに失敗しました</value>
   </data>
+  <data name="General_DeleteContainer_CannotDeleteRoot_Caption" xml:space="preserve">
+    <value>エラー</value>
+  </data>
+  <data name="General_DeleteContainer_CannotDeleteRoot_Text" xml:space="preserve">
+    <value>最上位フォルダーは削除できません</value>
+  </data>
+  <data name="General_DeleteContainer_Caption" xml:space="preserve">
+    <value>警告</value>
+  </data>
+  <data name="General_DeleteContainer_Text" xml:space="preserve">
+    <value>このフォルダー、および配下のサブフォルダー・パスワードを削除してしまって本当によろしいですか？
+
+{0}</value>
+  </data>
 </root>
