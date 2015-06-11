@@ -1114,6 +1114,7 @@ namespace PasswordManager
             this.ToolStripMenuItem_Edit_DeleteFolder.Text = strings.Form_ContextMenu_DeleteContainer;
             this.ToolStripMenuItem_Edit_AddPassword.Text = strings.Form_ContextMenu_AddPassword;
             this.ToolStripMenuItem_ListView_New.Text = strings.Form_ContextMenu_AddPassword;
+            this.ToolStripMenuItem_ListViewItem_New.Text = strings.Form_ContextMenu_AddPassword;
             this.ToolStripMenuItem_ListViewItem_Edit.Text = strings.Form_ContextMenu_EditPassword;
             this.ToolStripMenuItem_ListViewItem_Delete.Text = strings.Form_ContextMenu_DeletePassword;
             this.ToolStripMenuItem_ListViewItem_Move.Text = strings.Form_ContextMenu_MovePassword;
