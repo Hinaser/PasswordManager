@@ -43,6 +43,7 @@ namespace PasswordManager
             this.listView_PasswordItems.SelectedIndexChanged += listView_PasswordItems_SelectedIndexChanged;
             this.listView_PasswordItems.MouseUp += listView_PasswordItems_MouseUp;
             this.listView_PasswordItems.KeyUp += listView_PasswordItems_KeyUp;
+            this.listView_PasswordItems.ItemDrag += listView_PasswordItems_ItemDrag;
             // TreeView event
             this.treeView_Folders.AfterSelect += treeView_Folders_AfterSelect;
             this.treeView_Folders.NodeMouseClick += treeView_Folders_NodeMouseClick;
@@ -410,6 +411,31 @@ namespace PasswordManager
 
             return;
         }
+
+        /// <summary>
+        /// Drag start event
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        void listView_PasswordItems_ItemDrag(object sender, ItemDragEventArgs e)
+        {
+            // Move the dragged node when the left mouse button is used.
+            if (e.Button == MouseButtons.Left)
+            {
+                // Get selected listview items
+                List<ListViewItem> items = new List<ListViewItem>();
+                foreach (ListViewItem lvi in this.listView_PasswordItems.SelectedItems)
+                {
+                    items.Add(lvi);
+                }
+
+                // Construct data object to send
+                DataObject dobj = new DataObject(items);
+
+                // Transfer object data
+                DoDragDrop(dobj, DragDropEffects.Move);
+            }
+        }
         #endregion
 
         #region toolstrip event
@@ -728,10 +754,15 @@ namespace PasswordManager
 
             // Select the node at the mouse position.
             this.treeView_Folders.SelectedNode = this.treeView_Folders.GetNodeAt(targetPoint);
-            this.CurrentTreeNode = this.treeView_Folders.SelectedNode;
 
-            // Expand the node
-            this.CurrentTreeNode.Expand();
+            // Only if dragging cursor is on some treenode
+            if (this.treeView_Folders.SelectedNode != null)
+            {
+                this.CurrentTreeNode = this.treeView_Folders.SelectedNode;
+
+                // Expand the node
+                this.CurrentTreeNode.Expand();
+            }
         }
 
         /// <summary>
@@ -741,28 +772,96 @@ namespace PasswordManager
         /// <param name="e"></param>
         void treeView_Folders_DragDrop(object sender, DragEventArgs e)
         {
+            // Get destination node
             Point targetPoint = treeView_Folders.PointToClient(new Point(e.X, e.Y));
             TreeNode targetNode = treeView_Folders.GetNodeAt(targetPoint);
-            TreeNode draggedNode = (TreeNode)e.Data.GetData(typeof(TreeNode));
 
-            if (targetNode == null || draggedNode == null || targetNode.Tag == null || draggedNode.Tag == null)
+            // When dragged item is tree node (Password container)
+            if (e.Data.GetDataPresent(typeof(TreeNode)))
+            {
+                TreeNode draggedNode = (TreeNode)e.Data.GetData(typeof(TreeNode));
+                this.TreeNodeDropped(draggedNode, targetNode, e);
+
+                return;
+            }
+
+            // When dragged item is listview item (Password record)
+            if (e.Data.GetDataPresent(typeof(List<ListViewItem>)))
+            {
+                List<ListViewItem> draggedItem = (List<ListViewItem>)e.Data.GetData(typeof(List<ListViewItem>));
+                this.ListViewItemDropped(draggedItem, targetNode, e);
+
+                return;
+            }
+
+            return;
+        }
+
+        /// <summary>
+        /// Process treenode drop event
+        /// </summary>
+        /// <param name="srcNode"></param>
+        /// <param name="dstNode"></param>
+        /// <param name="e"></param>
+        void TreeNodeDropped(TreeNode srcNode, TreeNode dstNode, DragEventArgs e)
+        {
+            if (dstNode == null || srcNode == null || dstNode.Tag == null || srcNode.Tag == null)
             {
                 return;
             }
 
-            if (!draggedNode.Equals(targetNode) && !ContainsNode(draggedNode, targetNode))
+            if (!srcNode.Equals(dstNode) && !ContainsNode(srcNode, dstNode))
             {
                 if (e.Effect == DragDropEffects.Move)
                 {
-                    draggedNode.Remove();
-                    this.PasswordData.Indexer.RemoveContainer((int)draggedNode.Tag);
+                    srcNode.Remove();
+                    this.PasswordData.Indexer.RemoveContainer((int)srcNode.Tag);
 
-                    targetNode.Nodes.Add(draggedNode);
-                    this.PasswordData.Indexer.AppendContainer((int)draggedNode.Tag, (int)targetNode.Tag);
+                    dstNode.Nodes.Add(srcNode);
+                    this.PasswordData.Indexer.AppendContainer((int)srcNode.Tag, (int)dstNode.Tag);
                 }
 
-                targetNode.Expand();
+                dstNode.Expand();
             }
+        }
+
+        /// <summary>
+        /// Process listview item drop event
+        /// </summary>
+        /// <param name="srcItem"></param>
+        /// <param name="dstNode"></param>
+        /// <param name="e"></param>
+        void ListViewItemDropped(List<ListViewItem> srcItem, TreeNode dstNode, DragEventArgs e)
+        {
+            // If arguments are null or insufficient, do nothing
+            if (srcItem == null || srcItem.Count < 1 || dstNode == null || dstNode.Tag == null)
+            {
+                return;
+            }
+            foreach (ListViewItem lvi in srcItem)
+            {
+                if (lvi.Tag == null)
+                {
+                    return;
+                }
+            }
+
+            int destContainerID = (int)dstNode.Tag;
+
+            if (e.Effect == DragDropEffects.Move)
+            {
+                foreach (ListViewItem lvi in srcItem)
+                {
+                    int recordID = (int)lvi.Tag;
+                    this.PasswordData.Indexer.MoveRecord(recordID, destContainerID);
+                }
+            }
+
+            // Refresh listview
+            TreeViewEventArgs tvea = new TreeViewEventArgs(this.CurrentTreeNode);
+            this.treeView_Folders_AfterSelect(null, tvea);
+
+            return;
         }
         #endregion
 
@@ -913,11 +1012,11 @@ namespace PasswordManager
         }
 
         /// <summary>
-        /// Determine whether one node is a parent or ancestor of a second node.
+        /// Determine whether node1 is a parent or ancestor of a node2.
         /// </summary>
         /// <param name="node1"></param>
         /// <param name="node2"></param>
-        /// <returns></returns>
+        /// <returns>Result whether node1 is an ancester of node2</returns>
         private bool ContainsNode(TreeNode node1, TreeNode node2)
         {
             // Check the parent node of the second node.
