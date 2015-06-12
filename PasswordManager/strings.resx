@@ -261,6 +261,12 @@
   <data name="Form_UpdatePassword_Title" xml:space="preserve">
     <value>Update password</value>
   </data>
+  <data name="General_Copy_ID" xml:space="preserve">
+    <value>ID: {0} is copied into the clipboard</value>
+  </data>
+  <data name="General_Copy_Password" xml:space="preserve">
+    <value>Password: {0} is copied into the clipboard</value>
+  </data>
   <data name="General_DeleteContainer_CannotDeleteRoot_Caption" xml:space="preserve">
     <value>Error</value>
   </data>

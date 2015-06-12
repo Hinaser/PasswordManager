@@ -373,4 +373,10 @@
 
 {0}</value>
   </data>
+  <data name="General_Copy_ID" xml:space="preserve">
+    <value>ID: {0} がクリップボードにコピーされました</value>
+  </data>
+  <data name="General_Copy_Password" xml:space="preserve">
+    <value>パスワード: {0} がクリップボードにコピーされました</value>
+  </data>
 </root>

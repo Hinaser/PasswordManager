@@ -44,6 +44,7 @@ namespace PasswordManager
             this.listView_PasswordItems.MouseUp += listView_PasswordItems_MouseUp;
             this.listView_PasswordItems.KeyUp += listView_PasswordItems_KeyUp;
             this.listView_PasswordItems.ItemDrag += listView_PasswordItems_ItemDrag;
+            this.listView_PasswordItems.MouseDoubleClick += listView_PasswordItems_MouseDoubleClick;
             // TreeView event
             this.treeView_Folders.AfterSelect += treeView_Folders_AfterSelect;
             this.treeView_Folders.NodeMouseClick += treeView_Folders_NodeMouseClick;
@@ -435,6 +436,44 @@ namespace PasswordManager
                 // Transfer object data
                 DoDragDrop(dobj, DragDropEffects.Move);
             }
+        }
+
+        /// <summary>
+        /// Copy id or password into clipboard for selected password item
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        void listView_PasswordItems_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            // When double click button was left, copy ID to clipboard
+            if (e.Button == MouseButtons.Left)
+            {
+                PasswordRecord record = this.GetSelectedPasswordRecordOnList();
+
+                // Copy id into clipboard
+                Clipboard.SetDataObject(record.GetID());
+
+                // Notify status bar
+                this.toolStripStatusLabel1.Text = String.Format(strings.General_Copy_ID, record.GetID());
+
+                return;
+            }
+
+            // When double click button was right, copy password text to clipboard
+            if (e.Button == MouseButtons.Right)
+            {
+                PasswordRecord record = this.GetSelectedPasswordRecordOnList();
+
+                // Copy id into clipboard
+                Clipboard.SetDataObject(record.GetPassword());
+
+                // Notify status bar
+                this.toolStripStatusLabel1.Text = String.Format(strings.General_Copy_Password, record.GetPassword());
+
+                return;
+            }
+
+            return;
         }
         #endregion
 
@@ -1077,6 +1116,28 @@ namespace PasswordManager
             // call the ContainsNode method recursively using the parent of 
             // the second node.
             return ContainsNode(node1, node2.Parent);
+        }
+
+        /// <summary>
+        /// Get selected password item from listview. When multiple item on listview are selected, it returns null.
+        /// </summary>
+        /// <returns></returns>
+        private PasswordRecord GetSelectedPasswordRecordOnList()
+        {
+            if (this.listView_PasswordItems.SelectedItems == null
+                || this.listView_PasswordItems.SelectedItems.Count != 1)
+            {
+                return null;
+            }
+
+            ListViewItem lvi = this.listView_PasswordItems.SelectedItems[0];
+            if (lvi.Tag == null)
+            {
+                throw new InvalidOperationException();
+            }
+
+            int recordID = (int)lvi.Tag;
+            return this.PasswordData.Indexer.GetRecordByID(this.PasswordData.Records, recordID);
         }
         #endregion
 
