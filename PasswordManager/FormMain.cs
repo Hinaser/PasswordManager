@@ -450,6 +450,11 @@ namespace PasswordManager
             {
                 PasswordRecord record = this.GetSelectedPasswordRecordOnList();
 
+                if (record == null)
+                {
+                    return;
+                }
+
                 // Copy id into clipboard
                 Clipboard.SetDataObject(record.GetID());
 
@@ -463,6 +468,11 @@ namespace PasswordManager
             if (e.Button == MouseButtons.Right)
             {
                 PasswordRecord record = this.GetSelectedPasswordRecordOnList();
+
+                if (record == null)
+                {
+                    return;
+                }
 
                 // Copy id into clipboard
                 Clipboard.SetDataObject(record.GetPassword());
