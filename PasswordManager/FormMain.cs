@@ -73,7 +73,10 @@ namespace PasswordManager
             this.ToolStripMenuItem_Language_English.Click += ToolStripMenuItem_Language_English_Click;
             this.ToolStripMenuItem_Language_Japanese.Click += ToolStripMenuItem_Language_Japanese_Click;
 
-            // Add common menu tool stript for editing to "Edit" menu
+            // To change edit menu showing items, judging by last focused control(TreeView or ListView)
+            this.ToolStripMenuItem_Edit.MouseDown += ToolStripMenuItem_Edit_MouseDown;
+
+            // Add common menu tool script for editing to "Edit" menu
             this.ToolStripMenuItem_Edit_AddSubFolder.Click += ToolStripMenuItem_AddSubFolder_Click;
             this.ToolStripMenuItem_Edit_RenameFolder.Click += ToolStripMenuItem_RenameFolder_Click;
             this.ToolStripMenuItem_Edit_DeleteFolder.Click += ToolStripMenuItem_DeleteFolder_Click;
@@ -582,6 +585,31 @@ namespace PasswordManager
         void ToolStripMenuItem_Language_English_Click(object sender, EventArgs e)
         {
             this.SetupLanguage(InternalApplicationConfig.LocaleEnUS);
+        }
+
+        void ToolStripMenuItem_Edit_MouseDown(object sender, EventArgs e)
+        {
+            if (this.listView_PasswordItems.Focused)
+            {
+                this.ToolStripMenuItem_Edit.DropDownItems.Clear();
+                this.ToolStripMenuItem_Edit.DropDownItems.AddRange(new ToolStripItem[]{
+                    this.ToolStripMenuItem_ListViewItem_New,
+                    this.ToolStripMenuItem_ListViewItem_Edit,
+                    this.ToolStripMenuItem_ListViewItem_Move,
+                    this.ToolStripMenuItem_ListViewItem_Delete
+                });
+            }
+            else
+            {
+                this.ToolStripMenuItem_Edit.DropDownItems.Clear();
+                this.ToolStripMenuItem_Edit.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+                    this.ToolStripMenuItem_Edit_AddSubFolder,
+                    this.ToolStripMenuItem_Edit_RenameFolder,
+                    this.ToolStripMenuItem_Edit_DeleteFolder,
+                    this.toolStripMenuItem_Edit_Seperator,
+                    this.ToolStripMenuItem_Edit_AddPassword
+                });
+            }
         }
         #endregion
 
