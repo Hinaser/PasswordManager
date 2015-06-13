@@ -160,6 +160,7 @@ namespace PasswordManager
         /// <param name="e"></param>
         void listView_PasswordItems_MouseUp(object sender, MouseEventArgs e)
         {
+            // Show right-click menu
             if (e.Button == MouseButtons.Right)
             {
                 // When any records are not focused
@@ -177,6 +178,8 @@ namespace PasswordManager
                 {
                     contextMenuStrip_ListView.Show(Cursor.Position);
                 }
+
+                return;
             }
 
             return;
@@ -445,42 +448,57 @@ namespace PasswordManager
         /// <param name="e"></param>
         void listView_PasswordItems_MouseDoubleClick(object sender, MouseEventArgs e)
         {
-            // When double click button was left, copy ID to clipboard
             if (e.Button == MouseButtons.Left)
             {
-                PasswordRecord record = this.GetSelectedPasswordRecordOnList();
+                // Get which list column has been double-clicked
+                Point mousePos = this.listView_PasswordItems.PointToClient(Control.MousePosition);
+                ListViewHitTestInfo hitTest = this.listView_PasswordItems.HitTest(mousePos);
+                if (hitTest.Location == ListViewHitTestLocations.None
+                    || hitTest.Item == null
+                    || hitTest.SubItem == null)
+                {
+                    return;
+                }
 
+                PasswordRecord record = this.GetSelectedPasswordRecordOnList();
                 if (record == null)
                 {
                     return;
                 }
 
-                // Copy id into clipboard
-                Clipboard.SetDataObject(record.GetID());
-
-                // Notify status bar
-                this.toolStripStatusLabel1.Text = String.Format(strings.General_Copy_ID, record.GetID());
-
-                return;
-            }
-
-            // When double click button was right, copy password text to clipboard
-            if (e.Button == MouseButtons.Right)
-            {
-                PasswordRecord record = this.GetSelectedPasswordRecordOnList();
-
-                if (record == null)
+                // Copy caption
+                if (hitTest.Item.SubItems.IndexOf(hitTest.SubItem) == this.columnHeader_caption.Index)
                 {
+                    // Copy id into clipboard
+                    Clipboard.SetDataObject(record.GetCaption());
+
+                    // Notify status bar
+                    this.toolStripStatusLabel1.Text = String.Format(strings.General_Copy_Caption, record.GetCaption());
+
                     return;
                 }
+                // Copy ID
+                if (hitTest.Item.SubItems.IndexOf(hitTest.SubItem) == this.columnHeader_ID.Index)
+                {
+                    // Copy id into clipboard
+                    Clipboard.SetDataObject(record.GetID());
 
-                // Copy id into clipboard
-                Clipboard.SetDataObject(record.GetPassword());
+                    // Notify status bar
+                    this.toolStripStatusLabel1.Text = String.Format(strings.General_Copy_ID, record.GetID());
 
-                // Notify status bar
-                this.toolStripStatusLabel1.Text = String.Format(strings.General_Copy_Password, record.GetPassword());
+                    return;
+                }
+                // Copy password
+                if (hitTest.Item.SubItems.IndexOf(hitTest.SubItem) == this.columnHeader_password.Index)
+                {
+                    // Copy password into clipboard
+                    Clipboard.SetDataObject(record.GetPassword());
 
-                return;
+                    // Notify status bar
+                    this.toolStripStatusLabel1.Text = String.Format(strings.General_Copy_Password, record.GetPassword());
+
+                    return;
+                }
             }
 
             return;
