@@ -866,6 +866,13 @@ namespace PasswordManager
         /// <param name="e"></param>
         void treeView_Folders_DragOver(object sender, DragEventArgs e)
         {
+            if (!e.Data.GetDataPresent(typeof(TreeNode))
+                && !e.Data.GetDataPresent(typeof(List<ListViewItem>)))
+            {
+                e.Effect = DragDropEffects.None;
+                return;
+            }
+
             // Retrieve the client coordinates of the mouse position.
             Point targetPoint = this.treeView_Folders.PointToClient(new Point(e.X, e.Y));
 
@@ -889,6 +896,12 @@ namespace PasswordManager
         /// <param name="e"></param>
         void treeView_Folders_DragDrop(object sender, DragEventArgs e)
         {
+            if (!e.Data.GetDataPresent(typeof(TreeNode))
+                && !e.Data.GetDataPresent(typeof(List<ListViewItem>)))
+            {
+                return;
+            }
+
             // Get destination node
             Point targetPoint = treeView_Folders.PointToClient(new Point(e.X, e.Y));
             TreeNode targetNode = treeView_Folders.GetNodeAt(targetPoint);
