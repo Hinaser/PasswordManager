@@ -572,7 +572,7 @@ namespace PasswordManager
         /// <param name="e"></param>
         void toolStripButton_Save_Click(object sender, EventArgs e)
         {
-            PasswordFile f = new PasswordFile("test.txt");
+            PasswordFile f = new PasswordFile(InternalApplicationConfig.DefaultPasswordFilePath);
             DebugFilter df = new DebugFilter();
             f.AddIOFilter(df);
             f.AddFilterOrder(df.ToString());
