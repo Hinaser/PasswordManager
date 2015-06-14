@@ -18,6 +18,48 @@ using System.IO;
 namespace PasswordManager
 {
     /// <summary>
+    /// Storing all available IOFilter objects saved in assembly
+    /// </summary>
+    public class IOFilterFactory
+    {
+        // Singleton related objects
+        private static IOFilterFactory InternalInstance = null;
+        private static Object syncRoot = new Object();
+
+        private List<IOFilterBase> IOFilters = new List<IOFilterBase>();
+
+        // Private default constructor to achieve singleton model
+        private IOFilterFactory() { }
+
+        /// <summary>
+        /// Only 1 instance for this class
+        /// </summary>
+        public static IOFilterFactory Instance
+        {
+            get
+            {
+                if (InternalInstance == null)
+                {
+                    lock (syncRoot)
+                    {
+                        if (IOFilterFactory.InternalInstance == null)
+                        {
+                            IOFilterFactory.InternalInstance = new IOFilterFactory();
+                        }
+                    }
+                }
+
+                return IOFilterFactory.InternalInstance;
+            }
+        }
+
+        public void RegisterFilter(IOFilterBase filter)
+        {
+            this.IOFilters.Add(filter);
+        }
+    }
+
+    /// <summary>
     /// Abstract class for handling inputting/outputting data stream.
     /// </summary>
     public abstract class IOFilterBase
@@ -40,7 +82,7 @@ namespace PasswordManager
     /// <summary>
     /// This filter change nothing. Only pass exact same content to output stream from input stream.
     /// </summary>
-    public class NoFilter : IOFilterBase
+    public sealed class NoFilter : IOFilterBase
     {
         public override void InputFilter(MemoryStream src, MemoryStream dest)
         {

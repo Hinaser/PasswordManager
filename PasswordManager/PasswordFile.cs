@@ -334,7 +334,7 @@ namespace PasswordManager
     /// Raw(unfiltered) contents of password file
     /// </summary>
     [Serializable]
-    public class PasswordFileBody
+    public class PasswordFileBody : IDisposable
     {
         public PasswordIndexerBase Indexer;
         public ICollection<PasswordContainer> Containers;
@@ -346,6 +346,28 @@ namespace PasswordManager
             this.Indexer = i;
             this.Containers = c;
             this.Records = r;
+        }
+
+        /// <summary>
+        /// Sanitize all stored password data
+        /// </summary>
+        public void Dispose()
+        {
+            if (this.Containers!= null)
+            {
+                foreach (PasswordContainer c in this.Containers)
+                {
+                    c.Dispose();
+                }
+            }
+
+            if (this.Records != null)
+            {
+                foreach (PasswordRecord r in this.Records)
+                {
+                    r.Dispose();
+                }
+            }
         }
     }
 }
