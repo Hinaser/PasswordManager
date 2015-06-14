@@ -63,6 +63,8 @@ namespace PasswordManager
             this.checkBox_NewPassword_UseUpperCase.Checked = true;
             this.checkBox_NewPassword_UseNumerics.Checked = true;
             this.checkBox_NewPassword_UseSymbols.Checked = false;
+            this.textBox_NewPassword_Caption.MaxLength = InternalApplicationConfig.CaptionMaxLength;
+            this.textBox_NewPassword_ID.MaxLength = InternalApplicationConfig.IDMaxLength;
             this.numericUpDown_NewPassword_Minchars.Minimum = InternalApplicationConfig.PasswordMinLength;
             this.numericUpDown_NewPassword_Minchars.Maximum = InternalApplicationConfig.passwordMaxLength;
             this.numericUpDown_NewPassword_Maxchars.Minimum = InternalApplicationConfig.PasswordMinLength;

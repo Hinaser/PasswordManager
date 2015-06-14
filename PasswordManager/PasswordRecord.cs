@@ -20,7 +20,7 @@ namespace PasswordManager
     /// This represents one password item.
     /// </summary>
     [Serializable]
-    public class PasswordRecord : IEquatable<PasswordRecord>
+    public class PasswordRecord : IEquatable<PasswordRecord>, IDisposable
     {
         #region Member field
         /// <summary>
@@ -56,10 +56,24 @@ namespace PasswordManager
         }
         #endregion
 
-        #region Method for IEquatable<T>
+        #region Virtual methods
+        /// <summary>
+        /// Check equality by their recordIDs
+        /// </summary>
+        /// <param name="rec"></param>
+        /// <returns></returns>
         public bool Equals(PasswordRecord rec)
         {
             return rec != null && this.RecordID == rec.GetRecordID();
+        }
+
+        /// <summary>
+        /// Sanitize sensitive password information
+        /// </summary>
+        public void Dispose()
+        {
+            this.RecordID = -1;
+
         }
         #endregion
 
