@@ -25,11 +25,6 @@ namespace PasswordManager
         #region Field
         private int ContainerID = 0;
         private string Label = String.Empty;
-        // List<PasswordRecord> field below is not serialized because there is another special class to handle the relation between containers and records.
-        // The reason this List field is defined here is only search efficiency for child records. It does not make any sence that everytime examining container,
-        // it needs to look up all PasswordRecord objects whether those objects are combined to the PasswordContainer.
-        [NonSerialized]
-        private List<PasswordRecord> Passwords = new List<PasswordRecord>();
         #endregion
 
         #region Constructor
@@ -91,45 +86,6 @@ namespace PasswordManager
         public string GetLabel()
         {
             return String.IsNullOrEmpty(this.Label) ? String.Empty : this.Label;
-        }
-        #endregion
-
-        #region Password records method
-        /// <summary>
-        /// Add PasswordRecord instance to instance member List object.
-        /// </summary>
-        /// <param name="p"></param>
-        public void AddPasswordRecord(PasswordRecord p)
-        {
-            this.Passwords.Add(p);
-        }
-
-        /// <summary>
-        /// Get PasswordRecord instance by index value.
-        /// </summary>
-        /// <param name="index"></param>
-        /// <returns></returns>
-        public PasswordRecord GetPasswordRecord(int index)
-        {
-            return this.Passwords[index];
-        }
-
-        /// <summary>
-        /// Remove PasswordRecode instance from internal List object by index value.
-        /// </summary>
-        /// <param name="index"></param>
-        public void DeletePasswordRecord(int index)
-        {
-            this.Passwords.RemoveAt(index);
-        }
-
-        /// <summary>
-        /// Get count of PasswordRecord instaces stored in internal List object.
-        /// </summary>
-        /// <returns></returns>
-        public int GetPasswordCount()
-        {
-            return this.Passwords.Count;
         }
         #endregion
     }
