@@ -20,7 +20,7 @@ namespace PasswordManager
     /// Minimal unit for PasswordContainer. This looks like each folder for password records.
     /// </summary>
     [Serializable]
-    public class PasswordContainer : IEquatable<PasswordContainer>
+    public class PasswordContainer : IEquatable<PasswordContainer>, IDisposable
     {
         #region Field
         private int ContainerID = 0;
@@ -38,10 +38,23 @@ namespace PasswordManager
         public PasswordContainer(int containerID, string label) { this.ContainerID = containerID; this.Label = label; }
         #endregion
 
-        #region Method for IEquatable<T>
+        #region Virtual methods
+        /// <summary>
+        /// Validate equality by their container id
+        /// </summary>
+        /// <param name="con"></param>
+        /// <returns></returns>
         public bool Equals(PasswordContainer con)
         {
             return con != null && this.ContainerID == con.GetContainerID();
+        }
+
+        /// <summary>
+        /// Sanitize sensitive password information
+        /// </summary>
+        unsafe public void Dispose()
+        {
+
         }
         #endregion
 

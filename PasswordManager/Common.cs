@@ -38,7 +38,8 @@ namespace PasswordManager
         public static int CaptionMaxLength = 128;
         public static int IDMaxLength = 128;
         public static decimal PasswordMinLength = 1;
-        public static decimal passwordMaxLength = 128;
+        public static decimal PasswordMaxLength = 128;
+        public static int DescriptionMaxLength = 1024;
         public static double MaxWeakPasswordStrength = FormCreatePassword.CalculatePasswordStrength("aaAA00", 6);
         public static double MaxNormalPasswordStrength = FormCreatePassword.CalculatePasswordStrength("aaAA00Abc1", 10);
         public static int PasswordStrengthNoticeHeaderSize = 8;

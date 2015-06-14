@@ -36,7 +36,7 @@ namespace PasswordManager
         /// </summary>
         private string ID = String.Empty;
         private string Password = String.Empty;
-        private string Descriptioin = String.Empty;
+        private string Description = String.Empty;
         // Will be implemented in future update
         //private byte[] UnlockToken = null; // This value is required to get actual secret value from this class. If invalid value is passed when secret values are refered, dummy value will be returned.
         #endregion
@@ -52,7 +52,7 @@ namespace PasswordManager
             this.LastUpdateDate = lastUpdateDate;
             this.ID = id;
             this.Password = password;
-            this.Descriptioin = description;
+            this.Description = description;
         }
         #endregion
 
@@ -70,10 +70,64 @@ namespace PasswordManager
         /// <summary>
         /// Sanitize sensitive password information
         /// </summary>
-        public void Dispose()
+        unsafe public void Dispose()
         {
+            // Sanitize Record id
             this.RecordID = -1;
 
+            // Sanitize Caption
+            fixed (char* p = this.Caption)
+            {
+                int len = this.Caption.Length > InternalApplicationConfig.CaptionMaxLength ? this.Caption.Length : InternalApplicationConfig.CaptionMaxLength;
+                for (int i = 0; i < len; i++)
+                {
+                    p[i] = '\0';
+                }
+            }
+
+            // Sanitize ID
+            fixed (char* p = this.ID)
+            {
+                int len = this.ID.Length > InternalApplicationConfig.IDMaxLength ? this.ID.Length : InternalApplicationConfig.IDMaxLength;
+                for (int i = 0; i < len; i++)
+                {
+                    p[i] = '\0';
+                }
+            }
+
+            // Sanitize Password
+            fixed (char* p = this.Password)
+            {
+                int len = 0;
+                if (InternalApplicationConfig.PasswordMaxLength > Int32.MaxValue)
+                {
+                    len = Int32.MaxValue;
+                }
+                else if (InternalApplicationConfig.PasswordMaxLength < 0)
+                {
+                    len = 0;
+                }
+                else
+                {
+                    int passwordMaxLen = Decimal.ToInt32(InternalApplicationConfig.PasswordMaxLength);
+                    len = this.Password.Length > passwordMaxLen ? this.Password.Length : passwordMaxLen;
+                }
+
+                for (int i = 0; i < len; i++)
+                {
+                    p[i] = '\0';
+                }
+            }
+
+            // Sanitize Description
+            fixed (char* p = this.Description)
+            {
+                int len = this.Description.Length > InternalApplicationConfig.DescriptionMaxLength ? this.Description.Length : InternalApplicationConfig.DescriptionMaxLength;
+                for (int i = 0; i < len; i++)
+                {
+                    p[i] = '\0';
+                }
+            }
         }
         #endregion
 
@@ -121,7 +175,7 @@ namespace PasswordManager
         {
             this.ID = id;
             this.Password = password;
-            this.Descriptioin = description;
+            this.Description = description;
         }
         #endregion
 
@@ -145,7 +199,7 @@ namespace PasswordManager
 
         public string GetDescription()
         {
-            return this.Descriptioin;
+            return this.Description;
         }
         #endregion
 

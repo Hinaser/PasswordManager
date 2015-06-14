@@ -66,9 +66,11 @@ namespace PasswordManager
             this.textBox_NewPassword_Caption.MaxLength = InternalApplicationConfig.CaptionMaxLength;
             this.textBox_NewPassword_ID.MaxLength = InternalApplicationConfig.IDMaxLength;
             this.numericUpDown_NewPassword_Minchars.Minimum = InternalApplicationConfig.PasswordMinLength;
-            this.numericUpDown_NewPassword_Minchars.Maximum = InternalApplicationConfig.passwordMaxLength;
+            this.numericUpDown_NewPassword_Minchars.Maximum = InternalApplicationConfig.PasswordMaxLength;
             this.numericUpDown_NewPassword_Maxchars.Minimum = InternalApplicationConfig.PasswordMinLength;
-            this.numericUpDown_NewPassword_Maxchars.Maximum = InternalApplicationConfig.passwordMaxLength;
+            this.numericUpDown_NewPassword_Maxchars.Maximum = InternalApplicationConfig.PasswordMaxLength;
+            this.textBox_NewPassword_Password.MaxLength = InternalApplicationConfig.PasswordMaxLength.GetHashCode();
+            this.textBox_NewPassword_Memo.MaxLength = InternalApplicationConfig.DescriptionMaxLength;
             this.SetupLanguage();
         }
         #endregion
@@ -176,7 +178,7 @@ namespace PasswordManager
                 this.button_NewPassword_GeneratePassword.Focus();
                 return;
             }
-            if (this.numericUpDown_NewPassword_Maxchars.Value > InternalApplicationConfig.passwordMaxLength
+            if (this.numericUpDown_NewPassword_Maxchars.Value > InternalApplicationConfig.PasswordMaxLength
                 || this.numericUpDown_NewPassword_Maxchars.Value > Int32.MaxValue)
             {
                 MessageBox.Show(strings.Form_NewPassword_ErrorMaxTooLarge, strings.Form_NewPassword_ErrorDialogCaption, MessageBoxButtons.OK, MessageBoxIcon.Error);
