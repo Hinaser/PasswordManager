@@ -18,6 +18,7 @@ using System.Text;
 using System.Windows.Forms;
 using System.Threading;
 using System.Globalization;
+using System.IO;
 #endregion
 
 namespace PasswordManager
@@ -93,6 +94,19 @@ namespace PasswordManager
         /// </summary>
         void Initialize()
         {
+            // Try to open password file in the default location
+            try
+            {
+                PasswordFile f = new PasswordFile(InternalApplicationConfig.DefaultPasswordFilePath);
+                DebugFilter df = new DebugFilter();
+                f.AddIOFilter(df);
+                f.AddFilterOrder(df.ToString());
+
+                this.PasswordData = f.ReadPasswordFromFile(Utility.GetHash(new byte[] { 0xff, 0xfe, 0x00, 0x01, 0x02 }));
+            }
+            catch
+            { }
+
             this.InitializeTreeStructure(this.PasswordData.Containers, this.PasswordData.Indexer);
             this.treeView_Folders.Invalidate();
             this.listView_PasswordItems.Invalidate();
@@ -516,14 +530,32 @@ namespace PasswordManager
         /// <param name="e"></param>
         void toolStripButton_Open_Click(object sender, EventArgs e)
         {
-            PasswordFile f = new PasswordFile("test.txt");
+            /*
+             * PasswordFile f should be used in using statement and also password data should be disposed.
+             */
+            PasswordFile f = new PasswordFile(InternalApplicationConfig.DefaultPasswordFilePath); 
             DebugFilter df = new DebugFilter();
             f.AddIOFilter(df);
             f.AddFilterOrder(df.ToString());
 
-            this.PasswordData = f.ReadPasswordFromFile(Utility.GetHash(new byte[] { 0xff, 0xfe, 0x00, 0x01, 0x02 }));
-            this.InitializeTreeStructure(this.PasswordData.Containers, this.PasswordData.Indexer);
-            this.listView_PasswordItems.Invalidate();
+            try
+            {
+                this.PasswordData = f.ReadPasswordFromFile(Utility.GetHash(new byte[] { 0xff, 0xfe, 0x00, 0x01, 0x02 }));
+                this.InitializeTreeStructure(this.PasswordData.Containers, this.PasswordData.Indexer);
+                this.listView_PasswordItems.Invalidate();
+            }
+            catch (FileNotFoundException)
+            {
+                f.ResetPasswordFile(Utility.GetHash(new byte[] { 0xff, 0xfe, 0x00, 0x01, 0x02 }), null);
+                this.PasswordData = f.ReadPasswordFromFile(Utility.GetHash(new byte[] { 0xff, 0xfe, 0x00, 0x01, 0x02 }));
+                this.InitializeTreeStructure(this.PasswordData.Containers, this.PasswordData.Indexer);
+                this.listView_PasswordItems.Invalidate();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+                throw ex;
+            }
         }
 
         /// <summary>

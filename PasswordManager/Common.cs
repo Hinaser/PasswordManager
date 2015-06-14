@@ -26,8 +26,8 @@ namespace PasswordManager
         public static string LocaleJaJP = "ja-JP";
         public static string DefaultLocale = LocaleEnUS;
         public static Dictionary<int, string> Locale = new Dictionary<int, string>();
+        public static string DefaultPasswordFilePath = Environment.CurrentDirectory + @"\password.dat";
         public static string DefaultMasterPassword = "password";
-        public static string DefaultPasswordFilename = "data";
         public static int RootContainerID = 0;
         public static string RootContainerLabel = "All";
         public static string NewUnnamedContainerLabel = "New folder";

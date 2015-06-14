@@ -26,7 +26,7 @@ namespace PasswordManager
     public class PasswordFile
     {
         #region Field
-        protected string Filepath = Environment.CurrentDirectory + InternalApplicationConfig.DefaultPasswordFilename;
+        protected string Filepath = InternalApplicationConfig.DefaultPasswordFilePath;
         protected PasswordFileBodyFiltered BodyFiltered = new PasswordFileBodyFiltered(); // This field is kept to maintain original filterOrder information of password file.
         protected List<IOFilterBase> AvailableFilters = new List<IOFilterBase>();
         #endregion
@@ -92,6 +92,8 @@ namespace PasswordManager
         /// <summary>
         /// Read password file with removing data filter. Available filters must be added to instance before this method is called.
         /// </summary>
+        /// <exception cref="FileNotFoundException">Password file does not exist</exception>
+        /// <exception cref="InvalidMasterPasswordException">Master password is invalid</exception>
         public virtual PasswordFileBody ReadPasswordFromFile(byte[] masterPasswordHash, PasswordFileBody defaultPasswordFileBody = null)
         {
             if (masterPasswordHash.Length != InternalApplicationConfig.Hash.HashSize/InternalApplicationConfig.BitsPerAByte)
@@ -99,9 +101,10 @@ namespace PasswordManager
                 throw new ArgumentException();
             }
 
+            // When password file does not exist, throw an exception.
             if (!File.Exists(this.Filepath))
             {
-                this.ResetPasswordFile(masterPasswordHash, defaultPasswordFileBody);
+                throw new FileNotFoundException(this.Filepath);
             }
 
             BinaryFormatter formatter = new BinaryFormatter();
@@ -343,46 +346,6 @@ namespace PasswordManager
             this.Indexer = i;
             this.Containers = c;
             this.Records = r;
-        }
-    }
-
-    /// <summary>
-    /// Abstract class for handling inputting/outputting data stream.
-    /// </summary>
-    public abstract class IOFilterBase
-    {
-        /// <summary>
-        /// This method should be used after reading data from file.
-        /// </summary>
-        /// <param name="inStream">Source stream</param>
-        /// <param name="outSteram">Destination stream</param>
-        public abstract void InputFilter(MemoryStream inStream, MemoryStream outSteram);
-
-        /// <summary>
-        /// This method should be used before writing data to file.
-        /// </summary>
-        /// <param name="inStream">Source stream</param>
-        /// <param name="outSteram">Destination stream</param>
-        public abstract void OutputFilter(MemoryStream inStream, MemoryStream outSteram);
-    }
-
-    /// <summary>
-    /// This filter change nothing. Only pass exact same content to output stream from input stream.
-    /// </summary>
-    public class NoFilter : IOFilterBase
-    {
-        public override void InputFilter(MemoryStream src, MemoryStream dest)
-        {
-            src.Position = 0;
-            dest.Position = 0;
-            Utility.CopyStream(src, dest);
-        }
-
-        public override void OutputFilter(MemoryStream src, MemoryStream dest)
-        {
-            src.Position = 0;
-            dest.Position = 0;
-            Utility.CopyStream(src, dest);
         }
     }
 }
