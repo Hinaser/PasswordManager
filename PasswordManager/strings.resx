@@ -292,6 +292,13 @@
 
 {0}</value>
   </data>
+  <data name="General_EditLabel_GoOverMaxLength_Caption" xml:space="preserve">
+    <value>Error</value>
+  </data>
+  <data name="General_EditLabel_GoOverMaxLength_Text" xml:space="preserve">
+    <value>Folder name length must be less than or equal to {0}
+Your input: {1} characters</value>
+  </data>
   <data name="General_MovePassword_Fail_Caption" xml:space="preserve">
     <value>Warning</value>
   </data>

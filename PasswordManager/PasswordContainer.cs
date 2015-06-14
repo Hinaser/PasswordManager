@@ -49,7 +49,10 @@ namespace PasswordManager
         /// </summary>
         unsafe public void Dispose()
         {
-
+            fixed (char* p = this.Label)
+            {
+                ;
+            }
         }
         #endregion
 

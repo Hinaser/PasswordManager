@@ -880,15 +880,25 @@ namespace PasswordManager
         void treeView_Folders_AfterLabelEdit(object sender, NodeLabelEditEventArgs e)
         {
             // When the user presses ESC to cancel edit or pressed ENTER without modifying label text, e.Label is null.
-            if (e == null || e.Label == null || e.Node.Tag == null)
+            if (e == null || e.Label == null || e.Node.Tag == null || e.CancelEdit)
             {
                 return;
             }
 
+            // Get container object
             PasswordContainer container = this.PasswordData.Indexer.GetContainerByID(this.PasswordData.Containers, (int)e.Node.Tag);
-
             if (container == null)
             {
+                return;
+            }
+
+            // If label text is larger than max value, set back to previous label text and exit this method
+            if (e.Label.Length > InternalApplicationConfig.ContainerNameMax)
+            {
+                string text = String.Format(strings.General_EditLabel_GoOverMaxLength_Text, InternalApplicationConfig.ContainerNameMax, e.Label.Length);
+                MessageBox.Show(text, strings.General_EditLabel_GoOverMaxLength_Caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+                e.CancelEdit = true;
                 return;
             }
 
