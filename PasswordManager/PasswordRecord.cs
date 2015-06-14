@@ -78,8 +78,7 @@ namespace PasswordManager
             // Sanitize Caption
             fixed (char* p = this.Caption)
             {
-                int len = this.Caption.Length > InternalApplicationConfig.CaptionMaxLength ? this.Caption.Length : InternalApplicationConfig.CaptionMaxLength;
-                for (int i = 0; i < len; i++)
+                for (int i = 0; i < this.Caption.Length; i++)
                 {
                     p[i] = '\0';
                 }
@@ -88,8 +87,7 @@ namespace PasswordManager
             // Sanitize ID
             fixed (char* p = this.ID)
             {
-                int len = this.ID.Length > InternalApplicationConfig.IDMaxLength ? this.ID.Length : InternalApplicationConfig.IDMaxLength;
-                for (int i = 0; i < len; i++)
+                for (int i = 0; i < this.ID.Length; i++)
                 {
                     p[i] = '\0';
                 }
@@ -98,22 +96,7 @@ namespace PasswordManager
             // Sanitize Password
             fixed (char* p = this.Password)
             {
-                int len = 0;
-                if (InternalApplicationConfig.PasswordMaxLength > Int32.MaxValue)
-                {
-                    len = Int32.MaxValue;
-                }
-                else if (InternalApplicationConfig.PasswordMaxLength < 0)
-                {
-                    len = 0;
-                }
-                else
-                {
-                    int passwordMaxLen = Decimal.ToInt32(InternalApplicationConfig.PasswordMaxLength);
-                    len = this.Password.Length > passwordMaxLen ? this.Password.Length : passwordMaxLen;
-                }
-
-                for (int i = 0; i < len; i++)
+                for (int i = 0; i < this.Password.Length; i++)
                 {
                     p[i] = '\0';
                 }
@@ -122,8 +105,7 @@ namespace PasswordManager
             // Sanitize Description
             fixed (char* p = this.Description)
             {
-                int len = this.Description.Length > InternalApplicationConfig.DescriptionMaxLength ? this.Description.Length : InternalApplicationConfig.DescriptionMaxLength;
-                for (int i = 0; i < len; i++)
+                for (int i = 0; i < this.Description.Length; i++)
                 {
                     p[i] = '\0';
                 }

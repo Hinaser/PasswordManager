@@ -51,7 +51,10 @@ namespace PasswordManager
         {
             fixed (char* p = this.Label)
             {
-                ;
+                for (int i = 0; i < this.Label.Length; i++)
+                {
+                    p[0] = '\0';
+                }
             }
         }
         #endregion
