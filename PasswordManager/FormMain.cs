@@ -189,6 +189,13 @@ namespace PasswordManager
 
                 if (this.listView_PasswordItems.FocusedItem.Bounds.Contains(e.Location) == true)
                 {
+                    this.contextMenuStrip_ListViewItem.Items.Clear();
+                    this.contextMenuStrip_ListViewItem.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+                        this.ToolStripMenuItem_ListViewItem_New,
+                        this.ToolStripMenuItem_ListViewItem_Edit,
+                        this.ToolStripMenuItem_ListViewItem_Move,
+                        this.ToolStripMenuItem_ListViewItem_Delete
+                    });
                     contextMenuStrip_ListViewItem.Show(Cursor.Position);
                 }
                 else
