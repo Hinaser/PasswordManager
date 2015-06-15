@@ -101,6 +101,7 @@ namespace PasswordManager
             MemoryStream bodySteram;
             PasswordFileBody returnVal;
 
+            // Parse file header
             using (FileStream fs = new FileStream(this.Filepath, FileMode.Open, FileAccess.Read))
             {
                 using (BinaryReader reader = new BinaryReader(fs))
@@ -116,7 +117,12 @@ namespace PasswordManager
                     }
 
                     reader.BaseStream.Position = InternalApplicationConfig.HeaderTokenSize + InternalApplicationConfig.Hash.HashSize / InternalApplicationConfig.BitsPerAByte;
-                    this.BodyFiltered = (PasswordFileBodyFiltered)formatter.Deserialize(reader.BaseStream);
+                    MemoryStream encryptedFilterData = Utility.ReadBytes(reader);
+                    // Do decryption against loaded MemoryStream
+                    // something ...
+
+                    encryptedFilterData.Position = 0;
+                    this.BodyFiltered = (PasswordFileBodyFiltered)formatter.Deserialize(encryptedFilterData);
                 }
             }
 

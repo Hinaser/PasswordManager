@@ -90,6 +90,32 @@ namespace PasswordManager
         }
 
         /// <summary>
+        /// Get MemorySteram from BinaryReader. The binary data is read from the original position.
+        /// </summary>
+        /// <param name="reader"></param>
+        /// <returns></returns>
+        public static MemoryStream ReadBytes(BinaryReader reader)
+        {
+            if (reader == null)
+            {
+                throw new ArgumentNullException();
+            }
+
+            MemoryStream ms = new MemoryStream();
+
+            const int bufferSize = 16 * 1024;
+            byte[] buffer = new byte[bufferSize];
+            int count;
+
+            while ((count = reader.Read(buffer, 0, bufferSize)) != 0)
+            {
+                ms.Write(buffer, 0, count);
+            }
+
+            return ms;
+        }
+
+        /// <summary>
         /// Combine 2 hash value
         /// </summary>
         /// <param name="h1"></param>

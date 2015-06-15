@@ -148,6 +148,14 @@ namespace PasswordManager
         }
 
         /// <summary>
+        /// Clear all registered IOFilter classes
+        /// </summary>
+        public void ClearIOFilters()
+        {
+            this.IOFilters.Clear();
+        }
+
+        /// <summary>
         /// Check whether an instance of specified type name is registered into the factory
         /// </summary>
         /// <param name="typeName">String representing the name of the class derived from IOFilterBase</param>
