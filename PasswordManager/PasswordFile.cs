@@ -27,7 +27,7 @@ namespace PasswordManager
     {
         #region Field
         protected string Filepath = InternalApplicationConfig.DefaultPasswordFilePath;
-        protected PasswordFileBodyFiltered BodyFiltered = new PasswordFileBodyFiltered(); // This field is kept to maintain original filterOrder information of password file.
+        List<string> FilterOrder = new List<string>();
         #endregion
 
         #region Constructor
@@ -35,6 +35,7 @@ namespace PasswordManager
         public PasswordFile(string filepath)
         {
             this.Filepath = filepath;
+            this.FilterOrder.Add(typeof(NoFilter).ToString());
         }
         #endregion
 
@@ -54,7 +55,7 @@ namespace PasswordManager
         /// <param name="order"></param>
         public void SetFilterOrder(List<string> order)
         {
-            this.BodyFiltered.Filters = order;
+            this.FilterOrder = order;
         }
 
         /// <summary>
@@ -63,7 +64,7 @@ namespace PasswordManager
         /// <param name="filterHash"></param>
         public void AddFilterOrder(string filterName)
         {
-            this.BodyFiltered.Filters.Add(filterName);
+            this.FilterOrder.Add(filterName);
         }
         #endregion
 
@@ -98,8 +99,10 @@ namespace PasswordManager
             }
 
             BinaryFormatter formatter = new BinaryFormatter();
-            MemoryStream bodySteram;
+            MemoryStream[] bodyStream = new MemoryStream[] { new MemoryStream(), new MemoryStream() };
+            BinaryWriter[] bodyWriter = new BinaryWriter[] { new BinaryWriter(bodyStream[0]), new BinaryWriter(bodyStream[1]) };
             PasswordFileBody returnVal;
+            FilteredData filteredData;
 
             // Parse file header
             using (FileStream fs = new FileStream(this.Filepath, FileMode.Open, FileAccess.Read))
@@ -113,59 +116,54 @@ namespace PasswordManager
                     // Check masterPasswordHash is valid
                     if (!this.CheckMasterPasswordHash(header.CombinedMasterPasswordHash, masterPasswordHash, header.Token))
                     {
+                        bodyWriter[0].Close();
+                        bodyWriter[1].Close();
+                        bodyStream[0].Close();
+                        bodyStream[1].Close();
                         throw new InvalidMasterPasswordException();
                     }
 
                     reader.BaseStream.Position = InternalApplicationConfig.HeaderTokenSize + InternalApplicationConfig.Hash.HashSize / InternalApplicationConfig.BitsPerAByte;
-                    MemoryStream encryptedFilterData = Utility.ReadBytes(reader);
+                    bodyStream[0] = Utility.ReadBytes(reader);
                     // Do decryption against loaded MemoryStream
                     // something ...
 
-                    encryptedFilterData.Position = 0;
-                    this.BodyFiltered = (PasswordFileBodyFiltered)formatter.Deserialize(encryptedFilterData);
+                    filteredData = (FilteredData)formatter.Deserialize(bodyStream[0]);
                 }
             }
 
-            bodySteram = new MemoryStream(this.BodyFiltered.data);
-
-            // Reverse filter list order
-            this.BodyFiltered.Filters.Reverse();
-            foreach (string filterName in this.BodyFiltered.Filters)
+            int i = 0;
+            while (filteredData.Filter != typeof(NoFilter).ToString().ToCharArray() || i < 3)
             {
-                bool filterFound = false;
-
-                if (IOFilterFactory.Instance.ContainsIOFilter(filterName))
+                string filterName = new String(filteredData.Filter);
+                if (!IOFilterFactory.Instance.ContainsIOFilter(filterName))
                 {
-                    IOFilterBase filter = IOFilterFactory.Instance.GetIOFilter(filterName);
-
-                    using (MemoryStream tempStream = new MemoryStream())
-                    {
-                        filter.InputFilter(bodySteram, tempStream); // Convert input as a filter does and write it to output stream
-
-                        bodySteram.Close(); // Release input stream resources
-                        bodySteram = new MemoryStream();
-
-                        tempStream.Position = 0;
-                        Utility.CopyStream(tempStream, bodySteram);
-
-                        tempStream.Close(); // Release input stream resources
-                    }
-                    filterFound = true;
-                    break;
+                    bodyWriter[0].Close();
+                    bodyWriter[1].Close();
+                    bodyStream[0].Close();
+                    bodyStream[1].Close();
+                    throw new NotImplementedException();
                 }
 
-                if (!filterFound)
-                {
-                    throw new NoCorrespondingFilterFoundException();
-                }
+                IOFilterBase filter = IOFilterFactory.Instance.GetIOFilter(filterName);
+
+                bodyWriter[i % 2].Close();
+                bodyStream[i % 2].Close();
+                bodyStream[i % 2] = new MemoryStream();
+                bodyWriter[i % 2] = new BinaryWriter(bodyStream[i % 2]);
+
+                bodyWriter[i % 2].Write(filteredData.data);
+
+                filter.InputFilter(bodyStream[i % 2], bodyStream[(i + 1) % 2]);
+
+                bodyStream[(i + 1) % 2].Position = 0;
+                filteredData = (FilteredData)formatter.Deserialize(bodyStream[(i + 1) % 2]);
             }
-            // Set back filter order
-            this.BodyFiltered.Filters.Reverse();
 
             try
             {
-                bodySteram.Position = 0;
-                returnVal = (PasswordFileBody)formatter.Deserialize(bodySteram);
+                bodyStream[0] = new MemoryStream(filteredData.data);
+                returnVal = (PasswordFileBody)formatter.Deserialize(bodyStream[0]);
             }
             catch(Exception e)
             {
@@ -173,7 +171,10 @@ namespace PasswordManager
             }
             finally
             {
-                bodySteram.Close();
+                bodyWriter[0].Close();
+                bodyWriter[1].Close();
+                bodyStream[0].Close();
+                bodyStream[1].Close();
             }
 
             return returnVal;
@@ -189,44 +190,58 @@ namespace PasswordManager
                 throw new IOException();
             }
 
-            MemoryStream bodySteram = new MemoryStream();
+            MemoryStream[] bodyStream = new MemoryStream[]{new MemoryStream(), new MemoryStream()};
+            BinaryWriter[] bodyWriter = new BinaryWriter[] { new BinaryWriter(bodyStream[0]), new BinaryWriter(bodyStream[1]) };
             BinaryFormatter formatter = new BinaryFormatter();
-            formatter.Serialize(bodySteram, passwordData);
+            formatter.Serialize(bodyStream[0], passwordData);
 
-            List<string> appliedFilters = new List<string>();
-            foreach (string filterName in this.BodyFiltered.Filters)
+            int i = 0;
+            do
             {
-                if (IOFilterFactory.Instance.ContainsIOFilter(filterName))
+                string filterName = this.FilterOrder[i];
+
+                if (!IOFilterFactory.Instance.ContainsIOFilter(filterName))
                 {
-                    IOFilterBase filter = IOFilterFactory.Instance.GetIOFilter(filterName);
-
-                    if (filter.ToString() == filterName)
-                    {
-                        using (MemoryStream tempStream = new MemoryStream())
-                        {
-                            filter.OutputFilter(bodySteram, tempStream); // Convert input as a filter does and write it to output stream
-                            appliedFilters.Add(filterName);
-
-                            bodySteram.Close(); // Release input stream resources
-                            bodySteram = new MemoryStream();
-
-                            tempStream.Position = 0;
-                            Utility.CopyStream(tempStream, bodySteram);
-
-                            tempStream.Close(); // Release input stream resources
-                        }
-                    }
+                    bodyWriter[0].Close();
+                    bodyWriter[0].Close();
+                    bodyStream[1].Close();
+                    bodyStream[1].Close();
+                    throw new InvalidOperationException();
                 }
-            }
-            this.BodyFiltered.Filters = appliedFilters;
+
+                IOFilterBase filter = IOFilterFactory.Instance.GetIOFilter(filterName);
+                formatter.Serialize(bodyStream[(i + 1) % 2], filterName.ToCharArray());
+                //bodyWriter[(i + 1) % 2].Write(filterName.ToCharArray());
+
+                MemoryStream tmp = new MemoryStream();
+                filter.OutputFilter(bodyStream[i % 2], tmp); // Convert input as a filter does and write it to output stream
+                //formatter.Serialize(bodyStream[(i + 1) % 2], );
+                tmp.Close();
+
+                bodyWriter[i % 2].Close();
+                bodyStream[i % 2].Close(); // Release input stream resources
+                bodyStream[i % 2] = new MemoryStream();
+                bodyWriter[i % 2] = new BinaryWriter(bodyStream[i % 2]);
+
+                bodyStream[(i + 1) % 2].Position = 0;
+
+                i++;
+            } while (i < this.FilterOrder.Count);
+
+            MemoryStream filteredData = bodyStream[i % 2];
+
+            // Do encryption here
+            // .....
 
             // Construct header
             PasswordHeader header = new PasswordHeader();
             header.Token = DateTime.Now.ToString(CultureInfo.InvariantCulture).ToCharArray();
             header.CombinedMasterPasswordHash = Utility.GetHashCombined(masterPasswordHash, Utility.GetHash(header.Token));
 
+            // Construct filtered data
+            FilteredData data = (FilteredData)formatter.Deserialize(filteredData);
+
             // Write filtered data to the file
-            this.BodyFiltered.data = bodySteram.ToArray();
             using (FileStream fs = new FileStream(this.Filepath, FileMode.OpenOrCreate, FileAccess.Write))
             {
                 // Write header
@@ -235,7 +250,8 @@ namespace PasswordManager
                     writer.Write(header.Token); // Write token
                     writer.Write(header.CombinedMasterPasswordHash); // Write hash
                     // Write Filtered data
-                    formatter.Serialize(fs, this.BodyFiltered);
+                    writer.Write(data.Filter);
+                    writer.Write(data.data);
                 }
             }
         }
@@ -319,12 +335,12 @@ namespace PasswordManager
     }
 
     /// <summary>
-    /// Password file body which is filtered
+    /// Data which is filtered
     /// </summary>
     [Serializable]
-    public class PasswordFileBodyFiltered
+    public struct FilteredData
     {
-        public List<string> Filters = new List<string>();
+        public char[] Filter;
         public byte[] data;
     }
 

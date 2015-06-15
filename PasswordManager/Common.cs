@@ -56,6 +56,7 @@ namespace PasswordManager
             "9876","8765","7654","6543","5432","4321",
         };
         public static string Separater1 = ",";
+        public static int FilterNameMax = 128;
     }
 
     public static class Utility

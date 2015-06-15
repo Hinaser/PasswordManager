@@ -202,15 +202,11 @@ namespace PasswordManager
     {
         public override void InputFilter(MemoryStream src, MemoryStream dest)
         {
-            src.Position = 0;
-            dest.Position = 0;
             Utility.CopyStream(src, dest);
         }
 
         public override void OutputFilter(MemoryStream src, MemoryStream dest)
         {
-            src.Position = 0;
-            dest.Position = 0;
             Utility.CopyStream(src, dest);
         }
     }
@@ -232,7 +228,6 @@ namespace PasswordManager
             //////////////////////////////////////////////////////////////////
 
             MemoryStream temp = new MemoryStream(debug);
-            dest.Position = 0;
             Utility.CopyStream(temp, dest);
         }
 
@@ -248,7 +243,6 @@ namespace PasswordManager
             //////////////////////////////////////////////////////////////////
 
             MemoryStream temp = new MemoryStream(debug);
-            dest.Position = 0;
             Utility.CopyStream(temp, dest);
         }
     }
