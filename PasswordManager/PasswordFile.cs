@@ -28,7 +28,6 @@ namespace PasswordManager
         #region Field
         protected string Filepath = InternalApplicationConfig.DefaultPasswordFilePath;
         protected PasswordFileBodyFiltered BodyFiltered = new PasswordFileBodyFiltered(); // This field is kept to maintain original filterOrder information of password file.
-        protected List<IOFilterBase> AvailableFilters = new List<IOFilterBase>();
         #endregion
 
         #region Constructor
@@ -47,15 +46,6 @@ namespace PasswordManager
         public void SetFilePath(string filepath)
         {
             this.Filepath = filepath;
-        }
-
-        /// <summary>
-        /// Append I/O filter object to member field.
-        /// </summary>
-        /// <param name="filter"></param>
-        public void AddIOFilter(IOFilterBase filter)
-        {
-            this.AvailableFilters.Add(filter);
         }
 
         /// <summary>
@@ -137,25 +127,25 @@ namespace PasswordManager
             foreach (string filterName in this.BodyFiltered.Filters)
             {
                 bool filterFound = false;
-                foreach (IOFilterBase filter in this.AvailableFilters)
+
+                if (IOFilterFactory.Instance.ContainsIOFilter(filterName))
                 {
-                    if (filter.ToString() == filterName)
+                    IOFilterBase filter = IOFilterFactory.Instance.GetIOFilter(filterName);
+
+                    using (MemoryStream tempStream = new MemoryStream())
                     {
-                        using (MemoryStream tempStream = new MemoryStream())
-                        {
-                            filter.InputFilter(bodySteram, tempStream); // Convert input as a filter does and write it to output stream
+                        filter.InputFilter(bodySteram, tempStream); // Convert input as a filter does and write it to output stream
 
-                            bodySteram.Close(); // Release input stream resources
-                            bodySteram = new MemoryStream();
+                        bodySteram.Close(); // Release input stream resources
+                        bodySteram = new MemoryStream();
 
-                            tempStream.Position = 0;
-                            Utility.CopyStream(tempStream, bodySteram);
+                        tempStream.Position = 0;
+                        Utility.CopyStream(tempStream, bodySteram);
 
-                            tempStream.Close(); // Release input stream resources
-                        }
-                        filterFound = true;
-                        break;
+                        tempStream.Close(); // Release input stream resources
                     }
+                    filterFound = true;
+                    break;
                 }
 
                 if (!filterFound)
@@ -200,8 +190,10 @@ namespace PasswordManager
             List<string> appliedFilters = new List<string>();
             foreach (string filterName in this.BodyFiltered.Filters)
             {
-                foreach (IOFilterBase filter in this.AvailableFilters)
+                if (IOFilterFactory.Instance.ContainsIOFilter(filterName))
                 {
+                    IOFilterBase filter = IOFilterFactory.Instance.GetIOFilter(filterName);
+
                     if (filter.ToString() == filterName)
                     {
                         using (MemoryStream tempStream = new MemoryStream())

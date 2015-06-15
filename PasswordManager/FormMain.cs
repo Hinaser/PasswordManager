@@ -98,9 +98,7 @@ namespace PasswordManager
             try
             {
                 PasswordFile f = new PasswordFile(InternalApplicationConfig.DefaultPasswordFilePath);
-                DebugFilter df = new DebugFilter();
-                f.AddIOFilter(df);
-                f.AddFilterOrder(df.ToString());
+                f.AddFilterOrder(typeof(DebugFilter).ToString());
 
                 this.PasswordData = f.ReadPasswordFromFile(Utility.GetHash(new byte[] { 0xff, 0xfe, 0x00, 0x01, 0x02 }));
             }
@@ -540,10 +538,8 @@ namespace PasswordManager
             /*
              * PasswordFile f should be used in using statement and also password data should be disposed.
              */
-            PasswordFile f = new PasswordFile(InternalApplicationConfig.DefaultPasswordFilePath); 
-            DebugFilter df = new DebugFilter();
-            f.AddIOFilter(df);
-            f.AddFilterOrder(df.ToString());
+            PasswordFile f = new PasswordFile(InternalApplicationConfig.DefaultPasswordFilePath);
+            f.AddFilterOrder(typeof(DebugFilter).ToString());
 
             try
             {
@@ -573,9 +569,7 @@ namespace PasswordManager
         void toolStripButton_Save_Click(object sender, EventArgs e)
         {
             PasswordFile f = new PasswordFile(InternalApplicationConfig.DefaultPasswordFilePath);
-            DebugFilter df = new DebugFilter();
-            f.AddIOFilter(df);
-            f.AddFilterOrder(df.ToString());
+            f.AddFilterOrder(typeof(DebugFilter).ToString());
 
             f.WritePasswordToFile(Utility.GetHash(new byte[] { 0xff, 0xfe, 0x00, 0x01, 0x02 }), this.PasswordData);
         }

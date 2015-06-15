@@ -13,6 +13,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.IO;
+using System.Reflection;
 #endregion
 
 namespace PasswordManager
@@ -26,7 +27,7 @@ namespace PasswordManager
         private static IOFilterFactory InternalInstance = null;
         private static Object syncRoot = new Object();
 
-        private List<IOFilterBase> IOFilters = new List<IOFilterBase>();
+        private Dictionary<string, IOFilterBase> IOFilters = new Dictionary<string, IOFilterBase>();
 
         // Private default constructor to achieve singleton model
         private IOFilterFactory() { }
@@ -45,6 +46,7 @@ namespace PasswordManager
                         if (IOFilterFactory.InternalInstance == null)
                         {
                             IOFilterFactory.InternalInstance = new IOFilterFactory();
+                            IOFilterFactory.InternalInstance.GatherIOFilterFromAssemly(Assembly.GetExecutingAssembly(), false);
                         }
                     }
                 }
@@ -53,9 +55,115 @@ namespace PasswordManager
             }
         }
 
-        public void RegisterFilter(IOFilterBase filter)
+        /// <summary>
+        /// Inquire specified assembly to see if there are any IOFilterBase class defined. If there are, it adds those instances to own collection object.
+        /// </summary>
+        /// <param name="asm"></param>
+        public void GatherIOFilterFromAssemly(Assembly asm, bool preserve = false)
         {
-            this.IOFilters.Add(filter);
+            if (asm == null)
+            {
+                throw new ArgumentNullException();
+            }
+
+            // To enable to keep current registered IOFIlterBase class
+            HashSet<string> hash = new HashSet<string>();
+
+            // Clear current registered IOFilters
+            if (!preserve)
+            {
+                this.IOFilters.Clear();
+            }
+            else
+            {
+                foreach (var kvp in this.IOFilters)
+                {
+                    // Enroll current registered IOFilter class names
+                    hash.Add(kvp.Key);
+                }
+            }
+
+            // Create Instance from assembly
+            try
+            {
+                foreach (Type type in asm.GetExportedTypes())
+                {
+                    if (type.IsSubclassOf(typeof(IOFilterBase)))
+                    {
+                        // When the type is already stored, skip the type
+                        if (!hash.Add(type.ToString()))
+                        {
+                            continue;
+                        }
+
+                        IOFilterBase filter = (IOFilterBase)Activator.CreateInstance(type);
+                        this.IOFilters.Add(type.ToString(), filter);
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
+
+        /// <summary>
+        /// Load IOFilter class from specified dll file path
+        /// </summary>
+        /// <param name="dllPath"></param>
+        public void GatherIOFilterFromAssemly(string dllPath)
+        {
+            if (!File.Exists(dllPath))
+            {
+                throw new FileNotFoundException(dllPath);
+            }
+
+            Assembly asm;
+
+            // Load assembly from specified dll file path
+            try
+            {
+                asm = Assembly.LoadFrom(dllPath);
+            }
+            catch (FileLoadException e) { throw e; }
+            catch (BadImageFormatException e) { throw e; }
+            catch (Exception e) { throw e; }
+
+            this.GatherIOFilterFromAssemly(asm, true);
+        }
+
+        /// <summary>
+        /// Get specified IO filter class
+        /// </summary>
+        /// <param name="typeName">String representing the name of the class derived from IOFilterBase</param>
+        /// <returns></returns>
+        public IOFilterBase GetIOFilter(string typeName)
+        {
+            if (!this.IOFilters.ContainsKey(typeName))
+            {
+                return null;
+            }
+
+            return this.IOFilters[typeName];
+        }
+
+        /// <summary>
+        /// Check whether an instance of specified type name is registered into the factory
+        /// </summary>
+        /// <param name="typeName">String representing the name of the class derived from IOFilterBase</param>
+        /// <returns></returns>
+        public bool ContainsIOFilter(string typeName)
+        {
+            return this.IOFilters.ContainsKey(typeName);
+        }
+
+        /// <summary>
+        /// Get enumrator of registered IOFilterBase
+        /// </summary>
+        /// <returns></returns>
+        public Dictionary<string, IOFilterBase>.Enumerator GetEnumrator()
+        {
+            return this.IOFilters.GetEnumerator();
         }
     }
 
