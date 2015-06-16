@@ -21,6 +21,14 @@ using System.Globalization;
 namespace PasswordManager
 {
     /// <summary>
+    /// Password check algorithm for lazy implementation
+    /// </summary>
+    /// <param name="filePath"></param>
+    /// <param name="masterPasswordhash"></param>
+    /// <returns></returns>
+    public delegate bool PasswordHashChecker(string filePath, byte[] masterPasswordhash);
+
+    /// <summary>
     /// A class which handles input/output PasswordObject to actual file.
     /// </summary>
     public class PasswordFile
@@ -93,6 +101,33 @@ namespace PasswordManager
 
         #region I/O
         /// <summary>
+        /// Check whether password hash is valid for specified password file.
+        /// </summary>
+        /// <param name="filePath"></param>
+        /// <returns></returns>
+        public static bool ChallengeDoubleHashedMasterPassword(string filePath, byte[] challengingPasswordHash)
+        {
+            // When password file does not exist, throw an exception.
+            if (!File.Exists(filePath))
+            {
+                throw new FileNotFoundException(filePath);
+            }
+
+            // Parse file header
+            using (FileStream fs = new FileStream(filePath, FileMode.Open, FileAccess.Read))
+            {
+                using (BinaryReader reader = new BinaryReader(fs))
+                {
+                    PasswordHeader header = new PasswordHeader();
+                    header.Token = reader.ReadChars(InternalApplicationConfig.HeaderTokenSize);
+                    header.CombinedMasterPasswordHash = reader.ReadBytes(InternalApplicationConfig.Hash.HashSize / InternalApplicationConfig.BitsPerAByte);
+
+                    return CompareHashes(header.CombinedMasterPasswordHash, Utility.GetHashCombined(challengingPasswordHash, Utility.GetHash(header.Token)));
+                }
+            }
+        }
+
+        /// <summary>
         /// Read password file with removing data filter. Available filters must be added to instance before this method is called.
         /// </summary>
         /// <exception cref="FileNotFoundException">Password file does not exist</exception>
@@ -122,7 +157,7 @@ namespace PasswordManager
                     header.CombinedMasterPasswordHash = reader.ReadBytes(InternalApplicationConfig.Hash.HashSize / InternalApplicationConfig.BitsPerAByte);
 
                     // Check masterPasswordHash is valid
-                    if (!this.CheckMasterPasswordHash(header.CombinedMasterPasswordHash, masterPasswordHash, header.Token))
+                    if (!CheckMasterPasswordHash(header.CombinedMasterPasswordHash, masterPasswordHash, header.Token))
                     {
                         throw new InvalidMasterPasswordException();
                     }
@@ -229,7 +264,7 @@ namespace PasswordManager
         /// <param name="challengingMasterPasswordHash">Challenging password hash</param>
         /// <param name="token">Token value, which might be described in Password file header</param>
         /// <returns></returns>
-        public bool CheckMasterPasswordHash(byte[] expectedCombinedHash, byte[] challengingMasterPasswordHash, char[] token)
+        public static bool CheckMasterPasswordHash(byte[] expectedCombinedHash, byte[] challengingMasterPasswordHash, char[] token)
         {
             return CompareHashes(expectedCombinedHash, Utility.GetHashCombined(challengingMasterPasswordHash, Utility.GetHash(token)));
         }
@@ -240,7 +275,7 @@ namespace PasswordManager
         /// <param name="b1">A hash value to compare</param>
         /// <param name="b2">A hash value to compare</param>
         /// <returns></returns>
-        public bool CompareHashes(byte[] b1, byte[] b2)
+        public static bool CompareHashes(byte[] b1, byte[] b2)
         {
             if (b1.Length != b2.Length)
             {

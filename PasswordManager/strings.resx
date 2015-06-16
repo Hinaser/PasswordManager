@@ -144,8 +144,17 @@
   <data name="Form_InputMasterPassword_Caption" xml:space="preserve">
     <value>Please input master password.</value>
   </data>
+  <data name="Form_InputMasterPassword_InvalidPassword" xml:space="preserve">
+    <value>Wrong password.</value>
+  </data>
   <data name="Form_InputMasterPassword_OK" xml:space="preserve">
     <value>OK</value>
+  </data>
+  <data name="Form_InputMasterPassword_Title" xml:space="preserve">
+    <value>Master Password</value>
+  </data>
+  <data name="Form_InputMasterPassword_Waiting" xml:space="preserve">
+    <value>{0} seconds to retry</value>
   </data>
   <data name="Form_Listview_Caption" xml:space="preserve">
     <value>Caption</value>

@@ -103,32 +103,38 @@ namespace PasswordManager
             this.MasterPasswordHash = Utility.GetHash(InternalApplicationConfig.DefaultMasterPassword.ToCharArray());
 
             // Try to open password file in the default location
-            try
+            if (File.Exists(InternalApplicationConfig.DefaultPasswordFilePath))
             {
-                if (File.Exists(InternalApplicationConfig.DefaultPasswordFilePath))
+                // Ask master password hash
+                // Input password will be sanitised after exiting this using statement by user-defined Dispose() method on FormInputMasterPassword class.
+                DialogResult result;
+                using (FormInputMasterPassword form = new FormInputMasterPassword(PasswordFile.ChallengeDoubleHashedMasterPassword, InternalApplicationConfig.DefaultPasswordFilePath))
                 {
-                    // Ask master password hash
-                    FormInputMasterPassword form = new FormInputMasterPassword();
-                    if (form.ShowDialog() == DialogResult.OK)
+                    result = form.ShowDialog();
+                    this.MasterPasswordHash = form.GetMasterPasswordHash();
+                }
+
+                if (result == DialogResult.OK)
+                {
+                    try
                     {
-                        this.MasterPasswordHash = form.GetMasterPasswordHash();
                         PasswordFile f = new PasswordFile(InternalApplicationConfig.DefaultPasswordFilePath);
                         this.PasswordData = f.ReadPasswordFromFile(this.MasterPasswordHash);
                     }
+                    catch (InvalidMasterPasswordException)
+                    {
+                        MessageBox.Show(strings.General_InvalidMasterPassword_Text, strings.General_InvalidMasterPassword_Caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                    catch (NoCorrespondingFilterFoundException e)
+                    {
+                        string msgText = String.Format(strings.General_ParseFilterFailed_Text, e.Message);
+                        MessageBox.Show(msgText, strings.General_ParseFilterFailed_Caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                    catch
+                    {
+                        ;
+                    }
                 }
-            }
-            catch (InvalidMasterPasswordException)
-            {
-                MessageBox.Show(strings.General_InvalidMasterPassword_Text, strings.General_InvalidMasterPassword_Caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-            catch (NoCorrespondingFilterFoundException e)
-            {
-                string msgText = String.Format(strings.General_ParseFilterFailed_Text, e.Message);
-                MessageBox.Show(msgText, strings.General_ParseFilterFailed_Caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-            catch
-            {
-                ;
             }
 
             this.InitializeTreeStructure(this.PasswordData.Containers, this.PasswordData.Indexer);

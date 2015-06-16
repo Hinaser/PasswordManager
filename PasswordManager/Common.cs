@@ -57,6 +57,8 @@ namespace PasswordManager
         public static string Separater1 = ",";
         public static int FilterNameFixedLength = 128;
         public static int MaxFilterCount = 10;
+        public static int InitialWaitMiliSecondsWhenPasswordIsInvalid = 1000;
+        public static int RetryTickIntervalMiliSec = 200;
     }
 
     public static class Utility

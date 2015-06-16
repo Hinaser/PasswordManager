@@ -410,4 +410,13 @@
   <data name="General_InvalidMasterPassword_Text" xml:space="preserve">
     <value>マスターパスワードが間違っています。</value>
   </data>
+  <data name="Form_InputMasterPassword_InvalidPassword" xml:space="preserve">
+    <value>パスワードが間違っています。</value>
+  </data>
+  <data name="Form_InputMasterPassword_Title" xml:space="preserve">
+    <value>マスターパスワード</value>
+  </data>
+  <data name="Form_InputMasterPassword_Waiting" xml:space="preserve">
+    <value>{0}秒後にリトライできます</value>
+  </data>
 </root>
