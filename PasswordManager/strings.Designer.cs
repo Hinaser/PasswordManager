@@ -124,6 +124,33 @@ namespace PasswordManager {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Cancel.
+        /// </summary>
+        internal static string Form_InputMasterPassword_Cancel {
+            get {
+                return ResourceManager.GetString("Form_InputMasterPassword_Cancel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please input master password..
+        /// </summary>
+        internal static string Form_InputMasterPassword_Caption {
+            get {
+                return ResourceManager.GetString("Form_InputMasterPassword_Caption", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to OK.
+        /// </summary>
+        internal static string Form_InputMasterPassword_OK {
+            get {
+                return ResourceManager.GetString("Form_InputMasterPassword_OK", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Caption.
         /// </summary>
         internal static string Form_Listview_Caption {
@@ -593,6 +620,24 @@ namespace PasswordManager {
         internal static string General_EditLabel_GoOverMaxLength_Text {
             get {
                 return ResourceManager.GetString("General_EditLabel_GoOverMaxLength_Text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Error.
+        /// </summary>
+        internal static string General_InvalidMasterPassword_Caption {
+            get {
+                return ResourceManager.GetString("General_InvalidMasterPassword_Caption", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Master password you entered is not correct..
+        /// </summary>
+        internal static string General_InvalidMasterPassword_Text {
+            get {
+                return ResourceManager.GetString("General_InvalidMasterPassword_Text", resourceCulture);
             }
         }
         

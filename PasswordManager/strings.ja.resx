@@ -395,4 +395,19 @@
   <data name="General_ParseFilterFailed_Text" xml:space="preserve">
     <value>未知のデータフィルター {0} が適用されています。データの解析に失敗しました。</value>
   </data>
+  <data name="Form_InputMasterPassword_Cancel" xml:space="preserve">
+    <value>キャンセル</value>
+  </data>
+  <data name="Form_InputMasterPassword_Caption" xml:space="preserve">
+    <value>マスターパスワードを入力してください。</value>
+  </data>
+  <data name="Form_InputMasterPassword_OK" xml:space="preserve">
+    <value>OK</value>
+  </data>
+  <data name="General_InvalidMasterPassword_Caption" xml:space="preserve">
+    <value>エラー</value>
+  </data>
+  <data name="General_InvalidMasterPassword_Text" xml:space="preserve">
+    <value>マスターパスワードが間違っています。</value>
+  </data>
 </root>

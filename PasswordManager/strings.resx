@@ -138,6 +138,15 @@
   <data name="Form_ContextMenu_RenameContainer" xml:space="preserve">
     <value>Rename folder</value>
   </data>
+  <data name="Form_InputMasterPassword_Cancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="Form_InputMasterPassword_Caption" xml:space="preserve">
+    <value>Please input master password.</value>
+  </data>
+  <data name="Form_InputMasterPassword_OK" xml:space="preserve">
+    <value>OK</value>
+  </data>
   <data name="Form_Listview_Caption" xml:space="preserve">
     <value>Caption</value>
   </data>
@@ -298,6 +307,12 @@
   <data name="General_EditLabel_GoOverMaxLength_Text" xml:space="preserve">
     <value>Folder name length must be less than or equal to {0}
 Your input: {1} characters</value>
+  </data>
+  <data name="General_InvalidMasterPassword_Caption" xml:space="preserve">
+    <value>Error</value>
+  </data>
+  <data name="General_InvalidMasterPassword_Text" xml:space="preserve">
+    <value>Master password you entered is not correct.</value>
   </data>
   <data name="General_MovePassword_Fail_Caption" xml:space="preserve">
     <value>Warning</value>

@@ -29,6 +29,7 @@ namespace PasswordManager
         private PasswordFileBody PasswordData = new PasswordFileBody();
         private TreeNode CurrentTreeNode = null;
         private List<string> FilterOrder = new List<string>();
+        private byte[] MasterPasswordHash;
         #endregion
 
         #region Constructor
@@ -98,12 +99,27 @@ namespace PasswordManager
             // Set default filter order
             this.FilterOrder.Add(typeof(DebugFilter).ToString());
 
+            // Set default master password hash
+            this.MasterPasswordHash = Utility.GetHash(InternalApplicationConfig.DefaultMasterPassword.ToCharArray());
+
             // Try to open password file in the default location
             try
             {
-                PasswordFile f = new PasswordFile(InternalApplicationConfig.DefaultPasswordFilePath);
-
-                this.PasswordData = f.ReadPasswordFromFile(Utility.GetHash(new byte[] { 0xff, 0xfe, 0x00, 0x01, 0x02 }));
+                if (File.Exists(InternalApplicationConfig.DefaultPasswordFilePath))
+                {
+                    // Ask master password hash
+                    FormInputMasterPassword form = new FormInputMasterPassword();
+                    if (form.ShowDialog() == DialogResult.OK)
+                    {
+                        this.MasterPasswordHash = form.GetMasterPasswordHash();
+                        PasswordFile f = new PasswordFile(InternalApplicationConfig.DefaultPasswordFilePath);
+                        this.PasswordData = f.ReadPasswordFromFile(this.MasterPasswordHash);
+                    }
+                }
+            }
+            catch (InvalidMasterPasswordException)
+            {
+                MessageBox.Show(strings.General_InvalidMasterPassword_Text, strings.General_InvalidMasterPassword_Caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             catch (NoCorrespondingFilterFoundException e)
             {
