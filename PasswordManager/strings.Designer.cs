@@ -858,6 +858,24 @@ namespace PasswordManager {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Error.
+        /// </summary>
+        internal static string General_ParseFilterFailed_Caption {
+            get {
+                return ResourceManager.GetString("General_ParseFilterFailed_Caption", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unknown data filter {0} is applied. Failed to parse data..
+        /// </summary>
+        internal static string General_ParseFilterFailed_Text {
+            get {
+                return ResourceManager.GetString("General_ParseFilterFailed_Text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Ready.
         /// </summary>
         internal static string Status_Ready {

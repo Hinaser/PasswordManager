@@ -82,9 +82,6 @@ namespace PasswordManager
             this.ToolStripMenuItem_Edit_RenameFolder.Click += ToolStripMenuItem_RenameFolder_Click;
             this.ToolStripMenuItem_Edit_DeleteFolder.Click += ToolStripMenuItem_DeleteFolder_Click;
             this.ToolStripMenuItem_Edit_AddPassword.Click += ToolStripMenuItem_AddPassword_Click;
-
-            // Apply language setting
-            this.SetupLanguage(InternalApplicationConfig.DefaultLocale);
         }
         #endregion
 
@@ -94,16 +91,26 @@ namespace PasswordManager
         /// </summary>
         void Initialize()
         {
+            // Apply language setting
+            this.SetupLanguage(InternalApplicationConfig.DefaultLocale);
+
             // Try to open password file in the default location
             try
             {
                 PasswordFile f = new PasswordFile(InternalApplicationConfig.DefaultPasswordFilePath);
-                f.AddFilterOrder(typeof(DebugFilter).ToString());
+                //f.AddFilterOrder(typeof(DebugFilter).ToString());
 
                 this.PasswordData = f.ReadPasswordFromFile(Utility.GetHash(new byte[] { 0xff, 0xfe, 0x00, 0x01, 0x02 }));
             }
+            catch (NoCorrespondingFilterFoundException e)
+            {
+                string msgText = String.Format(strings.General_ParseFilterFailed_Text, e.Message);
+                MessageBox.Show(msgText, strings.General_ParseFilterFailed_Caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
             catch
-            { }
+            {
+                ;
+            }
 
             this.InitializeTreeStructure(this.PasswordData.Containers, this.PasswordData.Indexer);
             this.treeView_Folders.Invalidate();
@@ -539,7 +546,7 @@ namespace PasswordManager
              * PasswordFile f should be used in using statement and also password data should be disposed.
              */
             PasswordFile f = new PasswordFile(InternalApplicationConfig.DefaultPasswordFilePath);
-            f.AddFilterOrder(typeof(DebugFilter).ToString());
+            //f.AddFilterOrder(typeof(DebugFilter).ToString());
 
             try
             {
@@ -557,7 +564,6 @@ namespace PasswordManager
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
-                throw ex;
             }
         }
 

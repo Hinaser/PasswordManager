@@ -32,7 +32,6 @@ namespace PasswordManager
         public static string RootContainerLabel = "All";
         public static string NewUnnamedContainerLabel = "New folder";
         public static HashAlgorithm Hash = new SHA512Managed();
-        public static int MaxFilter = 1000;
         public static int HeaderTokenSize = DateTime.Now.ToString(CultureInfo.InvariantCulture).ToCharArray().Length;
         public static int BitsPerAByte = 8;
         public static int CaptionMaxLength = 128;
@@ -56,7 +55,8 @@ namespace PasswordManager
             "9876","8765","7654","6543","5432","4321",
         };
         public static string Separater1 = ",";
-        public static int FilterNameMax = 128;
+        public static int FilterNameFixedLength = 128;
+        public static int MaxFilterCount = 10;
     }
 
     public static class Utility
@@ -95,7 +95,7 @@ namespace PasswordManager
         /// </summary>
         /// <param name="reader"></param>
         /// <returns></returns>
-        public static MemoryStream ReadBytes(BinaryReader reader)
+        public static MemoryStream GetMemoryStream(BinaryReader reader)
         {
             if (reader == null)
             {
@@ -157,10 +157,95 @@ namespace PasswordManager
         {
             return InternalApplicationConfig.Hash.ComputeHash(b);
         }
+
+        /// <summary>
+        /// Get char array terminated by NUL.
+        /// </summary>
+        /// <param name="text"></param>
+        /// <param name="maxLen"></param>
+        /// <returns></returns>
+        public static char[] GetCharTerminatedByZero(string text, int maxLen)
+        {
+            maxLen = maxLen > text.Length ? maxLen : text.Length + 1;
+
+            char[] retValue = new char[maxLen];
+
+            for (int i = text.Length; i < maxLen; i++)
+            {
+                retValue[i] = '\0';
+            }
+
+            for (int i = 0; i < text.Length; i++)
+            {
+                retValue[i] = text[i];
+            }
+
+            return retValue;
+        }
+
+        /// <summary>
+        /// Fill target char[] with string text.
+        /// </summary>
+        /// <param name="text"></param>
+        /// <param name="maxLen"></param>
+        /// <remarks>When length of string is larger than length of char array, extra characters will be cut but the last index of char array is always NUL.</remarks>
+        /// <returns></returns>
+        public static void GetCharTerminatedByZero(string text, ref char[] target)
+        {
+            int maxLen = target.Length;
+
+            target[maxLen - 1] = '\0';
+
+            for (int i = text.Length; i < maxLen; i++)
+            {
+                target[i] = '\0';
+            }
+
+            for (int i = 0; i < text.Length && i < maxLen - 1; i++)
+            {
+                target[i] = text[i];
+            }
+        }
+
+        /// <summary>
+        /// Convert 0 terminated char array into string
+        /// </summary>
+        /// <param name="text"></param>
+        /// <returns></returns>
+        public static string GetStringByZeroTarminatedChar(char[] text)
+        {
+            int positionFirstNUL;
+
+            for (positionFirstNUL = 0; positionFirstNUL < text.Length; positionFirstNUL++)
+            {
+                if (text[positionFirstNUL] == '\0')
+                {
+                    break;
+                }
+            }
+
+            if (positionFirstNUL == 0)
+            {
+                return String.Empty;
+            }
+
+            return new String(text, 0, positionFirstNUL);
+        }
     }
 
     #region Exception
-    public class InvalidMasterPasswordException : Exception { }
-    public class NoCorrespondingFilterFoundException : Exception { }
+    public class InvalidMasterPasswordException : Exception
+    {
+        public InvalidMasterPasswordException() { }
+        public InvalidMasterPasswordException(string msg) : base(msg) { }
+        public InvalidMasterPasswordException(string msg, Exception innerException) : base(msg, innerException) { }
+    }
+
+    public class NoCorrespondingFilterFoundException : Exception
+    {
+        public NoCorrespondingFilterFoundException() { }
+        public NoCorrespondingFilterFoundException(string msg) : base(msg) { }
+        public NoCorrespondingFilterFoundException(string msg, Exception innterException) : base(msg, innterException) { }
+    }
     #endregion
 }

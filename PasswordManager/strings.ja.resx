@@ -389,4 +389,10 @@
     <value>フォルダー名は {0}文字以下である必要があります。
 あなたの入力: {1} 文字</value>
   </data>
+  <data name="General_ParseFilterFailed_Caption" xml:space="preserve">
+    <value>エラー</value>
+  </data>
+  <data name="General_ParseFilterFailed_Text" xml:space="preserve">
+    <value>未知のデータフィルター {0} が適用されています。データの解析に失敗しました。</value>
+  </data>
 </root>

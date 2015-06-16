@@ -386,6 +386,12 @@ Your input: {1} characters</value>
   <data name="General_NewPassword_Strength_US" xml:space="preserve">
     <value>Combination of upper case / symbol</value>
   </data>
+  <data name="General_ParseFilterFailed_Caption" xml:space="preserve">
+    <value>Error</value>
+  </data>
+  <data name="General_ParseFilterFailed_Text" xml:space="preserve">
+    <value>Unknown data filter {0} is applied. Failed to parse data.</value>
+  </data>
   <data name="Status_Ready" xml:space="preserve">
     <value>Ready</value>
   </data>
