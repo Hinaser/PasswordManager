@@ -35,7 +35,6 @@ namespace PasswordManager
         public PasswordFile(string filepath)
         {
             this.Filepath = filepath;
-            this.FilterOrder.Add(typeof(NoFilter).ToString()); // The nearest filter to the data content must be NoFilter
         }
         #endregion
 
@@ -55,6 +54,14 @@ namespace PasswordManager
         /// <param name="order"></param>
         public void SetFilterOrder(List<string> order)
         {
+            foreach (string filterName in order)
+            {
+                if (!IOFilterFactory.Instance.ContainsIOFilter(filterName))
+                {
+                    throw new ArgumentException();
+                }
+            }
+
             this.FilterOrder = order;
         }
 
@@ -64,6 +71,11 @@ namespace PasswordManager
         /// <param name="filterHash"></param>
         public void AddFilterOrder(string filterName)
         {
+            if (!IOFilterFactory.Instance.ContainsIOFilter(filterName))
+            {
+                throw new ArgumentException();
+            }
+
             this.FilterOrder.Add(filterName);
         }
         #endregion
@@ -98,9 +110,6 @@ namespace PasswordManager
                 throw new FileNotFoundException(this.Filepath);
             }
 
-            BinaryFormatter formatter = new BinaryFormatter();
-            MemoryStream[] bodyStream = new MemoryStream[2] { new MemoryStream(), new MemoryStream() };
-            PasswordFileBody returnVal;
             FilteredData filteredData;
 
             // Parse file header
@@ -115,76 +124,27 @@ namespace PasswordManager
                     // Check masterPasswordHash is valid
                     if (!this.CheckMasterPasswordHash(header.CombinedMasterPasswordHash, masterPasswordHash, header.Token))
                     {
-                        bodyStream[0].Close();
-                        bodyStream[1].Close();
                         throw new InvalidMasterPasswordException();
                     }
 
-                    bodyStream[0] = Utility.GetMemoryStream(reader);
-                    bodyStream[0].Position = 0;
+                    MemoryStream encryptedData = new MemoryStream();
+                    MemoryStream decryptedData = new MemoryStream();
+                    BinaryFormatter formatter = new BinaryFormatter();
+
+                    encryptedData = Utility.GetMemoryStream(reader);
+                    encryptedData.Position = 0;
                     // Do decryption against loaded MemoryStream
                     // something ...
-                    Utility.CopyStream(bodyStream[0], bodyStream[1]);
-                    bodyStream[1].Position = 0;
+                    Utility.CopyStream(encryptedData, decryptedData);
+                    decryptedData.Position = 0;
 
-                    filteredData = (FilteredData)formatter.Deserialize(bodyStream[1]);
-                    bodyStream[1].Position = 0;
+                    // Get filtered data
+                    filteredData = (FilteredData)formatter.Deserialize(decryptedData);
                 }
             }
 
             // Parse filter data
-            int i = 0;
-            for (string filterName = Utility.GetStringByZeroTarminatedChar(filteredData.Filter);
-                filterName != typeof(NoFilter).ToString() && i < InternalApplicationConfig.MaxFilterCount;
-                i++, filterName = Utility.GetStringByZeroTarminatedChar(filteredData.Filter))
-            {
-                if (!IOFilterFactory.Instance.ContainsIOFilter(filterName))
-                {
-                    bodyStream[0].Close();
-                    bodyStream[1].Close();
-                    throw new NoCorrespondingFilterFoundException(filterName);
-                }
-
-                // Get filter instance
-                IOFilterBase filter = IOFilterFactory.Instance.GetIOFilter(filterName);
-
-                // Setup MemoryStream
-                bodyStream[i % 2] = new MemoryStream(filteredData.data);
-
-                // Apply unfilter
-                filter.InputFilter(bodyStream[i % 2], bodyStream[(i + 1) % 2]);
-
-                // Get filter object
-                bodyStream[(i + 1) % 2].Position = 0;
-                BinaryReader reader = new BinaryReader(bodyStream[(i + 1) % 2]);
-                filteredData.Filter = reader.ReadChars(InternalApplicationConfig.FilterNameFixedLength);
-                if (bodyStream[(i + 1) % 2].Length > Int32.MaxValue) throw new OverflowException(); // When byte length is larger than intergar max value, throw exception.
-                filteredData.data = reader.ReadBytes((int)bodyStream[(i + 1) % 2].Length);
-                // The line below is not nice but in .NET Framework 3.5, when BinaryReader is Closed(), its BaseStream will be also Closed() so the line below is given in order to preserve original base stream content.
-                bodyStream[(i + 1) % 2] = new MemoryStream(bodyStream[(i + 1) % 2].ToArray());
-                reader.Close();
-
-                // Reset MemoryStream
-                bodyStream[i % 2].Close();
-                bodyStream[i % 2] = new MemoryStream();
-            }
-            
-            try
-            {
-                bodyStream[(i+1)%2] = new MemoryStream(filteredData.data);
-                returnVal = (PasswordFileBody)formatter.Deserialize(bodyStream[(i + 1) % 2]);
-            }
-            catch(Exception e)
-            {
-                throw e;
-            }
-            finally
-            {
-                bodyStream[0].Close();
-                bodyStream[1].Close();
-            }
-
-            return returnVal;
+            return (PasswordFileBody)IOFilterProcessor.RemoveFilter(filteredData);
         }
 
         /// <summary>
@@ -197,63 +157,20 @@ namespace PasswordManager
                 throw new IOException();
             }
 
-            MemoryStream[] bodyStream = new MemoryStream[]{new MemoryStream(), new MemoryStream()};
+            MemoryStream decryptedData = new MemoryStream();
+            MemoryStream encryptedData = new MemoryStream();
             BinaryFormatter formatter = new BinaryFormatter();
 
-            // Convert password data object to binary data stream
-            formatter.Serialize(bodyStream[0], passwordData);
-            bodyStream[0].Position = 0;
-
             // Apply data filters
-            // NoFilter must come first for filtering. This is why do-while statement is using instead of while or for statement
-            int i = 0;
-            FilteredData filteredData = new FilteredData();
-            do
-            {
-                // Get filter name registered
-                string filterName = this.FilterOrder[i];
-
-                // Throw exception if associated filter instance does not exist
-                if (!IOFilterFactory.Instance.ContainsIOFilter(filterName))
-                {
-                    bodyStream[0].Close();
-                    bodyStream[1].Close();
-                    throw new InvalidOperationException();
-                }
-
-                // Get target filter instance
-                IOFilterBase filter = IOFilterFactory.Instance.GetIOFilter(filterName);
-
-                // Write filter name information
-                Utility.GetCharTerminatedByZero(filterName, ref filteredData.Filter);
-
-                // Do apply filter
-                filter.OutputFilter(bodyStream[i % 2], bodyStream[(i + 1) % 2]); // Convert input as a filter does and write it to output stream
-                bodyStream[(i + 1) % 2].Position = 0;
-
-                // Set filtered data
-                filteredData.data = bodyStream[(i + 1) % 2].ToArray();
-
-                // Set filter object into MemoryStream
-                bodyStream[(i + 1) % 2].Close();
-                bodyStream[(i + 1) % 2] = new MemoryStream();
-                BinaryWriter writer = new BinaryWriter(bodyStream[(i + 1) % 2]);
-                writer.Write(filteredData.Filter, 0, filteredData.Filter.Length);
-                writer.Write(filteredData.data, 0, filteredData.data.Length);
-                // The line below is not nice but in .NET Framework 3.5, when BinaryWriter is Closed(), its BaseStream will be also Closed() so the line below is given in order to preserve original base stream content.
-                bodyStream[(i + 1) % 2] = new MemoryStream(bodyStream[(i + 1) % 2].ToArray());
-                writer.Close();
-
-                // Reset MemoryStream
-                bodyStream[i % 2].Close(); // Release input stream resources
-                bodyStream[i % 2] = new MemoryStream();
-            } while (++i < this.FilterOrder.Count);
+            FilteredData filteredData = IOFilterProcessor.ApplyFilter(passwordData, this.FilterOrder);
 
             // Convert FilteredData object into MemoryStream
-            formatter.Serialize(bodyStream[(i + 1) % 2], filteredData);
+            formatter.Serialize(decryptedData, filteredData);
+            decryptedData.Position = 0;
 
             // Do encryption here
             // .....
+            Utility.CopyStream(decryptedData, encryptedData);
 
             // Construct header
             PasswordHeader header = new PasswordHeader();
@@ -269,7 +186,7 @@ namespace PasswordManager
                     writer.Write(header.Token); // Write token
                     writer.Write(header.CombinedMasterPasswordHash); // Write hash
                     // Write Filtered data which has been encrypted
-                    writer.Write(bodyStream[(i + 1) % 2].ToArray());
+                    writer.Write(encryptedData.ToArray());
                 }
             }
         }

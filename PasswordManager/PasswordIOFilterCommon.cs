@@ -14,6 +14,7 @@ using System.Linq;
 using System.Text;
 using System.IO;
 using System.Reflection;
+using System.Runtime.Serialization.Formatters.Binary;
 #endregion
 
 namespace PasswordManager
@@ -86,7 +87,7 @@ namespace PasswordManager
             // Create Instance from assembly
             try
             {
-                foreach (Type type in asm.GetExportedTypes())
+                foreach (Type type in asm.GetTypes())
                 {
                     if (type.IsSubclassOf(typeof(IOFilterBase)))
                     {
@@ -176,6 +177,164 @@ namespace PasswordManager
     }
 
     /// <summary>
+    /// Apply or remove filter to/from specified object data
+    /// </summary>
+    public class IOFilterProcessor
+    {
+        /// <summary>
+        /// This filter change nothing. Only pass exact same content to output stream from input stream.
+        /// </summary>
+        private sealed class BaseFilter : IOFilterBase
+        {
+            public override void InputFilter(ref MemoryStream src, ref MemoryStream dest)
+            {
+                dest = src;
+            }
+
+            public override void OutputFilter(ref MemoryStream src, ref MemoryStream dest)
+            {
+                dest = src;
+            }
+        }
+
+        /// <summary>
+        /// Apply filter to specified object.
+        /// </summary>
+        /// <param name="obj">Data to be filtered</param>
+        /// <param name="filterOrder">Order to apply filter. filterOrder[0] is applied at first and filterOrder[lastindex] is applied at last.</param>
+        /// <returns></returns>
+        public static FilteredData ApplyFilter(Object obj, List<string> filterOrder)
+        {
+            MemoryStream[] bodyStream = new MemoryStream[] { new MemoryStream(), new MemoryStream() };
+            BinaryFormatter formatter = new BinaryFormatter();
+
+            // Convert password data object to binary data stream
+            formatter.Serialize(bodyStream[0], obj);
+            bodyStream[0].Position = 0;
+
+            List<string> order = new List<string>();
+            order.Add(typeof(BaseFilter).ToString());
+            order.AddRange(filterOrder);
+
+            // Apply data filters
+            // NoFilter must come first for filtering. This is why do-while statement is using instead of while or for statement
+            int i = 0;
+            FilteredData filteredData = new FilteredData();
+            do
+            {
+                // Get filter name registered
+                string filterName = order[i];
+
+                // Throw exception if associated filter instance does not exist
+                if (!IOFilterFactory.Instance.ContainsIOFilter(filterName))
+                {
+                    bodyStream[0].Close();
+                    bodyStream[1].Close();
+                    throw new InvalidOperationException();
+                }
+
+                // Get target filter instance
+                IOFilterBase filter = IOFilterFactory.Instance.GetIOFilter(filterName);
+
+                // Write filter name information
+                Utility.GetCharTerminatedByZero(filterName, ref filteredData.Filter);
+
+                // Do apply filter
+                filter.OutputFilter(ref bodyStream[i % 2], ref bodyStream[(i + 1) % 2]); // Convert input as a filter does and write it to output stream
+                bodyStream[(i + 1) % 2].Position = 0;
+
+                // Set filtered data
+                filteredData.data = bodyStream[(i + 1) % 2].ToArray();
+
+                // Set filter object into MemoryStream
+                bodyStream[(i + 1) % 2].Close();
+                bodyStream[(i + 1) % 2] = new MemoryStream();
+                BinaryWriter writer = new BinaryWriter(bodyStream[(i + 1) % 2]);
+                writer.Write(filteredData.Filter, 0, filteredData.Filter.Length);
+                writer.Write(filteredData.data, 0, filteredData.data.Length);
+                // The line below is not nice but in .NET Framework 3.5, when BinaryWriter is Closed(), its BaseStream will be also Closed() so the line below is given in order to preserve original base stream content.
+                bodyStream[(i + 1) % 2] = new MemoryStream(bodyStream[(i + 1) % 2].ToArray());
+                writer.Close();
+
+                // Reset MemoryStream
+                bodyStream[i % 2].Close(); // Release input stream resources
+                bodyStream[i % 2] = new MemoryStream();
+            } while (++i < order.Count);
+
+            // Convert FilteredData object into MemoryStream
+
+            return filteredData;
+        }
+
+        /// <summary>
+        /// Remove filter from specified memorystream.
+        /// </summary>
+        /// <param name="m"></param>
+        /// <remarks>Filter data must not be more than 2GB (Signed integer max)</remarks>
+        /// <returns></returns>
+        public static Object RemoveFilter(FilteredData filteredData)
+        {
+            BinaryFormatter formatter = new BinaryFormatter();
+            MemoryStream[] bodyStream = new MemoryStream[2] { new MemoryStream(), new MemoryStream() };
+            Object returnVal = null;
+
+            // Parse filter data
+            int i = 0;
+            for (string filterName = Utility.GetStringByZeroTarminatedChar(filteredData.Filter);
+                filterName != typeof(BaseFilter).ToString() && i < InternalApplicationConfig.MaxFilterCount;
+                i++, filterName = Utility.GetStringByZeroTarminatedChar(filteredData.Filter))
+            {
+                if (!IOFilterFactory.Instance.ContainsIOFilter(filterName))
+                {
+                    bodyStream[0].Close();
+                    bodyStream[1].Close();
+                    throw new NoCorrespondingFilterFoundException(filterName);
+                }
+
+                // Get filter instance
+                IOFilterBase filter = IOFilterFactory.Instance.GetIOFilter(filterName);
+
+                // Setup MemoryStream
+                bodyStream[i % 2] = new MemoryStream(filteredData.data);
+
+                // Remove filter here
+                filter.InputFilter(ref bodyStream[i % 2], ref bodyStream[(i + 1) % 2]);
+
+                // Get filter object
+                bodyStream[(i + 1) % 2].Position = 0;
+                BinaryReader reader = new BinaryReader(bodyStream[(i + 1) % 2]);
+                filteredData.Filter = reader.ReadChars(InternalApplicationConfig.FilterNameFixedLength);
+                if (bodyStream[(i + 1) % 2].Length > Int32.MaxValue) throw new OverflowException(); // When byte length is larger than intergar max value, throw exception.
+                filteredData.data = reader.ReadBytes((int)bodyStream[(i + 1) % 2].Length);
+                // The line below is not nice but in .NET Framework 3.5, when BinaryReader is Closed(), its BaseStream will be also Closed() so the line below is given in order to preserve original base stream content.
+                bodyStream[(i + 1) % 2] = new MemoryStream(bodyStream[(i + 1) % 2].ToArray());
+                reader.Close();
+
+                // Reset MemoryStream
+                bodyStream[i % 2].Close();
+                bodyStream[i % 2] = new MemoryStream();
+            }
+
+            try
+            {
+                bodyStream[(i + 1) % 2] = new MemoryStream(filteredData.data);
+                returnVal = formatter.Deserialize(bodyStream[(i + 1) % 2]);
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+            finally
+            {
+                bodyStream[0].Close();
+                bodyStream[1].Close();
+            }
+
+            return returnVal;
+        }
+    }
+
+    /// <summary>
     /// Abstract class for handling inputting/outputting data stream.
     /// </summary>
     public abstract class IOFilterBase
@@ -185,30 +344,14 @@ namespace PasswordManager
         /// </summary>
         /// <param name="inStream">Source stream</param>
         /// <param name="outSteram">Destination stream</param>
-        public abstract void InputFilter(MemoryStream inStream, MemoryStream outSteram);
+        public abstract void InputFilter(ref MemoryStream inStream, ref MemoryStream outSteram);
 
         /// <summary>
         /// This method should be used before writing data to file.
         /// </summary>
         /// <param name="inStream">Source stream</param>
         /// <param name="outSteram">Destination stream</param>
-        public abstract void OutputFilter(MemoryStream inStream, MemoryStream outSteram);
-    }
-
-    /// <summary>
-    /// This filter change nothing. Only pass exact same content to output stream from input stream.
-    /// </summary>
-    public sealed class NoFilter : IOFilterBase
-    {
-        public override void InputFilter(MemoryStream src, MemoryStream dest)
-        {
-            Utility.CopyStream(src, dest);
-        }
-
-        public override void OutputFilter(MemoryStream src, MemoryStream dest)
-        {
-            Utility.CopyStream(src, dest);
-        }
+        public abstract void OutputFilter(ref MemoryStream inStream, ref MemoryStream outSteram);
     }
 
     /// <summary>
@@ -216,7 +359,7 @@ namespace PasswordManager
     /// </summary>
     public class DebugFilter : IOFilterBase
     {
-        public override void InputFilter(MemoryStream src, MemoryStream dest)
+        public override void InputFilter(ref MemoryStream src, ref MemoryStream dest)
         {
             byte[] debug = src.ToArray();
 
@@ -231,7 +374,7 @@ namespace PasswordManager
             Utility.CopyStream(temp, dest);
         }
 
-        public override void OutputFilter(MemoryStream src, MemoryStream dest)
+        public override void OutputFilter(ref MemoryStream src, ref MemoryStream dest)
         {
             byte[] debug = src.ToArray();
 

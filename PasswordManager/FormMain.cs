@@ -28,6 +28,7 @@ namespace PasswordManager
         #region Fields
         private PasswordFileBody PasswordData = new PasswordFileBody();
         private TreeNode CurrentTreeNode = null;
+        private List<string> FilterOrder = new List<string>();
         #endregion
 
         #region Constructor
@@ -94,11 +95,13 @@ namespace PasswordManager
             // Apply language setting
             this.SetupLanguage(InternalApplicationConfig.DefaultLocale);
 
+            // Set default filter order
+            this.FilterOrder.Add(typeof(DebugFilter).ToString());
+
             // Try to open password file in the default location
             try
             {
                 PasswordFile f = new PasswordFile(InternalApplicationConfig.DefaultPasswordFilePath);
-                //f.AddFilterOrder(typeof(DebugFilter).ToString());
 
                 this.PasswordData = f.ReadPasswordFromFile(Utility.GetHash(new byte[] { 0xff, 0xfe, 0x00, 0x01, 0x02 }));
             }
@@ -546,7 +549,6 @@ namespace PasswordManager
              * PasswordFile f should be used in using statement and also password data should be disposed.
              */
             PasswordFile f = new PasswordFile(InternalApplicationConfig.DefaultPasswordFilePath);
-            //f.AddFilterOrder(typeof(DebugFilter).ToString());
 
             try
             {
@@ -575,7 +577,7 @@ namespace PasswordManager
         void toolStripButton_Save_Click(object sender, EventArgs e)
         {
             PasswordFile f = new PasswordFile(InternalApplicationConfig.DefaultPasswordFilePath);
-            f.AddFilterOrder(typeof(DebugFilter).ToString());
+            f.SetFilterOrder(this.FilterOrder);
 
             f.WritePasswordToFile(Utility.GetHash(new byte[] { 0xff, 0xfe, 0x00, 0x01, 0x02 }), this.PasswordData);
         }
