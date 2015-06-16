@@ -574,14 +574,14 @@ namespace PasswordManager
 
             try
             {
-                this.PasswordData = f.ReadPasswordFromFile(Utility.GetHash(new byte[] { 0xff, 0xfe, 0x00, 0x01, 0x02 }));
+                this.PasswordData = f.ReadPasswordFromFile(this.MasterPasswordHash);
                 this.InitializeTreeStructure(this.PasswordData.Containers, this.PasswordData.Indexer);
                 this.listView_PasswordItems.Invalidate();
             }
             catch (FileNotFoundException)
             {
-                f.ResetPasswordFile(Utility.GetHash(new byte[] { 0xff, 0xfe, 0x00, 0x01, 0x02 }), null);
-                this.PasswordData = f.ReadPasswordFromFile(Utility.GetHash(new byte[] { 0xff, 0xfe, 0x00, 0x01, 0x02 }));
+                f.ResetPasswordFile(this.MasterPasswordHash, null);
+                this.PasswordData = f.ReadPasswordFromFile(this.MasterPasswordHash);
                 this.InitializeTreeStructure(this.PasswordData.Containers, this.PasswordData.Indexer);
                 this.listView_PasswordItems.Invalidate();
             }
@@ -601,7 +601,7 @@ namespace PasswordManager
             PasswordFile f = new PasswordFile(InternalApplicationConfig.DefaultPasswordFilePath);
             f.SetFilterOrder(this.FilterOrder);
 
-            f.WritePasswordToFile(Utility.GetHash(new byte[] { 0xff, 0xfe, 0x00, 0x01, 0x02 }), this.PasswordData);
+            f.WritePasswordToFile(this.MasterPasswordHash, this.PasswordData);
         }
 
         /// <summary>
