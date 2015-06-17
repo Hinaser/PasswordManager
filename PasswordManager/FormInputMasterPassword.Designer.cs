@@ -38,6 +38,7 @@
             // 
             // textBox_InputMasterPassword
             // 
+            this.textBox_InputMasterPassword.AcceptsReturn = true;
             this.textBox_InputMasterPassword.Location = new System.Drawing.Point(12, 79);
             this.textBox_InputMasterPassword.Name = "textBox_InputMasterPassword";
             this.textBox_InputMasterPassword.PasswordChar = '*';
@@ -83,6 +84,7 @@
             // 
             // FormInputMasterPassword
             // 
+            this.AcceptButton = this.button_InputMasterPassword_OK;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(307, 148);

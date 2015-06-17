@@ -59,6 +59,7 @@ namespace PasswordManager
         public static int MaxFilterCount = 10;
         public static int InitialWaitMiliSecondsWhenPasswordIsInvalid = 1000;
         public static int RetryTickIntervalMiliSec = 200;
+        public static string OpeningPasswordFileFilter = "Data files (*.dat)|*.dat|All files (*.*)|*.*";
     }
 
     public static class Utility

@@ -455,4 +455,16 @@
   <data name="Form_MenuItem_ChangeMasterPassword" xml:space="preserve">
     <value>マスターパスワードの変更</value>
   </data>
+  <data name="General_Error" xml:space="preserve">
+    <value>エラー</value>
+  </data>
+  <data name="General_FileNotFound" xml:space="preserve">
+    <value>ファイルが見つかりませんでした。</value>
+  </data>
+  <data name="General_OpenFile_Success_Caption" xml:space="preserve">
+    <value>成功！</value>
+  </data>
+  <data name="General_OpenFile_Success_Text" xml:space="preserve">
+    <value>パスワードファイルの読み込みに成功しました。</value>
+  </data>
 </root>

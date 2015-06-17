@@ -599,28 +599,52 @@ namespace PasswordManager
         /// <param name="e"></param>
         void toolStripButton_Open_Click(object sender, EventArgs e)
         {
-            // Query target file name
+            // Query target file path
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.InitialDirectory = Environment.CurrentDirectory;
+            openFileDialog.Filter = InternalApplicationConfig.OpeningPasswordFileFilter;
+            openFileDialog.FilterIndex = 1;
+            if (openFileDialog.ShowDialog() != DialogResult.OK)
+            {
+                return;
+            }
+            string targetFilePath = openFileDialog.FileName;
 
             // Check the file exits
-
-            // Check the file can be read
+            if (!File.Exists(targetFilePath))
+            {
+                MessageBox.Show(strings.General_FileNotFound, strings.General_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
 
             // Instantiate password file object
-            PasswordFile f = new PasswordFile(InternalApplicationConfig.DefaultPasswordFilePath);
+            PasswordFile f = new PasswordFile(targetFilePath);
 
+            // Query master password for target password file
+            FormInputMasterPassword form = new FormInputMasterPassword(PasswordFile.ChallengeDoubleHashedMasterPassword, targetFilePath);
+            form.SetupLanguage(Thread.CurrentThread.CurrentUICulture.Name);
+            if (form.ShowDialog() != DialogResult.OK)
+            {
+                return;
+            }
+            byte[] passwordHash = form.GetMasterPasswordHash();
+
+            // Load password file
             try
             {
                 // Load password file
-                this.PasswordData = f.ReadPasswordFromFile(this.MasterPasswordHash);
+                this.PasswordData = f.ReadPasswordFromFile(passwordHash);
 
                 // Reconstruct treeview and listview
                 this.InitializeTreeStructure(this.PasswordData.Containers, this.PasswordData.Indexer);
                 this.listView_PasswordItems.Invalidate();
 
-                // Remember the loaded file name
-                //this.CurrentPasswordFilePath = 
+                // Remember the loaded file name and input password hash for saving
+                this.CurrentPasswordFilePath = targetFilePath;
+                this.MasterPasswordHash = passwordHash;
+
+                MessageBox.Show(strings.General_OpenFile_Success_Text, strings.General_OpenFile_Success_Caption, MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
-            catch (FileNotFoundException) { } // This statement shall not be used because file existence check was already done
             catch (NoCorrespondingFilterFoundException ex)
             {
                 string msgText = String.Format(strings.General_ParseFilterFailed_Text, ex.Message);

@@ -190,17 +190,32 @@ namespace PasswordManager
         }
 
         /// <summary>
-        /// Change UI language appearance
+        /// Change UI language appearance by specified locale string
         /// </summary>
         /// <param name="locale"></param>
-        private void SetupLanguage(string locale)
+        public void SetupLanguage(string locale)
         {
-            Thread.CurrentThread.CurrentUICulture = CultureInfo.GetCultureInfo(locale);
+            if (!String.IsNullOrEmpty(locale))
+            {
+                Thread.CurrentThread.CurrentUICulture = CultureInfo.GetCultureInfo(locale);
+            }
 
             this.label_InputMasterPassword.Text = strings.Form_InputMasterPassword_Caption;
             this.button_InputMasterPassword_OK.Text = strings.Form_InputMasterPassword_OK;
             this.button_InputMasterPassword_Cancel.Text = strings.Form_InputMasterPassword_Cancel;
             this.Text = strings.Form_InputMasterPassword_Title;
+
+            if (locale == InternalApplicationConfig.LocaleEnUS)
+            {
+                this.comboBox_InputMasterPassword_Language.Text = strings.Form_MenuItem_Language_English;
+                return;
+            }
+
+            if (locale == InternalApplicationConfig.LocaleJaJP)
+            {
+                this.comboBox_InputMasterPassword_Language.Text = strings.Form_MenuItem_Language_Japanese;
+                return;
+            }
         }
     }
 }

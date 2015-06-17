@@ -753,6 +753,24 @@ namespace PasswordManager {
         /// <summary>
         ///   Looks up a localized string similar to Error.
         /// </summary>
+        internal static string General_Error {
+            get {
+                return ResourceManager.GetString("General_Error", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to File was not found..
+        /// </summary>
+        internal static string General_FileNotFound {
+            get {
+                return ResourceManager.GetString("General_FileNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Error.
+        /// </summary>
         internal static string General_InvalidMasterPassword_Caption {
             get {
                 return ResourceManager.GetString("General_InvalidMasterPassword_Caption", resourceCulture);
@@ -1026,6 +1044,24 @@ namespace PasswordManager {
         internal static string General_NewPassword_Strength_US {
             get {
                 return ResourceManager.GetString("General_NewPassword_Strength_US", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Success!.
+        /// </summary>
+        internal static string General_OpenFile_Success_Caption {
+            get {
+                return ResourceManager.GetString("General_OpenFile_Success_Caption", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Password file has been successfully loaded..
+        /// </summary>
+        internal static string General_OpenFile_Success_Text {
+            get {
+                return ResourceManager.GetString("General_OpenFile_Success_Text", resourceCulture);
             }
         }
         
