@@ -73,6 +73,7 @@
             this.ToolStripMenuItem_ListViewItem_Edit = new System.Windows.Forms.ToolStripMenuItem();
             this.ToolStripMenuItem_ListViewItem_Move = new System.Windows.Forms.ToolStripMenuItem();
             this.ToolStripMenuItem_ListViewItem_Delete = new System.Windows.Forms.ToolStripMenuItem();
+            this.ToolStripMenuItem_ChangeMasterPassword = new System.Windows.Forms.ToolStripMenuItem();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
@@ -310,7 +311,8 @@
             // ToolStripMenuItem_option
             // 
             this.ToolStripMenuItem_option.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.ToolStripMenuItem_Language});
+            this.ToolStripMenuItem_Language,
+            this.ToolStripMenuItem_ChangeMasterPassword});
             this.ToolStripMenuItem_option.ImageTransparentColor = System.Drawing.Color.Transparent;
             this.ToolStripMenuItem_option.Name = "ToolStripMenuItem_option";
             this.ToolStripMenuItem_option.Size = new System.Drawing.Size(57, 20);
@@ -322,7 +324,7 @@
             this.ToolStripMenuItem_Language_English,
             this.ToolStripMenuItem_Language_Japanese});
             this.ToolStripMenuItem_Language.Name = "ToolStripMenuItem_Language";
-            this.ToolStripMenuItem_Language.Size = new System.Drawing.Size(130, 22);
+            this.ToolStripMenuItem_Language.Size = new System.Drawing.Size(220, 22);
             this.ToolStripMenuItem_Language.Text = "Language";
             // 
             // ToolStripMenuItem_Language_English
@@ -442,6 +444,12 @@
             this.ToolStripMenuItem_ListViewItem_Delete.Size = new System.Drawing.Size(112, 22);
             this.ToolStripMenuItem_ListViewItem_Delete.Text = "Delete";
             // 
+            // ToolStripMenuItem_ChangeMasterPassword
+            // 
+            this.ToolStripMenuItem_ChangeMasterPassword.Name = "ToolStripMenuItem_ChangeMasterPassword";
+            this.ToolStripMenuItem_ChangeMasterPassword.Size = new System.Drawing.Size(220, 22);
+            this.ToolStripMenuItem_ChangeMasterPassword.Text = "Change Master Password";
+            // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -520,6 +528,7 @@
         private System.Windows.Forms.ToolStripMenuItem ToolStripMenuItem_ListViewItem_Delete;
         private System.Windows.Forms.ToolStripButton toolStripButton_ExpandTree;
         private System.Windows.Forms.ToolStripButton toolStripButton_CollapseTree;
+        private System.Windows.Forms.ToolStripMenuItem ToolStripMenuItem_ChangeMasterPassword;
 
 
 

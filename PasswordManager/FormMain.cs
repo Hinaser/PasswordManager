@@ -75,6 +75,7 @@ namespace PasswordManager
             // Menu item click event
             this.ToolStripMenuItem_Language_English.Click += ToolStripMenuItem_Language_English_Click;
             this.ToolStripMenuItem_Language_Japanese.Click += ToolStripMenuItem_Language_Japanese_Click;
+            this.ToolStripMenuItem_ChangeMasterPassword.Click += ToolStripMenuItem_ChangeMasterPassword_Click;
 
             // To change edit menu showing items, judging by last focused control(TreeView or ListView)
             this.ToolStripMenuItem_Edit.MouseDown += ToolStripMenuItem_Edit_MouseDown;
@@ -701,6 +702,27 @@ namespace PasswordManager
                     this.toolStripMenuItem_Edit_Seperator,
                     this.ToolStripMenuItem_Edit_AddPassword
                 });
+            }
+        }
+
+        /// <summary>
+        /// Change master password
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        void ToolStripMenuItem_ChangeMasterPassword_Click(object sender, EventArgs e)
+        {
+            using (FormChangeMasterPassword form = new FormChangeMasterPassword())
+            {
+                DialogResult result = form.ShowDialog();
+                if (result != DialogResult.OK)
+                {
+                    MessageBox.Show(strings.Form_ChangeMasterPassword_NotChanged_Text, strings.Form_ChangeMasterPassword_NotChanged_Caption, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    return;
+                }
+
+                this.MasterPasswordHash = form.GetMasterPasswordHash();
+                MessageBox.Show(strings.Form_ChangeMasterPassword_Success_Text, strings.Form_ChangeMasterPassword_Success_Caption, MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
         #endregion
@@ -1350,6 +1372,7 @@ namespace PasswordManager
             this.ToolStripMenuItem_ListViewItem_Edit.Text = strings.Form_ContextMenu_EditPassword;
             this.ToolStripMenuItem_ListViewItem_Delete.Text = strings.Form_ContextMenu_DeletePassword;
             this.ToolStripMenuItem_ListViewItem_Move.Text = strings.Form_ContextMenu_MovePassword;
+            this.ToolStripMenuItem_ChangeMasterPassword.Text = strings.Form_MenuItem_ChangeMasterPassword;
         }
         #endregion
     }

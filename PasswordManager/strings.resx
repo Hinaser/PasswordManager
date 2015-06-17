@@ -117,6 +117,37 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="Form_ChangeMasterPassword_Cancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="Form_ChangeMasterPassword_Checkbox" xml:space="preserve">
+    <value>Show password</value>
+  </data>
+  <data name="Form_ChangeMasterPassword_Label" xml:space="preserve">
+    <value>Please enter new master password</value>
+  </data>
+  <data name="Form_ChangeMasterPassword_NotChanged_Caption" xml:space="preserve">
+    <value>Action canceled</value>
+  </data>
+  <data name="Form_ChangeMasterPassword_NotChanged_Text" xml:space="preserve">
+    <value>Master password has not been changed.</value>
+  </data>
+  <data name="Form_ChangeMasterPassword_OK" xml:space="preserve">
+    <value>OK</value>
+  </data>
+  <data name="Form_ChangeMasterPassword_RepeatPassword" xml:space="preserve">
+    <value>Repeat same password here</value>
+  </data>
+  <data name="Form_ChangeMasterPassword_Success_Caption" xml:space="preserve">
+    <value>Success!</value>
+  </data>
+  <data name="Form_ChangeMasterPassword_Success_Text" xml:space="preserve">
+    <value>Master password has been successfully changed.
+NOTE: New master password will be applied when file is saved.</value>
+  </data>
+  <data name="Form_ChangeMasterPassword_Title" xml:space="preserve">
+    <value>New Master Password</value>
+  </data>
   <data name="Form_ContextMenu_AddContainer" xml:space="preserve">
     <value>New folder</value>
   </data>
@@ -167,6 +198,9 @@
   </data>
   <data name="Form_MenuItem_About" xml:space="preserve">
     <value>About</value>
+  </data>
+  <data name="Form_MenuItem_ChangeMasterPassword" xml:space="preserve">
+    <value>Change Master Password</value>
   </data>
   <data name="Form_MenuItem_Edit" xml:space="preserve">
     <value>Edit</value>

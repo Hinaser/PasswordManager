@@ -173,6 +173,11 @@ namespace PasswordManager
         {
             string password = this.textBox_InputMasterPassword.Text;
 
+            if (String.IsNullOrEmpty(password))
+            {
+                return;
+            }
+
             fixed (char* p = password)
             {
                 for (int i = 0; i < password.Length; i++)

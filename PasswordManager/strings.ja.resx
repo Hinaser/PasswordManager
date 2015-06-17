@@ -419,4 +419,38 @@
   <data name="Form_InputMasterPassword_Waiting" xml:space="preserve">
     <value>{0}秒後にリトライできます</value>
   </data>
+  <data name="Form_ChangeMasterPassword_Cancel" xml:space="preserve">
+    <value>キャンセル</value>
+  </data>
+  <data name="Form_ChangeMasterPassword_Checkbox" xml:space="preserve">
+    <value>パスワードを表示する</value>
+  </data>
+  <data name="Form_ChangeMasterPassword_Label" xml:space="preserve">
+    <value>新しいマスターパスワードを入力してください</value>
+  </data>
+  <data name="Form_ChangeMasterPassword_NotChanged_Caption" xml:space="preserve">
+    <value>変更がキャンセルされました</value>
+  </data>
+  <data name="Form_ChangeMasterPassword_NotChanged_Text" xml:space="preserve">
+    <value>マスターパスワードは変更されていません。</value>
+  </data>
+  <data name="Form_ChangeMasterPassword_OK" xml:space="preserve">
+    <value>OK</value>
+  </data>
+  <data name="Form_ChangeMasterPassword_RepeatPassword" xml:space="preserve">
+    <value>同じパスワードを入力してください</value>
+  </data>
+  <data name="Form_ChangeMasterPassword_Success_Caption" xml:space="preserve">
+    <value>成功!</value>
+  </data>
+  <data name="Form_ChangeMasterPassword_Success_Text" xml:space="preserve">
+    <value>マスターパスワードが変更されました。
+ファイルを保存して新しいマスターパスワードをファイルに反映してください。</value>
+  </data>
+  <data name="Form_ChangeMasterPassword_Title" xml:space="preserve">
+    <value>新しいマスターパスワード</value>
+  </data>
+  <data name="Form_MenuItem_ChangeMasterPassword" xml:space="preserve">
+    <value>マスターパスワードの変更</value>
+  </data>
 </root>

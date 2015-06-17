@@ -13,6 +13,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Drawing;
+using System.Windows.Forms;
 #endregion
 
 namespace PasswordManager
@@ -23,7 +24,7 @@ namespace PasswordManager
     /// <param name="header">Summary of adjustment result</param>
     /// <param name="text">Adjustment detail</param>
     /// <param name="headerColor">Header color</param>
-    public delegate void ReportComplexityResult(string header, string text, Color headerColor);
+    public delegate void ReportComplexityResult(RichTextBox rich, string header, string text, Color headerColor);
 
     /// <summary>
     /// Adjuster method which validate password text and adjusted character length and returns adjusted character length
@@ -52,6 +53,11 @@ namespace PasswordManager
         private ReportComplexityResult ReportMethod = null;
 
         /// <summary>
+        /// Target rich textbox to report password strength.
+        /// </summary>
+        private RichTextBox Rich = null;
+
+        /// <summary>
         /// This class calls Initialize() method. After Initialize() method is called,
         /// if AdjusterMethods is empty, then the constructer throws an Exception.
         /// </summary>
@@ -73,7 +79,7 @@ namespace PasswordManager
         /// <param name="charLength">Password length (might be adjusted or not)</param>
         /// <param name="reportAction">Reporting method for password complexity validation result</param>
         /// <returns>Adjusted password length</returns>
-        public double GetAdjustedCharLength(string password, double charLength, ReportComplexityResult reportAction)
+        public double GetAdjustedCharLength(RichTextBox rich, string password, double charLength, ReportComplexityResult reportAction)
         {
             // If password text is empty, then do nothing
             if (String.IsNullOrEmpty(password))
@@ -83,6 +89,7 @@ namespace PasswordManager
 
             // Set ReportMethod field in order for adjuster methods to be able to use reporting funtion
             this.ReportMethod = reportAction;
+            this.Rich = rich;
 
             double returnValue = charLength;
 
@@ -122,7 +129,7 @@ namespace PasswordManager
                 return;
             }
 
-            this.ReportMethod(header, text, headerColor);
+            this.ReportMethod(this.Rich, header, text, headerColor);
         }
 
         /// <summary>

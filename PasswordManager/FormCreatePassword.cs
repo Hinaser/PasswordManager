@@ -270,12 +270,12 @@ namespace PasswordManager
             }
 
             // Analyze password class and show on strength report text area
-            PasswordTextClass c = GetPasswordClass(t.Text);
-            this.richTextBox_NewPassword_Strength.AppendText(String.Format(InternalApplicationConfig.PasswordStrengthNoticeFormat, strings.General_NewPassword_Strength_TypePassClass, this.GetPasswordClassText(c)));
+            PasswordTextClass c = FormCreatePassword.GetPasswordClass(t.Text);
+            this.richTextBox_NewPassword_Strength.AppendText(String.Format(InternalApplicationConfig.PasswordStrengthNoticeFormat, strings.General_NewPassword_Strength_TypePassClass, FormCreatePassword.GetPasswordClassText(c)));
 
             // Calculate password strength
             PasswordComplexityValidatorBase validator = new PasswordComplexityValidator();
-            double adjustedPasswordLength = validator.GetAdjustedCharLength(t.Text, t.Text.Length, this.AppendStrengthReport);
+            double adjustedPasswordLength = validator.GetAdjustedCharLength(this.richTextBox_NewPassword_Strength, t.Text, t.Text.Length, FormCreatePassword.AppendStrengthReport);
             double strength = FormCreatePassword.CalculatePasswordStrength(t.Text, adjustedPasswordLength);
             this.richTextBox_NewPassword_Strength.AppendText(String.Format(InternalApplicationConfig.PasswordStrengthNoticeFormat, strings.General_NewPassword_Strength_TypeResult, Math.Round(strength, 2).ToString()));
 
@@ -450,7 +450,7 @@ namespace PasswordManager
         /// </summary>
         /// <param name="c"></param>
         /// <returns></returns>
-        private string GetPasswordClassText(PasswordTextClass c)
+        public static string GetPasswordClassText(PasswordTextClass c)
         {
             switch (c)
             {
@@ -547,26 +547,26 @@ namespace PasswordManager
         /// </summary>
         /// <param name="header"></param>
         /// <param name="text"></param>
-        private void AppendStrengthReport(string header, string text, Color headerColor)
+        public static void AppendStrengthReport(RichTextBox rich, string header, string text, Color headerColor)
         {
             // Save current text length
-            int selectionStart = this.richTextBox_NewPassword_Strength.TextLength;
-            this.richTextBox_NewPassword_Strength.SelectionLength = 0;
+            int selectionStart = rich.TextLength;
+            rich.SelectionLength = 0;
 
             // Add text to form
-            this.richTextBox_NewPassword_Strength.AppendText(
+            rich.AppendText(
                 String.Format(
                 InternalApplicationConfig.PasswordStrengthNoticeFormat,
                 header,
                 text));
 
             // Paint color
-            this.richTextBox_NewPassword_Strength.SelectionStart = selectionStart;
-            this.richTextBox_NewPassword_Strength.SelectionLength = InternalApplicationConfig.PasswordStrengthNoticeHeaderSize;
-            this.richTextBox_NewPassword_Strength.SelectionColor = headerColor;
+            rich.SelectionStart = selectionStart;
+            rich.SelectionLength = InternalApplicationConfig.PasswordStrengthNoticeHeaderSize;
+            rich.SelectionColor = headerColor;
 
             // Deselect in order not to remain color effect
-            this.richTextBox_NewPassword_Strength.DeselectAll();
+            rich.DeselectAll();
         }
         #endregion
 
