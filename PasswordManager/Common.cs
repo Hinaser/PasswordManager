@@ -27,7 +27,7 @@ namespace PasswordManager
         public static string DefaultLocale = LocaleEnUS;
         public static Dictionary<int, string> Locale = new Dictionary<int, string>();
         public static string DefaultPasswordFilePath = Environment.CurrentDirectory + @"\password.dat";
-        public static string DefaultMasterPassword = "password";
+        public static string DefaultMasterPassword = "";
         public static int RootContainerID = 0;
         public static string RootContainerLabel = "All";
         public static string NewUnnamedContainerLabel = "New folder";
@@ -147,7 +147,27 @@ namespace PasswordManager
         /// <returns></returns>
         public static byte[] GetHash(char[] c)
         {
+            if (c == null || c.Length < 1)
+            {
+                c = new char[] { '\0' };
+            }
+
             return InternalApplicationConfig.Hash.ComputeHash(Encoding.Unicode.GetBytes(c));
+        }
+
+        /// <summary>
+        /// Get hash value as byte array
+        /// </summary>
+        /// <param name="b"></param>
+        /// <returns></returns>
+        public static byte[] GetHash(string b)
+        {
+            if (b == null)
+            {
+                b = String.Empty;
+            }
+
+            return Utility.GetHash(b.ToCharArray());
         }
 
         /// <summary>

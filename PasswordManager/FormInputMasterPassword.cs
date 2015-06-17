@@ -151,15 +151,14 @@ namespace PasswordManager
         /// <summary>
         /// Get hash of input master password.
         /// </summary>
-        /// <remarks>Input password string will be sanitized immediately after hash is computed.</remarks>
+        /// <remarks>Blank password is handled properly inside the method.</remarks>
         /// <returns></returns>
         public byte[] GetMasterPasswordHash()
         {
             string password = this.textBox_InputMasterPassword.Text;
-
-            if (String.IsNullOrEmpty(password))
+            if (password == null)
             {
-                return Utility.GetHash(new byte[]{0});
+                password = String.Empty;
             }
 
             byte[] retVal = Utility.GetHash(password.ToCharArray());

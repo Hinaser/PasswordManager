@@ -105,16 +105,45 @@ namespace PasswordManager
             // Try to open password file in the default location
             if (File.Exists(InternalApplicationConfig.DefaultPasswordFilePath))
             {
-                // Ask master password hash
-                // Input password will be sanitised after exiting this using statement by user-defined Dispose() method on FormInputMasterPassword class.
-                DialogResult result;
-                using (FormInputMasterPassword form = new FormInputMasterPassword(PasswordFile.ChallengeDoubleHashedMasterPassword, InternalApplicationConfig.DefaultPasswordFilePath))
+                bool validPasswordEntered = false;
+
+                // When the password file can be opened by default password, go without prompting masterpassword to user.
+                // Expected possible cases are as follows:
+                //   - Default master password is OK
+                //       -> Keep using default master password  as a master password.
+                //   - User input master password is OK
+                //       -> Stored master password hash will be replaced by user input password.
+                //   - User gives up to enter master password
+                //       -> Stored master password hash is kept as default master password.
+                //            In this case, this app do not try to open password file but open new password manager instance on memory.
+                //            Then user can save the instance to new password file. (Existing password file shouldn't be overwritten.)
+                if (PasswordFile.ChallengeDoubleHashedMasterPassword(InternalApplicationConfig.DefaultPasswordFilePath, this.MasterPasswordHash))
                 {
-                    result = form.ShowDialog();
-                    this.MasterPasswordHash = form.GetMasterPasswordHash();
+                    validPasswordEntered = true;
+                }
+                else
+                {
+                    // Ask master password hash
+                    // Input password will be sanitised after exiting this using statement by user-defined Dispose() method on FormInputMasterPassword class.
+                    using (FormInputMasterPassword form = new FormInputMasterPassword(PasswordFile.ChallengeDoubleHashedMasterPassword, InternalApplicationConfig.DefaultPasswordFilePath))
+                    {
+                        DialogResult result = form.ShowDialog();
+
+                        // Only when valid master password has been entered, master password of class member field will be updated.
+                        if (result == DialogResult.OK)
+                        {
+                            this.MasterPasswordHash = form.GetMasterPasswordHash();
+                            validPasswordEntered = true;
+                        }
+                        // Master password of class member field remains default password.
+                        else
+                        {
+                            validPasswordEntered = false;
+                        }
+                    }
                 }
 
-                if (result == DialogResult.OK)
+                if (validPasswordEntered)
                 {
                     try
                     {
