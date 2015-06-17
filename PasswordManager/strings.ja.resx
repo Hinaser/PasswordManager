@@ -393,7 +393,9 @@
     <value>エラー</value>
   </data>
   <data name="General_ParseFilterFailed_Text" xml:space="preserve">
-    <value>未知のデータフィルター {0} が適用されています。データの解析に失敗しました。</value>
+    <value>指定されたファイルからのパスワードデータの読み込みに失敗しました。
+データは認識できない方法で保存されたか、データが壊れています。
+不明なデータタイプ: {0}</value>
   </data>
   <data name="Form_InputMasterPassword_Cancel" xml:space="preserve">
     <value>キャンセル</value>

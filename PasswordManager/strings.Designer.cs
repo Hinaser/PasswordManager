@@ -1039,7 +1039,9 @@ namespace PasswordManager {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Unknown data filter {0} is applied. Failed to parse data..
+        ///   Looks up a localized string similar to Failed to load password data from the file. 
+        ///The data might be saved by unrecognizable way or data is broken.
+        ///Unknown data type: {0}.
         /// </summary>
         internal static string General_ParseFilterFailed_Text {
             get {

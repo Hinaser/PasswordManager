@@ -448,7 +448,9 @@ Your input: {1} characters</value>
     <value>Error</value>
   </data>
   <data name="General_ParseFilterFailed_Text" xml:space="preserve">
-    <value>Unknown data filter {0} is applied. Failed to parse data.</value>
+    <value>Failed to load password data from the file. 
+The data might be saved by unrecognizable way or data is broken.
+Unknown data type: {0}</value>
   </data>
   <data name="Status_Ready" xml:space="preserve">
     <value>Ready</value>

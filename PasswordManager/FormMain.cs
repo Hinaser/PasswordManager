@@ -30,6 +30,7 @@ namespace PasswordManager
         private TreeNode CurrentTreeNode = null;
         private List<string> FilterOrder = new List<string>();
         private byte[] MasterPasswordHash;
+        private string CurrentPasswordFilePath;
         #endregion
 
         #region Constructor
@@ -150,6 +151,7 @@ namespace PasswordManager
                     {
                         PasswordFile f = new PasswordFile(InternalApplicationConfig.DefaultPasswordFilePath);
                         this.PasswordData = f.ReadPasswordFromFile(this.MasterPasswordHash);
+                        this.CurrentPasswordFilePath = InternalApplicationConfig.DefaultPasswordFilePath;
                     }
                     catch (InvalidMasterPasswordException)
                     {
@@ -597,23 +599,32 @@ namespace PasswordManager
         /// <param name="e"></param>
         void toolStripButton_Open_Click(object sender, EventArgs e)
         {
-            /*
-             * PasswordFile f should be used in using statement and also password data should be disposed.
-             */
+            // Query target file name
+
+            // Check the file exits
+
+            // Check the file can be read
+
+            // Instantiate password file object
             PasswordFile f = new PasswordFile(InternalApplicationConfig.DefaultPasswordFilePath);
 
             try
             {
+                // Load password file
                 this.PasswordData = f.ReadPasswordFromFile(this.MasterPasswordHash);
+
+                // Reconstruct treeview and listview
                 this.InitializeTreeStructure(this.PasswordData.Containers, this.PasswordData.Indexer);
                 this.listView_PasswordItems.Invalidate();
+
+                // Remember the loaded file name
+                //this.CurrentPasswordFilePath = 
             }
-            catch (FileNotFoundException)
+            catch (FileNotFoundException) { } // This statement shall not be used because file existence check was already done
+            catch (NoCorrespondingFilterFoundException ex)
             {
-                f.ResetPasswordFile(this.MasterPasswordHash, null);
-                this.PasswordData = f.ReadPasswordFromFile(this.MasterPasswordHash);
-                this.InitializeTreeStructure(this.PasswordData.Containers, this.PasswordData.Indexer);
-                this.listView_PasswordItems.Invalidate();
+                string msgText = String.Format(strings.General_ParseFilterFailed_Text, ex.Message);
+                MessageBox.Show(msgText, strings.General_ParseFilterFailed_Caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             catch (Exception ex)
             {
@@ -628,7 +639,12 @@ namespace PasswordManager
         /// <param name="e"></param>
         void toolStripButton_Save_Click(object sender, EventArgs e)
         {
-            PasswordFile f = new PasswordFile(InternalApplicationConfig.DefaultPasswordFilePath);
+            if (String.IsNullOrEmpty(this.CurrentPasswordFilePath))
+            {
+                this.CurrentPasswordFilePath = InternalApplicationConfig.DefaultPasswordFilePath;
+            }
+
+            PasswordFile f = new PasswordFile(this.CurrentPasswordFilePath);
             f.SetFilterOrder(this.FilterOrder);
 
             f.WritePasswordToFile(this.MasterPasswordHash, this.PasswordData);
