@@ -233,7 +233,7 @@ namespace PasswordManager {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Wrong password..
+        ///   Looks up a localized string similar to SORRY BUT THIS IS WRONG PASSWORD.
         /// </summary>
         internal static string Form_InputMasterPassword_InvalidPassword {
             get {

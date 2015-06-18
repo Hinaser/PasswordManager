@@ -116,6 +116,7 @@ namespace PasswordManager
 
             // If password is not OK, sleep a bit time and re-enable buttons
             this.label_InputMasterPassword.Text = strings.Form_InputMasterPassword_InvalidPassword;
+            this.label_InputMasterPassword.ForeColor = Color.Red;
             this.button_InputMasterPassword_OK.Text = String.Format(strings.Form_InputMasterPassword_Waiting, this.SleepMiliSecond/1000);
             this.button_InputMasterPassword_OK.Enabled = false;
             this.timer.Start();
@@ -143,6 +144,7 @@ namespace PasswordManager
             this.button_InputMasterPassword_OK.Text = strings.Form_InputMasterPassword_OK;
             this.button_InputMasterPassword_OK.Enabled = true;
             this.label_InputMasterPassword.Text = strings.Form_InputMasterPassword_Caption;
+            this.label_InputMasterPassword.ForeColor = Color.Black;
             this.ElapsedMiliSecond = 0;
             this.SleepMiliSecond = this.SleepMiliSecond * 2;
             this.timer.Stop();

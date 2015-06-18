@@ -176,7 +176,7 @@ NOTE: New master password will be applied when file is saved.</value>
     <value>Please input master password.</value>
   </data>
   <data name="Form_InputMasterPassword_InvalidPassword" xml:space="preserve">
-    <value>Wrong password.</value>
+    <value>SORRY BUT THIS IS WRONG PASSWORD</value>
   </data>
   <data name="Form_InputMasterPassword_OK" xml:space="preserve">
     <value>OK</value>

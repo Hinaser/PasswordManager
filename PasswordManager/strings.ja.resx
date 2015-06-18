@@ -413,7 +413,7 @@
     <value>マスターパスワードが間違っています。</value>
   </data>
   <data name="Form_InputMasterPassword_InvalidPassword" xml:space="preserve">
-    <value>パスワードが間違っています。</value>
+    <value>パスワードが違います！</value>
   </data>
   <data name="Form_InputMasterPassword_Title" xml:space="preserve">
     <value>マスターパスワード</value>
