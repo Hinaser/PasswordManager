@@ -602,6 +602,24 @@ namespace PasswordManager {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to {0} is loaded.
+        /// </summary>
+        internal static string Form_StatusStrip_FileLoaded {
+            get {
+                return ResourceManager.GetString("Form_StatusStrip_FileLoaded", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No file is loaded.
+        /// </summary>
+        internal static string Form_StatusStrip_NoFileLoaded {
+            get {
+                return ResourceManager.GetString("Form_StatusStrip_NoFileLoaded", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Collapse all nodes.
         /// </summary>
         internal static string Form_Tooltip_CollapseTree {
@@ -647,7 +665,7 @@ namespace PasswordManager {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Caption: {0} has been copied into clipboard.
+        ///   Looks up a localized string similar to Copied Caption {0}.
         /// </summary>
         internal static string General_Copy_Caption {
             get {
@@ -656,7 +674,7 @@ namespace PasswordManager {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to ID: {0} has been copied into the clipboard.
+        ///   Looks up a localized string similar to Copied ID for {0}.
         /// </summary>
         internal static string General_Copy_ID {
             get {
@@ -665,7 +683,7 @@ namespace PasswordManager {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Password: {0} has been copied into the clipboard.
+        ///   Looks up a localized string similar to Copied Password for {0}.
         /// </summary>
         internal static string General_Copy_Password {
             get {

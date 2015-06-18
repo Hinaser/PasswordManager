@@ -374,13 +374,13 @@
 {0}</value>
   </data>
   <data name="General_Copy_ID" xml:space="preserve">
-    <value>ID: {0} がクリップボードにコピーされました</value>
+    <value>IDがコピーされました: {0}</value>
   </data>
   <data name="General_Copy_Password" xml:space="preserve">
-    <value>パスワード: {0} がクリップボードにコピーされました</value>
+    <value>パスワードがコピーされました: {0}</value>
   </data>
   <data name="General_Copy_Caption" xml:space="preserve">
-    <value>タイトル: {0} がクリップボードにコピーされました</value>
+    <value>タイトルがコピーされました: {0}</value>
   </data>
   <data name="General_EditLabel_GoOverMaxLength_Caption" xml:space="preserve">
     <value>エラー</value>
@@ -466,5 +466,11 @@
   </data>
   <data name="General_OpenFile_Success_Text" xml:space="preserve">
     <value>パスワードファイルの読み込みに成功しました。</value>
+  </data>
+  <data name="Form_StatusStrip_FileLoaded" xml:space="preserve">
+    <value>{0} が読み込まれています</value>
+  </data>
+  <data name="Form_StatusStrip_NoFileLoaded" xml:space="preserve">
+    <value>ファイルが読み込まれていません</value>
   </data>
 </root>

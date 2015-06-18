@@ -150,8 +150,11 @@ namespace PasswordManager
                 {
                     try
                     {
+                        // Try to parse specified password file
                         PasswordFile f = new PasswordFile(InternalApplicationConfig.DefaultPasswordFilePath);
                         this.PasswordData = f.ReadPasswordFromFile(this.MasterPasswordHash);
+
+                        // Set password file information
                         this.CurrentPasswordFilePath = InternalApplicationConfig.DefaultPasswordFilePath;
                     }
                     catch (InvalidMasterPasswordException)
@@ -173,6 +176,7 @@ namespace PasswordManager
             this.InitializeTreeStructure(this.PasswordData.Containers, this.PasswordData.Indexer);
             this.treeView_Folders.Invalidate();
             this.listView_PasswordItems.Invalidate();
+            this.SetFileLoadStatusLabel();
         }
         #endregion
 
@@ -571,7 +575,7 @@ namespace PasswordManager
                     Clipboard.SetDataObject(record.GetID());
 
                     // Notify status bar
-                    this.toolStripStatusLabel1.Text = String.Format(strings.General_Copy_ID, record.GetID());
+                    this.toolStripStatusLabel1.Text = String.Format(strings.General_Copy_ID, record.GetCaption());
 
                     return;
                 }
@@ -582,7 +586,7 @@ namespace PasswordManager
                     Clipboard.SetDataObject(record.GetPassword());
 
                     // Notify status bar
-                    this.toolStripStatusLabel1.Text = String.Format(strings.General_Copy_Password, record.GetPassword());
+                    this.toolStripStatusLabel1.Text = String.Format(strings.General_Copy_Password, record.GetCaption());
 
                     return;
                 }
@@ -667,6 +671,9 @@ namespace PasswordManager
             {
                 MessageBox.Show(ex.Message);
             }
+
+            // Update file load status label
+            this.SetFileLoadStatusLabel();
         }
 
         /// <summary>
@@ -1429,6 +1436,24 @@ namespace PasswordManager
             this.ToolStripMenuItem_ListViewItem_Delete.Text = strings.Form_ContextMenu_DeletePassword;
             this.ToolStripMenuItem_ListViewItem_Move.Text = strings.Form_ContextMenu_MovePassword;
             this.ToolStripMenuItem_ChangeMasterPassword.Text = strings.Form_MenuItem_ChangeMasterPassword;
+
+            this.SetFileLoadStatusLabel();
+        }
+
+        /// <summary>
+        /// Set file load status text to status strip
+        /// </summary>
+        public void SetFileLoadStatusLabel()
+        {
+            if (String.IsNullOrEmpty(this.CurrentPasswordFilePath))
+            {
+                this.toolStripStatusLabel_FileOpened.Text = strings.Form_StatusStrip_NoFileLoaded;
+            }
+            else
+            {
+                string shortPath = Utility.GetShorterText(this.CurrentPasswordFilePath, InternalApplicationConfig.MaxLoadedFileStatusTextLen);
+                this.toolStripStatusLabel_FileOpened.Text = String.Format(strings.Form_StatusStrip_FileLoaded, shortPath);
+            }
         }
         #endregion
     }

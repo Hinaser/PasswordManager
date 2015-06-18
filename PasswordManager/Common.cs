@@ -60,6 +60,7 @@ namespace PasswordManager
         public static int InitialWaitMiliSecondsWhenPasswordIsInvalid = 1000;
         public static int RetryTickIntervalMiliSec = 200;
         public static string OpeningPasswordFileFilter = "Data files (*.dat)|*.dat|All files (*.*)|*.*";
+        public static int MaxLoadedFileStatusTextLen = 40;
     }
 
     public static class Utility
@@ -253,6 +254,57 @@ namespace PasswordManager
             }
 
             return new String(text, 0, positionFirstNUL);
+        }
+
+        /// <summary>
+        /// Get shortened text for specified text and maximum length.
+        /// </summary>
+        /// <param name="text"></param>
+        /// <param name="maxLen"></param>
+        /// <example>
+        /// "C:\test1\test2\test3\test4\test5\somefile.txt" can be "C:\test1\~\somefile.txt"
+        /// </example>
+        /// <returns></returns>
+        public static string GetShorterText(string text, int maxLen, string replacer = null)
+        {
+            const string replacerDefault = "...";
+            if (String.IsNullOrEmpty(replacer))
+            {
+                replacer = replacerDefault;
+            }
+
+            if (text.Length <= maxLen || text.Length < replacer.Length + 2 || maxLen < replacer.Length + 2) // +2 represents head char(+1) and tail char(+1)
+            {
+                return text;
+            }
+
+            // Pick up just a center index of maxLen value.
+            int replacePosition = (maxLen - 1 - (replacer.Length - 1)) / 2;
+
+            StringBuilder retVal = new StringBuilder();
+            StringBuilder head = new StringBuilder();
+            StringBuilder tail = new StringBuilder();
+            for (int i = 0; i < replacePosition; i++)
+            {
+                head.Append(text[i]);
+                tail.Append(text[text.Length - replacePosition + (i +1) - 1]); // when i = replacePosition -1, this is tail.Append(text[text.Length - 1]);
+            }
+
+            if ((maxLen - replacer.Length) % 2 != 0)
+            {
+                return retVal
+                    .Append(head.ToString())
+                    .Append(replacer)
+                    .Append(text[text.Length - replacePosition - 1])
+                    .Append(tail.ToString())
+                    .ToString();
+            }
+
+            return retVal
+                .Append(head.ToString())
+                .Append(replacer)
+                .Append(tail.ToString())
+                .ToString(); ;
         }
     }
 

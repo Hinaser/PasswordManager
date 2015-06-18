@@ -298,6 +298,12 @@ NOTE: New master password will be applied when file is saved.</value>
   <data name="Form_NewPassword_WndTitle" xml:space="preserve">
     <value>Create New Password</value>
   </data>
+  <data name="Form_StatusStrip_FileLoaded" xml:space="preserve">
+    <value>{0} is loaded</value>
+  </data>
+  <data name="Form_StatusStrip_NoFileLoaded" xml:space="preserve">
+    <value>No file is loaded</value>
+  </data>
   <data name="Form_Tooltip_CollapseTree" xml:space="preserve">
     <value>Collapse all nodes</value>
   </data>
@@ -314,13 +320,13 @@ NOTE: New master password will be applied when file is saved.</value>
     <value>Update password</value>
   </data>
   <data name="General_Copy_Caption" xml:space="preserve">
-    <value>Caption: {0} has been copied into clipboard</value>
+    <value>Copied Caption {0}</value>
   </data>
   <data name="General_Copy_ID" xml:space="preserve">
-    <value>ID: {0} has been copied into the clipboard</value>
+    <value>Copied ID for {0}</value>
   </data>
   <data name="General_Copy_Password" xml:space="preserve">
-    <value>Password: {0} has been copied into the clipboard</value>
+    <value>Copied Password for {0}</value>
   </data>
   <data name="General_DeleteContainer_CannotDeleteRoot_Caption" xml:space="preserve">
     <value>Error</value>
