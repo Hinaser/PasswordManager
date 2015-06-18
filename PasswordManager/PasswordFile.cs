@@ -105,7 +105,7 @@ namespace PasswordManager
         /// </summary>
         /// <param name="filePath"></param>
         /// <returns></returns>
-        public static bool ChallengeDoubleHashedMasterPassword(string filePath, byte[] challengingPasswordHash)
+        public static bool ChallengeHashedMasterPassword(string filePath, byte[] challengingPasswordHash)
         {
             // When password file does not exist, throw an exception.
             if (!File.Exists(filePath))

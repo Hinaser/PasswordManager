@@ -119,7 +119,7 @@ namespace PasswordManager
                 //       -> Stored master password hash is kept as default master password.
                 //            In this case, this app do not try to open password file but open new password manager instance on memory.
                 //            Then user can save the instance to new password file. (Existing password file shouldn't be overwritten.)
-                if (PasswordFile.ChallengeDoubleHashedMasterPassword(InternalApplicationConfig.DefaultPasswordFilePath, this.MasterPasswordHash))
+                if (PasswordFile.ChallengeHashedMasterPassword(InternalApplicationConfig.DefaultPasswordFilePath, this.MasterPasswordHash))
                 {
                     validPasswordEntered = true;
                 }
@@ -127,7 +127,7 @@ namespace PasswordManager
                 {
                     // Ask master password hash
                     // Input password will be sanitised after exiting this using statement by user-defined Dispose() method on FormInputMasterPassword class.
-                    using (FormInputMasterPassword form = new FormInputMasterPassword(PasswordFile.ChallengeDoubleHashedMasterPassword, InternalApplicationConfig.DefaultPasswordFilePath))
+                    using (FormInputMasterPassword form = new FormInputMasterPassword(PasswordFile.ChallengeHashedMasterPassword, InternalApplicationConfig.DefaultPasswordFilePath))
                     {
                         form.StartPosition = FormStartPosition.CenterScreen;
                         DialogResult result = form.ShowDialog();
@@ -621,17 +621,25 @@ namespace PasswordManager
             // Instantiate password file object
             PasswordFile f = new PasswordFile(targetFilePath);
 
-            // Query master password for target password file
-            byte[] passwordHash;
-            using (FormInputMasterPassword form = new FormInputMasterPassword(PasswordFile.ChallengeDoubleHashedMasterPassword, targetFilePath))
+            // Initialize master password hash
+            byte[] passwordHash = Utility.GetHash(InternalApplicationConfig.DefaultMasterPassword);
+
+            // Try default master password once.
+            // When default master password is used to target password file,
+            // user do not need to enter master password by itself.
+            if (!PasswordFile.ChallengeHashedMasterPassword(targetFilePath, passwordHash))
             {
-                form.StartPosition = FormStartPosition.CenterParent;
-                form.SetupLanguage(Thread.CurrentThread.CurrentUICulture.Name);
-                if (form.ShowDialog() != DialogResult.OK)
+                // Query master password for target password file
+                using (FormInputMasterPassword form = new FormInputMasterPassword(PasswordFile.ChallengeHashedMasterPassword, targetFilePath))
                 {
-                    return;
+                    form.StartPosition = FormStartPosition.CenterParent;
+                    form.SetupLanguage(Thread.CurrentThread.CurrentUICulture.Name);
+                    if (form.ShowDialog() != DialogResult.OK)
+                    {
+                        return;
+                    }
+                    passwordHash = form.GetMasterPasswordHash();
                 }
-                passwordHash = form.GetMasterPasswordHash();
             }
 
             // Load password file
