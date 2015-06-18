@@ -61,6 +61,7 @@ namespace PasswordManager
         public static int RetryTickIntervalMiliSec = 200;
         public static string OpeningPasswordFileFilter = "Data files (*.dat)|*.dat|All files (*.*)|*.*";
         public static int MaxLoadedFileStatusTextLen = 40;
+        public static int MaxPasswordLabelStatusTextLen = 10;
     }
 
     public static class Utility
@@ -257,15 +258,16 @@ namespace PasswordManager
         }
 
         /// <summary>
-        /// Get shortened text for specified text and maximum length.
+        /// Get shortened text for specified text and maximum length. Midst text will be replaced by short word (replacer).
         /// </summary>
         /// <param name="text"></param>
         /// <param name="maxLen"></param>
+        /// <param name="replacer"></param>
         /// <example>
         /// "C:\test1\test2\test3\test4\test5\somefile.txt" can be "C:\test1\~\somefile.txt"
         /// </example>
         /// <returns></returns>
-        public static string GetShorterText(string text, int maxLen, string replacer = null)
+        public static string GetShorterTextMiddle(string text, int maxLen, string replacer = null)
         {
             const string replacerDefault = "...";
             if (String.IsNullOrEmpty(replacer))
@@ -304,6 +306,42 @@ namespace PasswordManager
                 .Append(head.ToString())
                 .Append(replacer)
                 .Append(tail.ToString())
+                .ToString(); ;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="text"></param>
+        /// <param name="maxLen"></param>
+        /// <param name="replacer"></param>
+        /// <returns></returns>
+        public static string GetShorterTextRight(string text, int maxLen, string replacer = null)
+        {
+            const string replacerDefault = "...";
+            if (String.IsNullOrEmpty(replacer))
+            {
+                replacer = replacerDefault;
+            }
+
+            if (text.Length <= maxLen || text.Length < replacer.Length + 1 || maxLen < replacer.Length + 1) // +1 represents original head char(+1)
+            {
+                return text;
+            }
+
+            // Pick up just a center index of maxLen value.
+            int replacePosition = (maxLen - 1 - (replacer.Length - 1));
+
+            StringBuilder retVal = new StringBuilder();
+            StringBuilder head = new StringBuilder();
+            for (int i = 0; i < replacePosition; i++)
+            {
+                head.Append(text[i]);
+            }
+
+            return retVal
+                .Append(head.ToString())
+                .Append(replacer)
                 .ToString(); ;
         }
     }

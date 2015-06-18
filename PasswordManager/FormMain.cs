@@ -564,7 +564,8 @@ namespace PasswordManager
                     Clipboard.SetDataObject(record.GetCaption());
 
                     // Notify status bar
-                    this.toolStripStatusLabel1.Text = String.Format(strings.General_Copy_Caption, record.GetCaption());
+                    string shortText = Utility.GetShorterTextRight(record.GetCaption(), InternalApplicationConfig.MaxPasswordLabelStatusTextLen);
+                    this.toolStripStatusLabel1.Text = String.Format(strings.General_Copy_Caption, shortText);
 
                     return;
                 }
@@ -575,7 +576,8 @@ namespace PasswordManager
                     Clipboard.SetDataObject(record.GetID());
 
                     // Notify status bar
-                    this.toolStripStatusLabel1.Text = String.Format(strings.General_Copy_ID, record.GetCaption());
+                    string shortText = Utility.GetShorterTextRight(record.GetCaption(), InternalApplicationConfig.MaxPasswordLabelStatusTextLen);
+                    this.toolStripStatusLabel1.Text = String.Format(strings.General_Copy_ID, shortText);
 
                     return;
                 }
@@ -586,7 +588,8 @@ namespace PasswordManager
                     Clipboard.SetDataObject(record.GetPassword());
 
                     // Notify status bar
-                    this.toolStripStatusLabel1.Text = String.Format(strings.General_Copy_Password, record.GetCaption());
+                    string shortText = Utility.GetShorterTextRight(record.GetCaption(), InternalApplicationConfig.MaxPasswordLabelStatusTextLen);
+                    this.toolStripStatusLabel1.Text = String.Format(strings.General_Copy_Password, shortText);
 
                     return;
                 }
@@ -1451,7 +1454,7 @@ namespace PasswordManager
             }
             else
             {
-                string shortPath = Utility.GetShorterText(this.CurrentPasswordFilePath, InternalApplicationConfig.MaxLoadedFileStatusTextLen);
+                string shortPath = Utility.GetShorterTextMiddle(this.CurrentPasswordFilePath, InternalApplicationConfig.MaxLoadedFileStatusTextLen);
                 this.toolStripStatusLabel_FileOpened.Text = String.Format(strings.Form_StatusStrip_FileLoaded, shortPath);
             }
         }
