@@ -568,6 +568,52 @@ namespace PasswordManager
             // Deselect in order not to remain color effect
             rich.DeselectAll();
         }
+
+        /// <summary>
+        /// Sanitize ID/Password text data from form instance.
+        /// </summary>
+        public unsafe void SanitizePasswordInfo()
+        {
+            string caption = this.textBox_NewPassword_Caption.Text;
+            string id = this.textBox_NewPassword_ID.Text;
+            string password = this.textBox_NewPassword_Password.Text;
+
+            if (!String.IsNullOrEmpty(caption))
+            {
+                fixed (char* p = caption)
+                {
+                    for (int i = 0; i < caption.Length; i++)
+                    {
+                        p[i] = '\0';
+                    }
+                }
+            }
+            this.textBox_NewPassword_Caption.Text = String.Empty;
+
+            if (!String.IsNullOrEmpty(id))
+            {
+                fixed (char* p = id)
+                {
+                    for (int i = 0; i < id.Length; i++)
+                    {
+                        p[i] = '\0';
+                    }
+                }
+            }
+            this.textBox_NewPassword_ID.Text = String.Empty;
+
+            if (!String.IsNullOrEmpty(password))
+            {
+                fixed (char* p = password)
+                {
+                    for (int i = 0; i < password.Length; i++)
+                    {
+                        p[i] = '\0';
+                    }
+                }
+            }
+            this.textBox_NewPassword_Password.Text = String.Empty;
+        }
         #endregion
 
         #region Setup language

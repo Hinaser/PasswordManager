@@ -303,25 +303,27 @@ namespace PasswordManager
             }
 
             // Create form instance
-            FormCreatePassword form = new FormCreatePassword();
-            form.StartPosition = FormStartPosition.Manual;
-            form.Location = this.Location;
-            form.Text = strings.Form_UpdatePassword_Title;
-
-            // Set current password record values
-            form.SetPasswordData(record);
-
-            // Save caption string for it is cleared by unknown reason
-            string caption = String.Copy(record.GetCaption());
-
-            // Activate dialog
-            if (form.ShowDialog() != DialogResult.OK)
+            string caption;
+            using (FormCreatePassword form = new FormCreatePassword())
             {
-                return;
-            }
+                form.StartPosition = FormStartPosition.Manual;
+                form.Location = this.Location;
+                form.Text = strings.Form_UpdatePassword_Title;
 
-            //record = form.GetPassword(); // For C#, this would be redundant because all object arguments are passed by reference
-            form.Dispose();
+                // Pass current password record reference
+                form.SetPasswordData(record);
+
+                // Save caption string for it is cleared by unknown reason
+                caption = String.Copy(record.GetCaption());
+
+                // Activate dialog
+                if (form.ShowDialog() != DialogResult.OK)
+                {
+                    return;
+                }
+
+                //record = form.GetPassword(); // For C#, this would be redundant because all object arguments are passed by reference
+            }
 
             // If caption is empty, recover saved caption text and exit
             if (String.IsNullOrEmpty(record.GetCaption()))
@@ -621,13 +623,16 @@ namespace PasswordManager
             PasswordFile f = new PasswordFile(targetFilePath);
 
             // Query master password for target password file
-            FormInputMasterPassword form = new FormInputMasterPassword(PasswordFile.ChallengeDoubleHashedMasterPassword, targetFilePath);
-            form.SetupLanguage(Thread.CurrentThread.CurrentUICulture.Name);
-            if (form.ShowDialog() != DialogResult.OK)
+            byte[] passwordHash;
+            using (FormInputMasterPassword form = new FormInputMasterPassword(PasswordFile.ChallengeDoubleHashedMasterPassword, targetFilePath))
             {
-                return;
+                form.SetupLanguage(Thread.CurrentThread.CurrentUICulture.Name);
+                if (form.ShowDialog() != DialogResult.OK)
+                {
+                    return;
+                }
+                passwordHash = form.GetMasterPasswordHash();
             }
-            byte[] passwordHash = form.GetMasterPasswordHash();
 
             // Load password file
             try
@@ -874,16 +879,18 @@ namespace PasswordManager
                 return;
             }
 
-            FormCreatePassword form = new FormCreatePassword();
-            form.StartPosition = FormStartPosition.Manual;
-            form.Location = this.Location;
-            if (form.ShowDialog() != DialogResult.OK)
+            PasswordRecord record = null;
+            using (FormCreatePassword form = new FormCreatePassword())
             {
-                return;
-            }
+                form.StartPosition = FormStartPosition.Manual;
+                form.Location = this.Location;
+                if (form.ShowDialog() != DialogResult.OK)
+                {
+                    return;
+                }
 
-            PasswordRecord record = form.GetPassword();
-            form.Dispose();
+                record = form.GetPassword();
+            }
 
             // If caption is empty, do nothing
             if (record == null || String.IsNullOrEmpty(record.GetCaption()))
