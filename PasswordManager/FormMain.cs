@@ -129,6 +129,7 @@ namespace PasswordManager
                     // Input password will be sanitised after exiting this using statement by user-defined Dispose() method on FormInputMasterPassword class.
                     using (FormInputMasterPassword form = new FormInputMasterPassword(PasswordFile.ChallengeDoubleHashedMasterPassword, InternalApplicationConfig.DefaultPasswordFilePath))
                     {
+                        form.StartPosition = FormStartPosition.CenterScreen;
                         DialogResult result = form.ShowDialog();
 
                         // Only when valid master password has been entered, master password of class member field will be updated.
@@ -306,8 +307,7 @@ namespace PasswordManager
             string caption;
             using (FormCreatePassword form = new FormCreatePassword())
             {
-                form.StartPosition = FormStartPosition.Manual;
-                form.Location = this.Location;
+                form.StartPosition = FormStartPosition.CenterParent;
                 form.Text = strings.Form_UpdatePassword_Title;
 
                 // Pass current password record reference
@@ -356,8 +356,7 @@ namespace PasswordManager
             }
 
             FormMovePassword form = new FormMovePassword(this.PasswordData.Containers, this.PasswordData.Indexer);
-            form.StartPosition = FormStartPosition.Manual;
-            form.Location = this.Location;
+            form.StartPosition = FormStartPosition.CenterParent;
 
             // Show dialog. When result is not OK, then exit
             if (form.ShowDialog() != DialogResult.OK)
@@ -626,6 +625,7 @@ namespace PasswordManager
             byte[] passwordHash;
             using (FormInputMasterPassword form = new FormInputMasterPassword(PasswordFile.ChallengeDoubleHashedMasterPassword, targetFilePath))
             {
+                form.StartPosition = FormStartPosition.CenterParent;
                 form.SetupLanguage(Thread.CurrentThread.CurrentUICulture.Name);
                 if (form.ShowDialog() != DialogResult.OK)
                 {
@@ -759,6 +759,8 @@ namespace PasswordManager
         {
             using (FormChangeMasterPassword form = new FormChangeMasterPassword())
             {
+                form.StartPosition = FormStartPosition.CenterParent;
+
                 DialogResult result = form.ShowDialog();
                 if (result != DialogResult.OK)
                 {
@@ -882,8 +884,7 @@ namespace PasswordManager
             PasswordRecord record = null;
             using (FormCreatePassword form = new FormCreatePassword())
             {
-                form.StartPosition = FormStartPosition.Manual;
-                form.Location = this.Location;
+                form.StartPosition = FormStartPosition.CenterParent;
                 if (form.ShowDialog() != DialogResult.OK)
                 {
                     return;
