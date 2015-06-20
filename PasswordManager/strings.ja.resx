@@ -473,4 +473,10 @@
   <data name="Form_StatusStrip_NoFileLoaded" xml:space="preserve">
     <value>ファイルが読み込まれていません</value>
   </data>
+  <data name="General_MasterPassword_Empty_Caption" xml:space="preserve">
+    <value>空のマスターパスワードが入力されました</value>
+  </data>
+  <data name="General_MasterPassword_Empty_Text" xml:space="preserve">
+    <value>マスターパスワードによってファイルを保護することができなくなりますが、本当によろしいでしょうか？</value>
+  </data>
 </root>

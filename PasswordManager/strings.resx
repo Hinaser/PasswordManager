@@ -369,6 +369,12 @@ Your input: {1} characters</value>
   <data name="General_InvalidMasterPassword_Text" xml:space="preserve">
     <value>Master password you entered is not correct.</value>
   </data>
+  <data name="General_MasterPassword_Empty_Caption" xml:space="preserve">
+    <value>You entered blank master password.</value>
+  </data>
+  <data name="General_MasterPassword_Empty_Text" xml:space="preserve">
+    <value>This makes password file not be protected by master password. Are you sure for this?</value>
+  </data>
   <data name="General_MovePassword_Fail_Caption" xml:space="preserve">
     <value>Warning</value>
   </data>

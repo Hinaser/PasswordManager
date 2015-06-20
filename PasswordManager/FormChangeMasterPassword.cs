@@ -141,6 +141,15 @@ namespace PasswordManager
                 return;
             }
 
+            // If specified master password is empty, pop up an alert dialog.
+            if (String.IsNullOrEmpty(this.textBox_ChangeMasterPassword_1.Text))
+            {
+                if (MessageBox.Show(strings.General_MasterPassword_Empty_Text, strings.General_MasterPassword_Empty_Caption, MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) != DialogResult.OK)
+                {
+                    return;
+                }
+            }
+
             this.MasterPasswordHash = Utility.GetHash(this.textBox_ChangeMasterPassword_1.Text);
             this.SanitizeInputPassword();
             this.DialogResult = DialogResult.OK;
