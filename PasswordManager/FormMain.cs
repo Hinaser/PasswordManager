@@ -1249,17 +1249,17 @@ namespace PasswordManager
         /// <param name="e"></param>
         void FormMain_KeyDown(object sender, KeyEventArgs e)
         {
+            // Ctrl+Shift+S
+            if (e.KeyCode == Keys.S && ((Control.ModifierKeys & Keys.Control) != 0) && ((Control.ModifierKeys & Keys.Shift) != 0))
+            {
+                this.SaveNewFile();
+                return;
+            }
+
             // Ctrl+S
             if (e.KeyCode == Keys.S && ((Control.ModifierKeys & Keys.Control) != 0))
             {
                 this.OverwriteFile();
-                return;
-            }
-
-            // Ctrl+Shift+S
-            if (e.KeyCode == Keys.S && ((Control.ModifierKeys & Keys.Control & Keys.Shift) != 0))
-            {
-                this.SaveNewFile();
                 return;
             }
         }
