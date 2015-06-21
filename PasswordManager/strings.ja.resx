@@ -482,6 +482,9 @@
   <data name="Form_MenuItem_File_SaveAs" xml:space="preserve">
     <value>名前をつけて保存</value>
   </data>
+  <data name="Form_StatusStrip_FileSaved" xml:space="preserve">
+    <value>{0}に保存されました。</value>
+  </data>
   <data name="General_DirNotFound" xml:space="preserve">
     <value>ディレクトリが見つかりませんでした。</value>
   </data>
