@@ -408,6 +408,7 @@
             this.toolStripStatusLabel_FileOpened});
             this.statusStrip_Main.Location = new System.Drawing.Point(0, 374);
             this.statusStrip_Main.Name = "statusStrip_Main";
+            this.statusStrip_Main.ShowItemToolTips = true;
             this.statusStrip_Main.Size = new System.Drawing.Size(619, 24);
             this.statusStrip_Main.TabIndex = 4;
             this.statusStrip_Main.Text = "statusStrip1";
@@ -420,6 +421,7 @@
             // 
             // toolStripStatusLabel_FileOpened
             // 
+            this.toolStripStatusLabel_FileOpened.AutoToolTip = true;
             this.toolStripStatusLabel_FileOpened.BorderSides = System.Windows.Forms.ToolStripStatusLabelBorderSides.Left;
             this.toolStripStatusLabel_FileOpened.BorderStyle = System.Windows.Forms.Border3DStyle.Bump;
             this.toolStripStatusLabel_FileOpened.Name = "toolStripStatusLabel_FileOpened";

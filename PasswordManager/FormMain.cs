@@ -1451,11 +1451,13 @@ namespace PasswordManager
             if (String.IsNullOrEmpty(this.CurrentPasswordFilePath))
             {
                 this.toolStripStatusLabel_FileOpened.Text = strings.Form_StatusStrip_NoFileLoaded;
+                this.toolStripStatusLabel_FileOpened.ToolTipText = String.Empty;
             }
             else
             {
                 string shortPath = Utility.GetShorterTextMiddle(this.CurrentPasswordFilePath, InternalApplicationConfig.MaxLoadedFileStatusTextLen);
                 this.toolStripStatusLabel_FileOpened.Text = String.Format(strings.Form_StatusStrip_FileLoaded, shortPath);
+                this.toolStripStatusLabel_FileOpened.ToolTipText = this.CurrentPasswordFilePath;
             }
         }
         #endregion
