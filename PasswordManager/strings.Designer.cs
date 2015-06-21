@@ -332,6 +332,15 @@ namespace PasswordManager {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Exit.
+        /// </summary>
+        internal static string Form_MenuItem_File_Exit {
+            get {
+                return ResourceManager.GetString("Form_MenuItem_File_Exit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Open.
         /// </summary>
         internal static string Form_MenuItem_File_Open {

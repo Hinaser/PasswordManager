@@ -55,6 +55,17 @@ namespace PasswordManager
         }
         #endregion
 
+        #region Hash algorithm
+        /// <summary>
+        /// Get hash value representing whole index data
+        /// </summary>
+        /// <returns></returns>
+        public override int GetDataHash()
+        {
+            throw new NotImplementedException();
+        }
+        #endregion
+
         #region Setter method
         /// <summary>
         /// Append container to target container. If appending container already exists in target container, it does nothing but returns false.

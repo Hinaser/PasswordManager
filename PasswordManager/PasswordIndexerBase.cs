@@ -20,6 +20,12 @@ namespace PasswordManager
     public abstract class PasswordIndexerBase
     {
         /// <summary>
+        /// Get hash value calculated from data itself.
+        /// </summary>
+        /// <returns></returns>
+        public abstract int GetDataHash();
+
+        /// <summary>
         /// This might store Password container/record object indexes deleted by indexer method
         /// </summary>
         public class RemovedObjects

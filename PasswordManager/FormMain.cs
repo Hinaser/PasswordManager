@@ -80,6 +80,7 @@ namespace PasswordManager
             this.ToolStripMenuItem_File_Open.Click += ToolStripMenuItem_File_Open_Click;
             this.ToolStripMenuItem_File_SaveAs.Click += ToolStripMenuItem_File_SaveAs_Click;
             this.ToolStripMenuItem_File_Save.Click += ToolStripMenuItem_File_Save_Click;
+            this.ToolStripMenuItem_File_Exit.Click += ToolStripMenuItem_File_Exit_Click;
 
             // To change edit menu showing items, judging by last focused control(TreeView or ListView)
             this.ToolStripMenuItem_Edit.MouseDown += ToolStripMenuItem_Edit_MouseDown;
@@ -748,6 +749,16 @@ namespace PasswordManager
         void ToolStripMenuItem_File_Save_Click(object sender, EventArgs e)
         {
             this.OverwriteFile();
+        }
+
+        /// <summary>
+        /// Exit application
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        void ToolStripMenuItem_File_Exit_Click(object sender, EventArgs e)
+        {
+            this.TryToCloseApplication(); // Try to close application cleanly.
         }
         #endregion
 
@@ -1545,6 +1556,14 @@ namespace PasswordManager
             // Update file load status label
             this.SetFileLoadStatusLabel();
         }
+
+        /// <summary>
+        /// Close application if it can
+        /// </summary>
+        private void TryToCloseApplication()
+        {
+            this.Close();
+        }
         #endregion
 
         #region Language setup
@@ -1576,6 +1595,7 @@ namespace PasswordManager
             this.ToolStripMenuItem_File_Open.Text = strings.Form_MenuItem_File_Open;
             this.ToolStripMenuItem_File_Save.Text = strings.Form_MenuItem_File_Save;
             this.ToolStripMenuItem_File_SaveAs.Text = strings.Form_MenuItem_File_SaveAs;
+            this.ToolStripMenuItem_File_Exit.Text = strings.Form_MenuItem_File_Exit;
             this.ToolStripMenuItem_Edit.Text = strings.Form_MenuItem_Edit;
             this.ToolStripMenuItem_Edit_AddSubFolder.Text = strings.Form_ContextMenu_AddContainer;
             this.ToolStripMenuItem_Edit_RenameFolder.Text = strings.Form_ContextMenu_RenameContainer;

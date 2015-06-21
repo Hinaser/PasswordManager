@@ -353,5 +353,14 @@ namespace PasswordManager
                 }
             }
         }
+
+        /// <summary>
+        /// Get hash value representing instance data
+        /// </summary>
+        /// <returns></returns>
+        public int GetHashData()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

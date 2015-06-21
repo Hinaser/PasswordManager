@@ -76,6 +76,7 @@
             this.ToolStripMenuItem_ListViewItem_Edit = new System.Windows.Forms.ToolStripMenuItem();
             this.ToolStripMenuItem_ListViewItem_Move = new System.Windows.Forms.ToolStripMenuItem();
             this.ToolStripMenuItem_ListViewItem_Delete = new System.Windows.Forms.ToolStripMenuItem();
+            this.ToolStripMenuItem_File_Exit = new System.Windows.Forms.ToolStripMenuItem();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
@@ -253,7 +254,8 @@
             this.ToolStripMenuItem_File.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.ToolStripMenuItem_File_Open,
             this.ToolStripMenuItem_File_Save,
-            this.ToolStripMenuItem_File_SaveAs});
+            this.ToolStripMenuItem_File_SaveAs,
+            this.ToolStripMenuItem_File_Exit});
             this.ToolStripMenuItem_File.Name = "ToolStripMenuItem_File";
             this.ToolStripMenuItem_File.Size = new System.Drawing.Size(39, 20);
             this.ToolStripMenuItem_File.Text = "File";
@@ -470,6 +472,12 @@
             this.ToolStripMenuItem_ListViewItem_Delete.Size = new System.Drawing.Size(112, 22);
             this.ToolStripMenuItem_ListViewItem_Delete.Text = "Delete";
             // 
+            // ToolStripMenuItem_File_Exit
+            // 
+            this.ToolStripMenuItem_File_Exit.Name = "ToolStripMenuItem_File_Exit";
+            this.ToolStripMenuItem_File_Exit.Size = new System.Drawing.Size(152, 22);
+            this.ToolStripMenuItem_File_Exit.Text = "Exit";
+            // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -553,6 +561,7 @@
         private System.Windows.Forms.ToolStripMenuItem ToolStripMenuItem_ChangeMasterPassword;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel_FileOpened;
         private System.Windows.Forms.ToolStripMenuItem ToolStripMenuItem_File_SaveAs;
+        private System.Windows.Forms.ToolStripMenuItem ToolStripMenuItem_File_Exit;
 
 
 

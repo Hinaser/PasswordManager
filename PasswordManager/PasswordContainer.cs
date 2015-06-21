@@ -59,6 +59,17 @@ namespace PasswordManager
         }
         #endregion
 
+        #region Hash algorithm for holding data
+        /// <summary>
+        /// Get hash value representing instance data
+        /// </summary>
+        /// <returns></returns>
+        public int GetHashData()
+        {
+            throw new NotImplementedException();
+        }
+        #endregion
+
         #region Setter method
         /// <summary>
         /// Set label text to instance member field
