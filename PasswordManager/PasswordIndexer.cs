@@ -60,9 +60,38 @@ namespace PasswordManager
         /// Get hash value representing whole index data
         /// </summary>
         /// <returns></returns>
-        public override int GetDataHash()
+        public override int GetHashInt()
         {
-            throw new NotImplementedException();
+            int recordsHash = this.GetHash(this.RecordIndexes);
+            int containerHash = this.GetHash(this.ContainerIndexes);
+
+            return recordsHash ^ containerHash;
+        }
+
+        /// <summary>
+        /// Calculate hash from Dictionary<int, List<int>> object
+        /// </summary>
+        /// <param name="arg"></param>
+        /// <returns></returns>
+        private int GetHash(Dictionary<int, List<int>> arg)
+        {
+            int ret = Int32.MaxValue;
+
+            if (arg == null)
+            {
+                return ret;
+            }
+
+            foreach (KeyValuePair<int, List<int>> kvp in arg)
+            {
+                ret = ret ^ kvp.Key * 3;
+                foreach (int list in kvp.Value)
+                {
+                    ret = ret ^ list * 2;
+                }
+            }
+
+            return ret;
         }
         #endregion
 

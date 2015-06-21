@@ -122,6 +122,39 @@ namespace PasswordManager
         {
             throw new NotImplementedException();
         }
+
+        /// <summary>
+        /// Get hashed int value from string
+        /// </summary>
+        /// <param name="s"></param>
+        /// <returns></returns>
+        private int GetHashFromString(string s)
+        {
+            if (String.IsNullOrEmpty(s) || s.Length < 1)
+            {
+                return 0;
+            }
+
+            byte[] byteString = Encoding.UTF8.GetBytes(s);
+
+            int mod = 4;
+            byte[] byteSet = new byte[4] { 255, 255, 255, byteString[0] }; // byteString[0] has value because string length is not less than 1.
+
+            for (int i = 0; i < (byteString.Length - 1) / 4 + 1; i++)
+            {
+                if (i == (byteString.Length - 1) / 4)
+                {
+                    mod = (byteString.Length - 1) % 4;
+                }
+
+                for (int j = 0; j < mod; j++)
+                {
+                    byteSet[j] = (byte)(byteSet[(i % 4)] * 2 ^ byteString[i * 4 + j]);
+                }
+            }
+
+            return (byteSet[3] << 24) + (byteSet[2] << 16) + (byteSet[1] << 8) + byteSet[0];
+        }
         #endregion
 
         #region Setter method

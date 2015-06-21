@@ -64,9 +64,53 @@ namespace PasswordManager
         /// Get hash value representing instance data
         /// </summary>
         /// <returns></returns>
-        public int GetHashData()
+        public int GetHashInt()
         {
-            throw new NotImplementedException();
+            int textInt = this.GetHashFromString(this.Label == null ? String.Empty : this.Label);
+
+            byte[] idBytes = BitConverter.GetBytes(this.ContainerID);
+            int idInt = 0;
+
+            if (idBytes.Length > 3) { idInt = (idBytes[3] << 24) + (idBytes[2] << 16) + (idBytes[1] << 8) + idBytes[0]; }
+            else if (idBytes.Length == 3) { idInt = (idBytes[2] << 16) + (idBytes[1] << 8) + idBytes[0]; }
+            else if (idBytes.Length == 2) { idInt = (idBytes[1] << 8) + idBytes[0]; }
+            else if (idBytes.Length == 1) { idInt = idBytes[0]; }
+            else { idInt = 0; }
+
+            return textInt*3 ^ idInt*2;
+        }
+
+        /// <summary>
+        /// Get hashed int value from string
+        /// </summary>
+        /// <param name="s"></param>
+        /// <returns></returns>
+        private int GetHashFromString(string s)
+        {
+            if (String.IsNullOrEmpty(s) || s.Length < 1)
+            {
+                return 0;
+            }
+
+            byte[] byteString = Encoding.UTF8.GetBytes(s);
+
+            int mod = 4;
+            byte[] byteSet = new byte[4] { 255, 255, 255, byteString[0] }; // byteString[0] has value because string length is not less than 1.
+
+            for (int i = 0; i < (byteString.Length - 1) / 4 + 1; i++)
+            {
+                if (i == (byteString.Length - 1) / 4)
+                {
+                    mod = (byteString.Length - 1) % 4;
+                }
+
+                for (int j = 0; j < mod; j++)
+                {
+                    byteSet[j] = (byte)(byteSet[(i % 4)]*2 ^ byteString[i * 4 + j]);
+                }
+            }
+
+            return (byteSet[3] << 24) + (byteSet[2] << 16) + (byteSet[1] << 8) + byteSet[0];
         }
         #endregion
 
