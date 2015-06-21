@@ -62,6 +62,7 @@ namespace PasswordManager
         public static string OpeningPasswordFileFilter = "Data files (*.dat)|*.dat|All files (*.*)|*.*";
         public static int MaxLoadedFileStatusTextLen = 40;
         public static int MaxPasswordLabelStatusTextLen = 10;
+        public static string DefaultFileExt = ".dat";
     }
 
     public static class Utility

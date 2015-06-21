@@ -686,15 +686,50 @@ namespace PasswordManager
         /// <param name="e"></param>
         void toolStripButton_Save_Click(object sender, EventArgs e)
         {
-            if (String.IsNullOrEmpty(this.CurrentPasswordFilePath))
+            // Set default directory which will be shown on save file dialog
+            string directory = Environment.CurrentDirectory;
+            if (!String.IsNullOrEmpty(this.CurrentPasswordFilePath) && Directory.Exists(Path.GetDirectoryName(this.CurrentPasswordFilePath)))
             {
-                this.CurrentPasswordFilePath = InternalApplicationConfig.DefaultPasswordFilePath;
+                directory = Path.GetDirectoryName(this.CurrentPasswordFilePath);
             }
 
-            PasswordFile f = new PasswordFile(this.CurrentPasswordFilePath);
-            f.SetFilterOrder(this.FilterOrder);
+            // Setup save file dialog
+            SaveFileDialog saveDialog = new SaveFileDialog();
+            saveDialog.InitialDirectory = directory;
+            saveDialog.DefaultExt = InternalApplicationConfig.DefaultFileExt;
+            saveDialog.Filter = InternalApplicationConfig.OpeningPasswordFileFilter;
+            saveDialog.FilterIndex = 1;
+            saveDialog.OverwritePrompt = true;
 
-            f.WritePasswordToFile(this.MasterPasswordHash, this.PasswordData);
+            // Show save file dialog
+            if (saveDialog.ShowDialog() != DialogResult.OK)
+            {
+                return;
+            }
+
+            string writingFilePath = saveDialog.FileName;
+
+            // Check specified filepath
+            if (!Directory.Exists(Path.GetDirectoryName(writingFilePath)))
+            {
+                return;
+            }
+
+            try
+            {
+                // Try to write password object content to specified file
+                PasswordFile f = new PasswordFile(writingFilePath);
+                f.SetFilterOrder(this.FilterOrder);
+                f.WritePasswordToFile(this.MasterPasswordHash, this.PasswordData);
+
+                // Update current path information
+                this.CurrentPasswordFilePath = writingFilePath;
+                this.SetFileLoadStatusLabel();
+            }
+            catch (Exception excp)
+            {
+                MessageBox.Show(excp.Message + Environment.NewLine + excp.StackTrace);
+            }
         }
 
         /// <summary>
