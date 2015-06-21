@@ -60,8 +60,8 @@ namespace PasswordManager
         public static int InitialWaitMiliSecondsWhenPasswordIsInvalid = 1000;
         public static int RetryTickIntervalMiliSec = 200;
         public static string OpeningPasswordFileFilter = "Data files (*.dat)|*.dat|All files (*.*)|*.*";
-        public static int MaxLoadedFileStatusTextLen = 40;
-        public static int MaxPasswordLabelStatusTextLen = 10;
+        public static int StatusStripFilePathMaxLength = 40;
+        public static int StatusStripPasswordLabelMaxLength = 10;
         public static string DefaultFileExt = ".dat";
     }
 

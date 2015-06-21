@@ -226,10 +226,10 @@
     <value>新規パスワード作成</value>
   </data>
   <data name="Form_Tooltip_OpenFile" xml:space="preserve">
-    <value>ファイルを開く</value>
+    <value>開く</value>
   </data>
-  <data name="Form_Tooltip_SaveFile" xml:space="preserve">
-    <value>ファイルに保存する</value>
+  <data name="Form_Tooltip_SaveFileAs" xml:space="preserve">
+    <value>名前をつけて保存する</value>
   </data>
   <data name="General_NewPassword_Strength_TypeGood" xml:space="preserve">
     <value>[安全]</value>
@@ -319,10 +319,10 @@
     <value>ファイル</value>
   </data>
   <data name="Form_MenuItem_File_Open" xml:space="preserve">
-    <value>ファイルを開く</value>
+    <value>開く</value>
   </data>
   <data name="Form_MenuItem_File_Save" xml:space="preserve">
-    <value>ファイルに保存する</value>
+    <value>上書き保存</value>
   </data>
   <data name="Form_Tooltip_CollapseTree" xml:space="preserve">
     <value>ツリー上の全ノードを折りたたむ</value>
@@ -478,5 +478,11 @@
   </data>
   <data name="General_MasterPassword_Empty_Text" xml:space="preserve">
     <value>マスターパスワードによってファイルを保護することができなくなりますが、本当によろしいでしょうか？</value>
+  </data>
+  <data name="Form_MenuItem_File_SaveAs" xml:space="preserve">
+    <value>名前をつけて保存</value>
+  </data>
+  <data name="General_DirNotFound" xml:space="preserve">
+    <value>ディレクトリが見つかりませんでした。</value>
   </data>
 </root>

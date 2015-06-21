@@ -209,10 +209,13 @@ NOTE: New master password will be applied when file is saved.</value>
     <value>File</value>
   </data>
   <data name="Form_MenuItem_File_Open" xml:space="preserve">
-    <value>Open file</value>
+    <value>Open</value>
   </data>
   <data name="Form_MenuItem_File_Save" xml:space="preserve">
-    <value>Save file</value>
+    <value>Save</value>
+  </data>
+  <data name="Form_MenuItem_File_SaveAs" xml:space="preserve">
+    <value>Save As...</value>
   </data>
   <data name="Form_MenuItem_Language" xml:space="preserve">
     <value>Language</value>
@@ -301,6 +304,9 @@ NOTE: New master password will be applied when file is saved.</value>
   <data name="Form_StatusStrip_FileLoaded" xml:space="preserve">
     <value>{0} is loaded</value>
   </data>
+  <data name="Form_StatusStrip_FileSaved" xml:space="preserve">
+    <value>Saved data to {0}</value>
+  </data>
   <data name="Form_StatusStrip_NoFileLoaded" xml:space="preserve">
     <value>No file is loaded</value>
   </data>
@@ -311,10 +317,10 @@ NOTE: New master password will be applied when file is saved.</value>
     <value>Expand all nodes</value>
   </data>
   <data name="Form_Tooltip_OpenFile" xml:space="preserve">
-    <value>Open file</value>
+    <value>Open</value>
   </data>
-  <data name="Form_Tooltip_SaveFile" xml:space="preserve">
-    <value>Save file</value>
+  <data name="Form_Tooltip_SaveFileAs" xml:space="preserve">
+    <value>Save As...</value>
   </data>
   <data name="Form_UpdatePassword_Title" xml:space="preserve">
     <value>Update password</value>
@@ -349,6 +355,9 @@ NOTE: New master password will be applied when file is saved.</value>
     <value>Are you sure to delete the following password?
 
 {0}</value>
+  </data>
+  <data name="General_DirNotFound" xml:space="preserve">
+    <value>Directory was not found.</value>
   </data>
   <data name="General_EditLabel_GoOverMaxLength_Caption" xml:space="preserve">
     <value>Error</value>

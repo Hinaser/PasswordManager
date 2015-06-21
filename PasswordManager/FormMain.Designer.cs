@@ -50,6 +50,7 @@
             this.ToolStripMenuItem_File = new System.Windows.Forms.ToolStripMenuItem();
             this.ToolStripMenuItem_File_Open = new System.Windows.Forms.ToolStripMenuItem();
             this.ToolStripMenuItem_File_Save = new System.Windows.Forms.ToolStripMenuItem();
+            this.ToolStripMenuItem_File_SaveAs = new System.Windows.Forms.ToolStripMenuItem();
             this.ToolStripMenuItem_Edit = new System.Windows.Forms.ToolStripMenuItem();
             this.ToolStripMenuItem_Edit_AddSubFolder = new System.Windows.Forms.ToolStripMenuItem();
             this.ToolStripMenuItem_Edit_RenameFolder = new System.Windows.Forms.ToolStripMenuItem();
@@ -68,7 +69,7 @@
             this.toolStripButton_ExpandTree = new System.Windows.Forms.ToolStripButton();
             this.toolStripButton_CollapseTree = new System.Windows.Forms.ToolStripButton();
             this.statusStrip_Main = new System.Windows.Forms.StatusStrip();
-            this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
+            this.toolStripStatusLabel_ClipboardStatus = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabel_FileOpened = new System.Windows.Forms.ToolStripStatusLabel();
             this.contextMenuStrip_ListViewItem = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.ToolStripMenuItem_ListViewItem_New = new System.Windows.Forms.ToolStripMenuItem();
@@ -251,7 +252,8 @@
             // 
             this.ToolStripMenuItem_File.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.ToolStripMenuItem_File_Open,
-            this.ToolStripMenuItem_File_Save});
+            this.ToolStripMenuItem_File_Save,
+            this.ToolStripMenuItem_File_SaveAs});
             this.ToolStripMenuItem_File.Name = "ToolStripMenuItem_File";
             this.ToolStripMenuItem_File.Size = new System.Drawing.Size(39, 20);
             this.ToolStripMenuItem_File.Text = "File";
@@ -259,14 +261,20 @@
             // ToolStripMenuItem_File_Open
             // 
             this.ToolStripMenuItem_File_Open.Name = "ToolStripMenuItem_File_Open";
-            this.ToolStripMenuItem_File_Open.Size = new System.Drawing.Size(125, 22);
-            this.ToolStripMenuItem_File_Open.Text = "Open file";
+            this.ToolStripMenuItem_File_Open.Size = new System.Drawing.Size(152, 22);
+            this.ToolStripMenuItem_File_Open.Text = "Open";
             // 
             // ToolStripMenuItem_File_Save
             // 
             this.ToolStripMenuItem_File_Save.Name = "ToolStripMenuItem_File_Save";
-            this.ToolStripMenuItem_File_Save.Size = new System.Drawing.Size(125, 22);
-            this.ToolStripMenuItem_File_Save.Text = "Save file";
+            this.ToolStripMenuItem_File_Save.Size = new System.Drawing.Size(152, 22);
+            this.ToolStripMenuItem_File_Save.Text = "Save";
+            // 
+            // ToolStripMenuItem_File_SaveAs
+            // 
+            this.ToolStripMenuItem_File_SaveAs.Name = "ToolStripMenuItem_File_SaveAs";
+            this.ToolStripMenuItem_File_SaveAs.Size = new System.Drawing.Size(152, 22);
+            this.ToolStripMenuItem_File_SaveAs.Text = "Save As...";
             // 
             // ToolStripMenuItem_Edit
             // 
@@ -404,7 +412,7 @@
             this.statusStrip_Main.BackColor = System.Drawing.Color.Transparent;
             this.statusStrip_Main.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.statusStrip_Main.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripStatusLabel1,
+            this.toolStripStatusLabel_ClipboardStatus,
             this.toolStripStatusLabel_FileOpened});
             this.statusStrip_Main.Location = new System.Drawing.Point(0, 374);
             this.statusStrip_Main.Name = "statusStrip_Main";
@@ -413,11 +421,11 @@
             this.statusStrip_Main.TabIndex = 4;
             this.statusStrip_Main.Text = "statusStrip1";
             // 
-            // toolStripStatusLabel1
+            // toolStripStatusLabel_ClipboardStatus
             // 
-            this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
-            this.toolStripStatusLabel1.Size = new System.Drawing.Size(43, 19);
-            this.toolStripStatusLabel1.Text = "Ready";
+            this.toolStripStatusLabel_ClipboardStatus.Name = "toolStripStatusLabel_ClipboardStatus";
+            this.toolStripStatusLabel_ClipboardStatus.Size = new System.Drawing.Size(43, 19);
+            this.toolStripStatusLabel_ClipboardStatus.Text = "Ready";
             // 
             // toolStripStatusLabel_FileOpened
             // 
@@ -471,6 +479,7 @@
             this.Controls.Add(this.toolStrip_Main);
             this.Controls.Add(this.splitContainer1);
             this.Controls.Add(this.menuStrip_Main);
+            this.KeyPreview = true;
             this.MainMenuStrip = this.menuStrip_Main;
             this.Name = "FormMain";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
@@ -508,7 +517,7 @@
         private System.Windows.Forms.ToolStrip toolStrip_Main;
         private System.Windows.Forms.ToolStripButton toolStripButton_Open;
         private System.Windows.Forms.StatusStrip statusStrip_Main;
-        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
+        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel_ClipboardStatus;
         private System.Windows.Forms.ToolStripMenuItem ToolStripMenuItem_about;
         private System.Windows.Forms.ColumnHeader columnHeader_caption;
         private System.Windows.Forms.ColumnHeader columnHeader_ID;
@@ -543,6 +552,7 @@
         private System.Windows.Forms.ToolStripButton toolStripButton_CollapseTree;
         private System.Windows.Forms.ToolStripMenuItem ToolStripMenuItem_ChangeMasterPassword;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel_FileOpened;
+        private System.Windows.Forms.ToolStripMenuItem ToolStripMenuItem_File_SaveAs;
 
 
 

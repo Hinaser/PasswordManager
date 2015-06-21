@@ -77,6 +77,9 @@ namespace PasswordManager
             this.ToolStripMenuItem_Language_English.Click += ToolStripMenuItem_Language_English_Click;
             this.ToolStripMenuItem_Language_Japanese.Click += ToolStripMenuItem_Language_Japanese_Click;
             this.ToolStripMenuItem_ChangeMasterPassword.Click += ToolStripMenuItem_ChangeMasterPassword_Click;
+            this.ToolStripMenuItem_File_Open.Click += ToolStripMenuItem_File_Open_Click;
+            this.ToolStripMenuItem_File_SaveAs.Click += ToolStripMenuItem_File_SaveAs_Click;
+            this.ToolStripMenuItem_File_Save.Click += ToolStripMenuItem_File_Save_Click;
 
             // To change edit menu showing items, judging by last focused control(TreeView or ListView)
             this.ToolStripMenuItem_Edit.MouseDown += ToolStripMenuItem_Edit_MouseDown;
@@ -86,6 +89,9 @@ namespace PasswordManager
             this.ToolStripMenuItem_Edit_RenameFolder.Click += ToolStripMenuItem_RenameFolder_Click;
             this.ToolStripMenuItem_Edit_DeleteFolder.Click += ToolStripMenuItem_DeleteFolder_Click;
             this.ToolStripMenuItem_Edit_AddPassword.Click += ToolStripMenuItem_AddPassword_Click;
+
+            // General keyboard shortcut events
+            this.KeyDown += FormMain_KeyDown;
         }
         #endregion
 
@@ -564,8 +570,8 @@ namespace PasswordManager
                     Clipboard.SetDataObject(record.GetCaption());
 
                     // Notify status bar
-                    string shortText = Utility.GetShorterTextRight(record.GetCaption(), InternalApplicationConfig.MaxPasswordLabelStatusTextLen);
-                    this.toolStripStatusLabel1.Text = String.Format(strings.General_Copy_Caption, shortText);
+                    string shortText = Utility.GetShorterTextRight(record.GetCaption(), InternalApplicationConfig.StatusStripPasswordLabelMaxLength);
+                    this.toolStripStatusLabel_ClipboardStatus.Text = String.Format(strings.General_Copy_Caption, shortText);
 
                     return;
                 }
@@ -576,8 +582,8 @@ namespace PasswordManager
                     Clipboard.SetDataObject(record.GetID());
 
                     // Notify status bar
-                    string shortText = Utility.GetShorterTextRight(record.GetCaption(), InternalApplicationConfig.MaxPasswordLabelStatusTextLen);
-                    this.toolStripStatusLabel1.Text = String.Format(strings.General_Copy_ID, shortText);
+                    string shortText = Utility.GetShorterTextRight(record.GetCaption(), InternalApplicationConfig.StatusStripPasswordLabelMaxLength);
+                    this.toolStripStatusLabel_ClipboardStatus.Text = String.Format(strings.General_Copy_ID, shortText);
 
                     return;
                 }
@@ -588,8 +594,8 @@ namespace PasswordManager
                     Clipboard.SetDataObject(record.GetPassword());
 
                     // Notify status bar
-                    string shortText = Utility.GetShorterTextRight(record.GetCaption(), InternalApplicationConfig.MaxPasswordLabelStatusTextLen);
-                    this.toolStripStatusLabel1.Text = String.Format(strings.General_Copy_Password, shortText);
+                    string shortText = Utility.GetShorterTextRight(record.GetCaption(), InternalApplicationConfig.StatusStripPasswordLabelMaxLength);
+                    this.toolStripStatusLabel_ClipboardStatus.Text = String.Format(strings.General_Copy_Password, shortText);
 
                     return;
                 }
@@ -686,50 +692,7 @@ namespace PasswordManager
         /// <param name="e"></param>
         void toolStripButton_Save_Click(object sender, EventArgs e)
         {
-            // Set default directory which will be shown on save file dialog
-            string directory = Environment.CurrentDirectory;
-            if (!String.IsNullOrEmpty(this.CurrentPasswordFilePath) && Directory.Exists(Path.GetDirectoryName(this.CurrentPasswordFilePath)))
-            {
-                directory = Path.GetDirectoryName(this.CurrentPasswordFilePath);
-            }
-
-            // Setup save file dialog
-            SaveFileDialog saveDialog = new SaveFileDialog();
-            saveDialog.InitialDirectory = directory;
-            saveDialog.DefaultExt = InternalApplicationConfig.DefaultFileExt;
-            saveDialog.Filter = InternalApplicationConfig.OpeningPasswordFileFilter;
-            saveDialog.FilterIndex = 1;
-            saveDialog.OverwritePrompt = true;
-
-            // Show save file dialog
-            if (saveDialog.ShowDialog() != DialogResult.OK)
-            {
-                return;
-            }
-
-            string writingFilePath = saveDialog.FileName;
-
-            // Check specified filepath
-            if (!Directory.Exists(Path.GetDirectoryName(writingFilePath)))
-            {
-                return;
-            }
-
-            try
-            {
-                // Try to write password object content to specified file
-                PasswordFile f = new PasswordFile(writingFilePath);
-                f.SetFilterOrder(this.FilterOrder);
-                f.WritePasswordToFile(this.MasterPasswordHash, this.PasswordData);
-
-                // Update current path information
-                this.CurrentPasswordFilePath = writingFilePath;
-                this.SetFileLoadStatusLabel();
-            }
-            catch (Exception excp)
-            {
-                MessageBox.Show(excp.Message + Environment.NewLine + excp.StackTrace);
-            }
+            this.SaveNewFile();
         }
 
         /// <summary>
@@ -824,6 +787,36 @@ namespace PasswordManager
                 this.MasterPasswordHash = form.GetMasterPasswordHash();
                 MessageBox.Show(strings.Form_ChangeMasterPassword_Success_Text, strings.Form_ChangeMasterPassword_Success_Caption, MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
+        }
+
+        /// <summary>
+        /// Open and load password file
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        void ToolStripMenuItem_File_Open_Click(object sender, EventArgs e)
+        {
+            this.toolStripButton_Open_Click(null, null);
+        }
+
+        /// <summary>
+        /// Save password data as a new file
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        void ToolStripMenuItem_File_SaveAs_Click(object sender, EventArgs e)
+        {
+            this.SaveNewFile();
+        }
+
+        /// <summary>
+        /// Overwrite password information to the file currently loaded
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        void ToolStripMenuItem_File_Save_Click(object sender, EventArgs e)
+        {
+            this.OverwriteFile();
         }
         #endregion
 
@@ -1248,6 +1241,30 @@ namespace PasswordManager
         }
         #endregion
 
+        #region General keyboard shortcut
+        /// <summary>
+        /// Handles keyboard shortcuts
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        void FormMain_KeyDown(object sender, KeyEventArgs e)
+        {
+            // Ctrl+S
+            if (e.KeyCode == Keys.S && ((Control.ModifierKeys & Keys.Control) != 0))
+            {
+                this.OverwriteFile();
+                return;
+            }
+
+            // Ctrl+Shift+S
+            if (e.KeyCode == Keys.S && ((Control.ModifierKeys & Keys.Control & Keys.Shift) != 0))
+            {
+                this.SaveNewFile();
+                return;
+            }
+        }
+        #endregion
+
         #endregion
 
         #region Utility
@@ -1433,6 +1450,93 @@ namespace PasswordManager
             int recordID = (int)lvi.Tag;
             return this.PasswordData.Indexer.GetRecordByID(this.PasswordData.Records, recordID);
         }
+
+        /// <summary>
+        /// Overwrite password information to the file currently loaded
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void OverwriteFile()
+        {
+            string writingFilePath = this.CurrentPasswordFilePath;
+
+            // Check specified filepath. If file is not loaded, then open save as dialog
+            if (!File.Exists(writingFilePath))
+            {
+                this.SaveNewFile();
+                return;
+            }
+
+            try
+            {
+                // Try to write password object content to specified file
+                PasswordFile f = new PasswordFile(writingFilePath);
+                f.SetFilterOrder(this.FilterOrder);
+                f.WritePasswordToFile(this.MasterPasswordHash, this.PasswordData);
+
+                // Update current path information
+                this.CurrentPasswordFilePath = writingFilePath;
+                this.SetFileSaveStatusLabel();
+            }
+            catch (Exception excp)
+            {
+                MessageBox.Show(excp.Message + Environment.NewLine + excp.StackTrace);
+            }
+        }
+
+        /// <summary>
+        /// Save current password data into a new file
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void SaveNewFile()
+        {
+            // Set default directory which will be shown on save file dialog
+            string directory = Environment.CurrentDirectory;
+            if (!String.IsNullOrEmpty(this.CurrentPasswordFilePath) && Directory.Exists(Path.GetDirectoryName(this.CurrentPasswordFilePath)))
+            {
+                directory = Path.GetDirectoryName(this.CurrentPasswordFilePath);
+            }
+
+            // Setup save file dialog
+            SaveFileDialog saveDialog = new SaveFileDialog();
+            saveDialog.InitialDirectory = directory;
+            saveDialog.DefaultExt = InternalApplicationConfig.DefaultFileExt;
+            saveDialog.Filter = InternalApplicationConfig.OpeningPasswordFileFilter;
+            saveDialog.FilterIndex = 1;
+            saveDialog.OverwritePrompt = true;
+
+            // Show save file dialog
+            if (saveDialog.ShowDialog() != DialogResult.OK)
+            {
+                return;
+            }
+
+            string writingFilePath = saveDialog.FileName;
+
+            // Check specified filepath
+            if (!Directory.Exists(Path.GetDirectoryName(writingFilePath)))
+            {
+                MessageBox.Show(strings.General_DirNotFound, strings.General_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            try
+            {
+                // Try to write password object content to specified file
+                PasswordFile f = new PasswordFile(writingFilePath);
+                f.SetFilterOrder(this.FilterOrder);
+                f.WritePasswordToFile(this.MasterPasswordHash, this.PasswordData);
+
+                // Update current path information
+                this.CurrentPasswordFilePath = writingFilePath;
+                this.SetFileSaveStatusLabel();
+            }
+            catch (Exception excp)
+            {
+                MessageBox.Show(excp.Message + Environment.NewLine + excp.StackTrace);
+            }
+        }
         #endregion
 
         #region Language setup
@@ -1445,9 +1549,9 @@ namespace PasswordManager
 
             this.ToolStripMenuItem_about.Text = strings.Form_MenuItem_About;
             this.ToolStripMenuItem_option.Text = strings.Form_MenuItem_Option;
-            this.toolStripStatusLabel1.Text = strings.Status_Ready;
+            this.toolStripStatusLabel_ClipboardStatus.Text = strings.Status_Ready;
             this.toolStripButton_Open.ToolTipText = strings.Form_Tooltip_OpenFile;
-            this.toolStripButton_Save.ToolTipText = strings.Form_Tooltip_SaveFile;
+            this.toolStripButton_Save.ToolTipText = strings.Form_Tooltip_SaveFileAs;
             this.toolStripButton_ExpandTree.ToolTipText = strings.Form_Tooltip_ExpandTree;
             this.toolStripButton_CollapseTree.ToolTipText = strings.Form_Tooltip_CollapseTree;
             this.columnHeader_caption.Text = strings.Form_Listview_Caption;
@@ -1463,6 +1567,7 @@ namespace PasswordManager
             this.ToolStripMenuItem_File.Text = strings.Form_MenuItem_File;
             this.ToolStripMenuItem_File_Open.Text = strings.Form_MenuItem_File_Open;
             this.ToolStripMenuItem_File_Save.Text = strings.Form_MenuItem_File_Save;
+            this.ToolStripMenuItem_File_SaveAs.Text = strings.Form_MenuItem_File_SaveAs;
             this.ToolStripMenuItem_Edit.Text = strings.Form_MenuItem_Edit;
             this.ToolStripMenuItem_Edit_AddSubFolder.Text = strings.Form_ContextMenu_AddContainer;
             this.ToolStripMenuItem_Edit_RenameFolder.Text = strings.Form_ContextMenu_RenameContainer;
@@ -1490,10 +1595,28 @@ namespace PasswordManager
             }
             else
             {
-                string shortPath = Utility.GetShorterTextMiddle(this.CurrentPasswordFilePath, InternalApplicationConfig.MaxLoadedFileStatusTextLen);
+                string shortPath = Utility.GetShorterTextMiddle(this.CurrentPasswordFilePath, InternalApplicationConfig.StatusStripFilePathMaxLength);
                 this.toolStripStatusLabel_FileOpened.Text = String.Format(strings.Form_StatusStrip_FileLoaded, shortPath);
                 this.toolStripStatusLabel_FileOpened.ToolTipText = this.CurrentPasswordFilePath;
             }
+        }
+
+        /// <summary>
+        /// Set file save status text to status strip
+        /// </summary>
+        public void SetFileSaveStatusLabel()
+        {
+            string shortPath = Utility.GetShorterTextMiddle(this.CurrentPasswordFilePath, InternalApplicationConfig.StatusStripFilePathMaxLength);
+            string text = String.Format(strings.Form_StatusStrip_FileSaved, shortPath);
+
+            if (text == this.toolStripStatusLabel_FileOpened.Text)
+            {
+                // A space character is inserted before the original text in order for user to be notified that a data has been saved.
+                text = ' ' + text;
+            }
+
+            this.toolStripStatusLabel_FileOpened.Text = text;
+            this.toolStripStatusLabel_FileOpened.ToolTipText = this.CurrentPasswordFilePath;
         }
         #endregion
     }

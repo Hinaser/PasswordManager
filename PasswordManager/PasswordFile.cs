@@ -213,7 +213,7 @@ namespace PasswordManager
             header.CombinedMasterPasswordHash = Utility.GetHashCombined(masterPasswordHash, Utility.GetHash(header.Token));
 
             // Write filtered data to the file
-            using (FileStream fs = new FileStream(this.Filepath, FileMode.OpenOrCreate, FileAccess.Write))
+            using (FileStream fs = new FileStream(this.Filepath, FileMode.Create, FileAccess.Write))
             {
                 // Write header
                 using (BinaryWriter writer = new BinaryWriter(fs))
