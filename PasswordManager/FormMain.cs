@@ -613,76 +613,7 @@ namespace PasswordManager
         /// <param name="e"></param>
         void toolStripButton_Open_Click(object sender, EventArgs e)
         {
-            // Query target file path
-            OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.InitialDirectory = Environment.CurrentDirectory;
-            openFileDialog.Filter = InternalApplicationConfig.OpeningPasswordFileFilter;
-            openFileDialog.FilterIndex = 1;
-            if (openFileDialog.ShowDialog() != DialogResult.OK)
-            {
-                return;
-            }
-            string targetFilePath = openFileDialog.FileName;
-
-            // Check the file exits
-            if (!File.Exists(targetFilePath))
-            {
-                MessageBox.Show(strings.General_FileNotFound, strings.General_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
-
-            // Instantiate password file object
-            PasswordFile f = new PasswordFile(targetFilePath);
-
-            // Initialize master password hash
-            byte[] passwordHash = Utility.GetHash(InternalApplicationConfig.DefaultMasterPassword);
-
-            // Try default master password once.
-            // When default master password is used to target password file,
-            // user do not need to enter master password by itself.
-            if (!PasswordFile.ChallengeHashedMasterPassword(targetFilePath, passwordHash))
-            {
-                // Query master password for target password file
-                using (FormInputMasterPassword form = new FormInputMasterPassword(PasswordFile.ChallengeHashedMasterPassword, targetFilePath))
-                {
-                    form.StartPosition = FormStartPosition.CenterParent;
-                    form.SetupLanguage(Thread.CurrentThread.CurrentUICulture.Name);
-                    if (form.ShowDialog() != DialogResult.OK)
-                    {
-                        return;
-                    }
-                    passwordHash = form.GetMasterPasswordHash();
-                }
-            }
-
-            // Load password file
-            try
-            {
-                // Load password file
-                this.PasswordData = f.ReadPasswordFromFile(passwordHash);
-
-                // Reconstruct treeview and listview
-                this.InitializeTreeStructure(this.PasswordData.Containers, this.PasswordData.Indexer);
-                this.listView_PasswordItems.Invalidate();
-
-                // Remember the loaded file name and input password hash for saving
-                this.CurrentPasswordFilePath = targetFilePath;
-                this.MasterPasswordHash = passwordHash;
-
-                MessageBox.Show(strings.General_OpenFile_Success_Text, strings.General_OpenFile_Success_Caption, MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (NoCorrespondingFilterFoundException ex)
-            {
-                string msgText = String.Format(strings.General_ParseFilterFailed_Text, ex.Message);
-                MessageBox.Show(msgText, strings.General_ParseFilterFailed_Caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
-
-            // Update file load status label
-            this.SetFileLoadStatusLabel();
+            this.OpenFile();
         }
 
         /// <summary>
@@ -796,7 +727,7 @@ namespace PasswordManager
         /// <param name="e"></param>
         void ToolStripMenuItem_File_Open_Click(object sender, EventArgs e)
         {
-            this.toolStripButton_Open_Click(null, null);
+            this.OpenFile();
         }
 
         /// <summary>
@@ -1536,6 +1467,83 @@ namespace PasswordManager
             {
                 MessageBox.Show(excp.Message + Environment.NewLine + excp.StackTrace);
             }
+        }
+
+        /// <summary>
+        /// Open new password file and load objects
+        /// </summary>
+        public void OpenFile()
+        {
+            // Query target file path
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.InitialDirectory = Environment.CurrentDirectory;
+            openFileDialog.Filter = InternalApplicationConfig.OpeningPasswordFileFilter;
+            openFileDialog.FilterIndex = 1;
+            if (openFileDialog.ShowDialog() != DialogResult.OK)
+            {
+                return;
+            }
+            string targetFilePath = openFileDialog.FileName;
+
+            // Check the file exits
+            if (!File.Exists(targetFilePath))
+            {
+                MessageBox.Show(strings.General_FileNotFound, strings.General_Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            // Instantiate password file object
+            PasswordFile f = new PasswordFile(targetFilePath);
+
+            // Initialize master password hash
+            byte[] passwordHash = Utility.GetHash(InternalApplicationConfig.DefaultMasterPassword);
+
+            // Try default master password once.
+            // When default master password is used to target password file,
+            // user do not need to enter master password by itself.
+            if (!PasswordFile.ChallengeHashedMasterPassword(targetFilePath, passwordHash))
+            {
+                // Query master password for target password file
+                using (FormInputMasterPassword form = new FormInputMasterPassword(PasswordFile.ChallengeHashedMasterPassword, targetFilePath))
+                {
+                    form.StartPosition = FormStartPosition.CenterParent;
+                    form.SetupLanguage(Thread.CurrentThread.CurrentUICulture.Name);
+                    if (form.ShowDialog() != DialogResult.OK)
+                    {
+                        return;
+                    }
+                    passwordHash = form.GetMasterPasswordHash();
+                }
+            }
+
+            // Load password file
+            try
+            {
+                // Load password file
+                this.PasswordData = f.ReadPasswordFromFile(passwordHash);
+
+                // Reconstruct treeview and listview
+                this.InitializeTreeStructure(this.PasswordData.Containers, this.PasswordData.Indexer);
+                this.listView_PasswordItems.Invalidate();
+
+                // Remember the loaded file name and input password hash for saving
+                this.CurrentPasswordFilePath = targetFilePath;
+                this.MasterPasswordHash = passwordHash;
+
+                MessageBox.Show(strings.General_OpenFile_Success_Text, strings.General_OpenFile_Success_Caption, MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (NoCorrespondingFilterFoundException ex)
+            {
+                string msgText = String.Format(strings.General_ParseFilterFailed_Text, ex.Message);
+                MessageBox.Show(msgText, strings.General_ParseFilterFailed_Caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+
+            // Update file load status label
+            this.SetFileLoadStatusLabel();
         }
         #endregion
 
