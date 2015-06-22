@@ -88,7 +88,7 @@ namespace PasswordManager {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Action canceled.
+        ///   Looks up a localized string similar to Information.
         /// </summary>
         internal static string Form_ChangeMasterPassword_NotChanged_Caption {
             get {
@@ -97,7 +97,7 @@ namespace PasswordManager {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Master password has not been changed..
+        ///   Looks up a localized string similar to Master password did NOT change. Continuing to use the same password..
         /// </summary>
         internal static string Form_ChangeMasterPassword_NotChanged_Text {
             get {
@@ -292,6 +292,15 @@ namespace PasswordManager {
         internal static string Form_Listview_Password {
             get {
                 return ResourceManager.GetString("Form_Listview_Password", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Password Manager.
+        /// </summary>
+        internal static string Form_Main_Title {
+            get {
+                return ResourceManager.GetString("Form_Main_Title", resourceCulture);
             }
         }
         
@@ -1116,6 +1125,15 @@ namespace PasswordManager {
         internal static string General_NewPassword_Strength_US {
             get {
                 return ResourceManager.GetString("General_NewPassword_Strength_US", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to  (Unsaved data exists).
+        /// </summary>
+        internal static string General_Notice_Modified {
+            get {
+                return ResourceManager.GetString("General_Notice_Modified", resourceCulture);
             }
         }
         

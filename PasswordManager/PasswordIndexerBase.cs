@@ -20,10 +20,10 @@ namespace PasswordManager
     public abstract class PasswordIndexerBase
     {
         /// <summary>
-        /// Get hash value calculated from data itself.
+        /// Get hash value calculated from instance itself. It should be an unique representing value of instance.
         /// </summary>
         /// <returns></returns>
-        public abstract int GetHashInt();
+        public abstract int GetRepresentingHash();
 
         /// <summary>
         /// This might store Password container/record object indexes deleted by indexer method

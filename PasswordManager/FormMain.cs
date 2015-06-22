@@ -31,6 +31,7 @@ namespace PasswordManager
         private List<string> FilterOrder = new List<string>();
         private byte[] MasterPasswordHash;
         private string CurrentPasswordFilePath;
+        private bool UnsavedDataExists = false;
         #endregion
 
         #region Constructor
@@ -327,11 +328,17 @@ namespace PasswordManager
                 // Save caption string for it is cleared by unknown reason
                 caption = String.Copy(record.GetCaption());
 
+                // Modification checker
+                this.BeginCheckUpdateStatus(record.GetRepresentingHash());
+
                 // Activate dialog
                 if (form.ShowDialog() != DialogResult.OK)
                 {
                     return;
                 }
+
+                // Notify update status if record has been changed.
+                this.EndCheckUpdateStatus(record.GetRepresentingHash());
 
                 //record = form.GetPassword(); // For C#, this would be redundant because all object arguments are passed by reference
             }
@@ -375,8 +382,11 @@ namespace PasswordManager
                 return;
             }
 
-            // This may throw when targetContainerID is not set
+            // This may throw exception when targetContainerID is not set
             int destContainerID = form.GetTargetContainerID();
+
+            // Update checker
+            this.BeginCheckUpdateStatus(this.PasswordData.GetRepresentingHashIndexer());
 
             // Move all records to designated folder
             List<string> failedRecordCaptions = new List<string>();
@@ -401,6 +411,9 @@ namespace PasswordManager
                 }
             }
 
+            // Update checker
+            this.EndCheckUpdateStatus(this.PasswordData.GetRepresentingHashIndexer());
+
             // If some of records were failed to move, show warning message
             if (failedRecordCaptions.Count > 1)
             {
@@ -422,76 +435,7 @@ namespace PasswordManager
         /// <param name="e"></param>
         void ToolStripMenuItem_ListViewItem_Delete_Click(object sender, EventArgs e)
         {
-            // Check current folder
-            if (this.CurrentTreeNode == null || this.CurrentTreeNode.Tag == null)
-            {
-                return;
-            }
-            int containerID = (int)this.CurrentTreeNode.Tag;
-            PasswordIndexerBase indexer = this.PasswordData.Indexer;
-
-            // Check selected record
-            if (this.listView_PasswordItems.SelectedItems.Count < 1)
-            {
-                return;
-            }
-
-            // Check and get deleting pasword records
-            List<PasswordRecord> deletingRecords = new List<PasswordRecord>();
-            List<string> deletingRecordsCaptions = new List<string>();
-            foreach (ListViewItem lvi in this.listView_PasswordItems.SelectedItems)
-            {
-                if (lvi.Tag == null)
-                {
-                    throw new NullReferenceException();
-                }
-
-                int recordID = (int)lvi.Tag;
-                PasswordRecord deletingRecord = indexer.GetRecordByID(this.PasswordData.Records, recordID);
-                if (deletingRecord == null)
-                {
-                    throw new InvalidOperationException();
-                }
-
-                deletingRecords.Add(deletingRecord);
-                deletingRecordsCaptions.Add(deletingRecord.GetCaption());
-            }
-
-            if (deletingRecords.Count != deletingRecordsCaptions.Count || deletingRecords.Count != this.listView_PasswordItems.SelectedItems.Count)
-            {
-                throw new InvalidOperationException();
-            }
-
-            // Confirm really want to delete
-            string concatenatedCaption = String.Join(Environment.NewLine, deletingRecordsCaptions.ToArray());
-            DialogResult dresult = MessageBox.Show(String.Format(strings.General_DeletePassword_Text, concatenatedCaption), strings.General_DeletePassword_Caption, MessageBoxButtons.OKCancel, MessageBoxIcon.Warning);
-            if (dresult != DialogResult.OK)
-            {
-                return;
-            }
-
-            // Delete all selected records
-            foreach(PasswordRecord record in deletingRecords)
-            {
-                // Remove target password record from indexer.
-                // If it fails to remove record from index, exit.
-                if (!indexer.RemoveRecord(record.GetRecordID()))
-                {
-                    return;
-                }
-
-                // Remove target password record from the list in password data
-                if (!this.PasswordData.Records.Remove(record))
-                {
-                    throw new Exception();
-                }
-            }
-
-            // Refresh listview
-            TreeViewEventArgs tvea = new TreeViewEventArgs(this.CurrentTreeNode);
-            this.treeView_Folders_AfterSelect(null, tvea);
-
-            return;
+            this.DeletePasswordRecord();
         }
 
         /// <summary>
@@ -505,7 +449,7 @@ namespace PasswordManager
             {
                 // Delete operation
                 case Keys.Delete:
-                    this.ToolStripMenuItem_ListViewItem_Delete_Click(null, null);
+                    this.DeletePasswordRecord();
                     break;
                 default:
                     break;
@@ -673,6 +617,11 @@ namespace PasswordManager
             this.SetupLanguage(InternalApplicationConfig.LocaleEnUS);
         }
 
+        /// <summary>
+        /// Change edit menu content by currect focused control.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         void ToolStripMenuItem_Edit_MouseDown(object sender, EventArgs e)
         {
             if (this.listView_PasswordItems.Focused)
@@ -709,6 +658,22 @@ namespace PasswordManager
             {
                 form.StartPosition = FormStartPosition.CenterParent;
 
+                // Update checker
+                if (this.MasterPasswordHash.Length > 3)
+                {
+                    this.BeginCheckUpdateStatus(BitConverter.ToInt32(this.MasterPasswordHash, 0));
+                }
+                else
+                {
+                    byte[] complementHash = new byte[4] { 0, 0, 0, 0 };
+                    for (int i = 0; i < this.MasterPasswordHash.Length; i++)
+                    {
+                        complementHash[i] = this.MasterPasswordHash[i];
+                    }
+
+                    this.BeginCheckUpdateStatus(BitConverter.ToInt32(complementHash,0));
+                }
+
                 DialogResult result = form.ShowDialog();
                 if (result != DialogResult.OK)
                 {
@@ -716,8 +681,34 @@ namespace PasswordManager
                     return;
                 }
 
+                // Get and set new master password hash
                 this.MasterPasswordHash = form.GetMasterPasswordHash();
-                MessageBox.Show(strings.Form_ChangeMasterPassword_Success_Text, strings.Form_ChangeMasterPassword_Success_Caption, MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                // Update checker
+                bool isUpdated = false;
+                if (this.MasterPasswordHash.Length > 3)
+                {
+                    isUpdated = this.EndCheckUpdateStatus(BitConverter.ToInt32(this.MasterPasswordHash, 0));
+                }
+                else
+                {
+                    byte[] complementHash = new byte[4] { 0, 0, 0, 0 };
+                    for (int i = 0; i < this.MasterPasswordHash.Length; i++)
+                    {
+                        complementHash[i] = this.MasterPasswordHash[i];
+                    }
+
+                    isUpdated = this.EndCheckUpdateStatus(BitConverter.ToInt32(complementHash, 0));
+                }
+
+                if (isUpdated)
+                {
+                    MessageBox.Show(strings.Form_ChangeMasterPassword_Success_Text, strings.Form_ChangeMasterPassword_Success_Caption, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                else
+                {
+                    MessageBox.Show(strings.Form_ChangeMasterPassword_NotChanged_Text, strings.Form_ChangeMasterPassword_NotChanged_Caption, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
             }
         }
 
@@ -783,6 +774,9 @@ namespace PasswordManager
 
             // Add sub folder to current selected tree node
             TreeNode node = this.AddContainerToTreeView(container, this.CurrentTreeNode);
+
+            // Notify update
+            this.NotifyUpdate();
 
             // Invoke editlabel feature on the created folder
             this.treeView_Folders.SelectedNode = node;
@@ -854,6 +848,9 @@ namespace PasswordManager
             this.treeView_Folders.BeginUpdate();
             targetNode.Remove();
             this.treeView_Folders.EndUpdate();
+
+            // Notify update
+            this.NotifyUpdate();
         }
 
         /// <summary>
@@ -902,6 +899,9 @@ namespace PasswordManager
 
             // Add password record to PasswordFile object
             this.PasswordData.Records.Add(record);
+
+            // Notify update
+            this.NotifyUpdate();
 
             // Refresh listview
             TreeViewEventArgs tvea = new TreeViewEventArgs(this.CurrentTreeNode);
@@ -1010,6 +1010,9 @@ namespace PasswordManager
                 return;
             }
 
+            // Update checker
+            this.BeginCheckUpdateStatus(container.GetRepresentingHash());
+
             // If label text is larger than max value, set back to previous label text and exit this method
             if (e.Label.Length > InternalApplicationConfig.ContainerNameMax)
             {
@@ -1021,6 +1024,9 @@ namespace PasswordManager
             }
 
             container.SetLabel(e.Label);
+
+            // Update checker
+            this.EndCheckUpdateStatus(container.GetRepresentingHash());
         }
 
         /// <summary>
@@ -1137,6 +1143,9 @@ namespace PasswordManager
 
                     dstNode.Nodes.Add(srcNode);
                     this.PasswordData.Indexer.AppendContainer((int)srcNode.Tag, (int)dstNode.Tag);
+
+                    // Notify update
+                    this.NotifyUpdate();
                 }
 
                 dstNode.Expand();
@@ -1173,6 +1182,9 @@ namespace PasswordManager
                     int recordID = (int)lvi.Tag;
                     this.PasswordData.Indexer.MoveRecord(recordID, destContainerID);
                 }
+
+                // Notify update
+                this.NotifyUpdate();
             }
 
             // Refresh listview
@@ -1558,11 +1570,131 @@ namespace PasswordManager
         }
 
         /// <summary>
+        /// Delete password record
+        /// </summary>
+        public void DeletePasswordRecord()
+        {
+            // Check current folder
+            if (this.CurrentTreeNode == null || this.CurrentTreeNode.Tag == null)
+            {
+                return;
+            }
+            int containerID = (int)this.CurrentTreeNode.Tag;
+            PasswordIndexerBase indexer = this.PasswordData.Indexer;
+
+            // Check selected record
+            if (this.listView_PasswordItems.SelectedItems.Count < 1)
+            {
+                return;
+            }
+
+            // Check and get deleting pasword records
+            List<PasswordRecord> deletingRecords = new List<PasswordRecord>();
+            List<string> deletingRecordsCaptions = new List<string>();
+            foreach (ListViewItem lvi in this.listView_PasswordItems.SelectedItems)
+            {
+                if (lvi.Tag == null)
+                {
+                    throw new NullReferenceException();
+                }
+
+                int recordID = (int)lvi.Tag;
+                PasswordRecord deletingRecord = indexer.GetRecordByID(this.PasswordData.Records, recordID);
+                if (deletingRecord == null)
+                {
+                    throw new InvalidOperationException();
+                }
+
+                deletingRecords.Add(deletingRecord);
+                deletingRecordsCaptions.Add(deletingRecord.GetCaption());
+            }
+
+            if (deletingRecords.Count != deletingRecordsCaptions.Count || deletingRecords.Count != this.listView_PasswordItems.SelectedItems.Count)
+            {
+                throw new InvalidOperationException();
+            }
+
+            // Confirm really want to delete
+            string concatenatedCaption = String.Join(Environment.NewLine, deletingRecordsCaptions.ToArray());
+            DialogResult dresult = MessageBox.Show(String.Format(strings.General_DeletePassword_Text, concatenatedCaption), strings.General_DeletePassword_Caption, MessageBoxButtons.OKCancel, MessageBoxIcon.Warning);
+            if (dresult != DialogResult.OK)
+            {
+                return;
+            }
+
+            // Notify update even though deletion has not been done.
+            // Whether deleting fails or not, update should be notified.
+            this.NotifyUpdate();
+
+            // Delete all selected records
+            foreach (PasswordRecord record in deletingRecords)
+            {
+                // Remove target password record from indexer.
+                // If it fails to remove record from index, exit.
+                if (!indexer.RemoveRecord(record.GetRecordID()))
+                {
+                    return;
+                }
+
+                // Remove target password record from the list in password data
+                if (!this.PasswordData.Records.Remove(record))
+                {
+                    throw new Exception();
+                }
+            }
+
+            // Refresh listview
+            TreeViewEventArgs tvea = new TreeViewEventArgs(this.CurrentTreeNode);
+            this.treeView_Folders_AfterSelect(null, tvea);
+
+            return;
+        }
+
+        /// <summary>
         /// Close application if it can
         /// </summary>
         private void TryToCloseApplication()
         {
             this.Close();
+        }
+
+        /// <summary>
+        /// Used to check modification status.
+        /// </summary>
+        int PreservedCheckerHash = 0;
+
+        /// <summary>
+        /// Begin to check update status. Hash value of the parameter will be stored temporarily for later update check.
+        /// </summary>
+        /// <param name="hash"></param>
+        private void BeginCheckUpdateStatus(int hash)
+        {
+            this.PreservedCheckerHash = hash;
+        }
+
+        /// <summary>
+        /// Check whether hash has been update by comparing the stored hash value with argument hash value.
+        /// Change form title text if changes are confirmed.
+        /// </summary>
+        /// <param name="hash"></param>
+        private bool EndCheckUpdateStatus(int hash)
+        {
+            if (this.PreservedCheckerHash == hash)
+            {
+                return false;
+            }
+
+            this.NotifyUpdate();
+            return true;
+        }
+
+        /// <summary>
+        /// Set update notification label to main form title
+        /// </summary>
+        private void NotifyUpdate()
+        {
+            this.Text = strings.Form_Main_Title + strings.General_Notice_Modified;
+            this.UnsavedDataExists = true;
         }
         #endregion
 
@@ -1574,6 +1706,7 @@ namespace PasswordManager
         {
             Thread.CurrentThread.CurrentUICulture = CultureInfo.GetCultureInfo(locale);
 
+            this.Text = this.UnsavedDataExists ? strings.Form_Main_Title + strings.General_Notice_Modified : strings.Form_Main_Title;
             this.ToolStripMenuItem_about.Text = strings.Form_MenuItem_About;
             this.ToolStripMenuItem_option.Text = strings.Form_MenuItem_Option;
             this.toolStripStatusLabel_ClipboardStatus.Text = strings.Status_Ready;
@@ -1645,6 +1778,10 @@ namespace PasswordManager
 
             this.toolStripStatusLabel_FileOpened.Text = text;
             this.toolStripStatusLabel_FileOpened.ToolTipText = this.CurrentPasswordFilePath;
+
+            // Update main form title as normal. (Removing "modified" label from title)
+            this.Text = strings.Form_Main_Title;
+            this.UnsavedDataExists = false;
         }
         #endregion
     }

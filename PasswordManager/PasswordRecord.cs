@@ -118,9 +118,17 @@ namespace PasswordManager
         /// Get hash value representing instance data
         /// </summary>
         /// <returns></returns>
-        public int GetHashData()
+        public int GetRepresentingHash()
         {
-            throw new NotImplementedException();
+            int recordIDHash = this.RecordID;
+            int captionHash = this.GetHash(this.Caption);
+            int cdateHash = this.GetHash(this.CreateDate);
+            int udateHash = this.GetHash(this.LastUpdateDate);
+            int idHash = this.GetHash(this.ID);
+            int passwordHash = this.GetHash(this.Password);
+            int descHash = this.GetHash(this.Description);
+
+            return recordIDHash ^ captionHash * 2 ^ cdateHash * 3 ^ udateHash * 4 ^ idHash * 5 ^ passwordHash * 6 ^ descHash * 7;
         }
 
         /// <summary>
@@ -128,7 +136,7 @@ namespace PasswordManager
         /// </summary>
         /// <param name="s"></param>
         /// <returns></returns>
-        private int GetHashFromString(string s)
+        private int GetHash(string s)
         {
             if (String.IsNullOrEmpty(s) || s.Length < 1)
             {
@@ -138,7 +146,7 @@ namespace PasswordManager
             byte[] byteString = Encoding.UTF8.GetBytes(s);
 
             int mod = 4;
-            byte[] byteSet = new byte[4] { 255, 255, 255, byteString[0] }; // byteString[0] has value because string length is not less than 1.
+            byte[] byteSet = new byte[4] { 255, 255, 255, 255 }; // byteString[0] has value because string length is not less than 1.
 
             for (int i = 0; i < (byteString.Length - 1) / 4 + 1; i++)
             {
@@ -154,6 +162,21 @@ namespace PasswordManager
             }
 
             return (byteSet[3] << 24) + (byteSet[2] << 16) + (byteSet[1] << 8) + byteSet[0];
+        }
+
+        /// <summary>
+        /// Get hashed int value from DateTime
+        /// </summary>
+        /// <param name="d"></param>
+        /// <returns></returns>
+        private int GetHash(DateTime d)
+        {
+            if (d == null)
+            {
+                return this.GetHash(String.Empty);
+            }
+
+            return this.GetHash(d.Ticks.ToString());
         }
         #endregion
 

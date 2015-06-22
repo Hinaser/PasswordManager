@@ -127,10 +127,10 @@
     <value>Please enter new master password</value>
   </data>
   <data name="Form_ChangeMasterPassword_NotChanged_Caption" xml:space="preserve">
-    <value>Action canceled</value>
+    <value>Information</value>
   </data>
   <data name="Form_ChangeMasterPassword_NotChanged_Text" xml:space="preserve">
-    <value>Master password has not been changed.</value>
+    <value>Master password did NOT change. Continuing to use the same password.</value>
   </data>
   <data name="Form_ChangeMasterPassword_OK" xml:space="preserve">
     <value>OK</value>
@@ -195,6 +195,9 @@ NOTE: New master password will be applied when file is saved.</value>
   </data>
   <data name="Form_Listview_Password" xml:space="preserve">
     <value>Password</value>
+  </data>
+  <data name="Form_Main_Title" xml:space="preserve">
+    <value>Password Manager</value>
   </data>
   <data name="Form_MenuItem_About" xml:space="preserve">
     <value>About</value>
@@ -473,6 +476,9 @@ Your input: {1} characters</value>
   </data>
   <data name="General_NewPassword_Strength_US" xml:space="preserve">
     <value>Combination of upper case / symbol</value>
+  </data>
+  <data name="General_Notice_Modified" xml:space="preserve">
+    <value> (Unsaved data exists)</value>
   </data>
   <data name="General_OpenFile_Success_Caption" xml:space="preserve">
     <value>Success!</value>

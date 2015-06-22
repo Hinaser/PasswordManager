@@ -431,10 +431,10 @@
     <value>新しいマスターパスワードを入力してください</value>
   </data>
   <data name="Form_ChangeMasterPassword_NotChanged_Caption" xml:space="preserve">
-    <value>変更がキャンセルされました</value>
+    <value>お知らせ</value>
   </data>
   <data name="Form_ChangeMasterPassword_NotChanged_Text" xml:space="preserve">
-    <value>マスターパスワードは変更されていません。</value>
+    <value>マスターパスワードは変更されていません。現在と同じマスタパスワードを引き続き使用します。</value>
   </data>
   <data name="Form_ChangeMasterPassword_OK" xml:space="preserve">
     <value>OK</value>
@@ -490,5 +490,11 @@
   </data>
   <data name="General_DirNotFound" xml:space="preserve">
     <value>ディレクトリが見つかりませんでした。</value>
+  </data>
+  <data name="Form_Main_Title" xml:space="preserve">
+    <value>パスワードマネージャ</value>
+  </data>
+  <data name="General_Notice_Modified" xml:space="preserve">
+    <value> (未保存のデータあり)</value>
   </data>
 </root>

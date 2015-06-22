@@ -64,9 +64,9 @@ namespace PasswordManager
         /// Get hash value representing instance data
         /// </summary>
         /// <returns></returns>
-        public int GetHashInt()
+        public int GetRepresentingHash()
         {
-            int textInt = this.GetHashFromString(this.Label == null ? String.Empty : this.Label);
+            int textInt = this.GetHash(this.Label == null ? String.Empty : this.Label);
 
             byte[] idBytes = BitConverter.GetBytes(this.ContainerID);
             int idInt = 0;
@@ -85,7 +85,7 @@ namespace PasswordManager
         /// </summary>
         /// <param name="s"></param>
         /// <returns></returns>
-        private int GetHashFromString(string s)
+        private int GetHash(string s)
         {
             if (String.IsNullOrEmpty(s) || s.Length < 1)
             {

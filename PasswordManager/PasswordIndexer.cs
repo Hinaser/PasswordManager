@@ -60,7 +60,7 @@ namespace PasswordManager
         /// Get hash value representing whole index data
         /// </summary>
         /// <returns></returns>
-        public override int GetHashInt()
+        public override int GetRepresentingHash()
         {
             int recordsHash = this.GetHash(this.RecordIndexes);
             int containerHash = this.GetHash(this.ContainerIndexes);

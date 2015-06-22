@@ -358,9 +358,52 @@ namespace PasswordManager
         /// Get hash value representing instance data
         /// </summary>
         /// <returns></returns>
-        public int GetHashData()
+        public int GetRepresentingHash()
         {
-            throw new NotImplementedException();
+            return this.GetRepresentingHashIndexer()
+                ^ this.GetRepresentingHashContainers()
+                ^ this.GetRepresentingHashRecords();
+        }
+
+        /// <summary>
+        /// Get indexer hash
+        /// </summary>
+        /// <returns></returns>
+        public int GetRepresentingHashIndexer()
+        {
+            return this.Indexer.GetRepresentingHash();
+        }
+
+        /// <summary>
+        /// Get container collection hash
+        /// </summary>
+        /// <returns></returns>
+        public int GetRepresentingHashContainers()
+        {
+            int containersHash = 0;
+
+            foreach (var c in this.Containers)
+            {
+                containersHash ^= c.GetRepresentingHash();
+            }
+
+            return containersHash;
+        }
+
+        /// <summary>
+        /// Get record collection hash
+        /// </summary>
+        /// <returns></returns>
+        public int GetRepresentingHashRecords()
+        {
+            int recordsHash = 0;
+
+            foreach (var r in this.Records)
+            {
+                recordsHash ^= r.GetRepresentingHash();
+            }
+
+            return recordsHash;
         }
     }
 }
