@@ -148,6 +148,12 @@ NOTE: New master password will be applied when file is saved.</value>
   <data name="Form_ChangeMasterPassword_Title" xml:space="preserve">
     <value>New Master Password</value>
   </data>
+  <data name="Form_ClosingWithUnsavedData_Caption" xml:space="preserve">
+    <value>Are you sure to close?</value>
+  </data>
+  <data name="Form_ClosingWithUnsavedData_Text" xml:space="preserve">
+    <value>Do you want to close the application for sure?　There remains unsaved data which might be lost if you close the application now.</value>
+  </data>
   <data name="Form_ContextMenu_AddContainer" xml:space="preserve">
     <value>New folder</value>
   </data>

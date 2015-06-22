@@ -491,6 +491,12 @@
   <data name="General_DirNotFound" xml:space="preserve">
     <value>ディレクトリが見つかりませんでした。</value>
   </data>
+  <data name="Form_ClosingWithUnsavedData_Caption" xml:space="preserve">
+    <value>本当に終了してもよろしいですか？</value>
+  </data>
+  <data name="Form_ClosingWithUnsavedData_Text" xml:space="preserve">
+    <value>未保存のデータが残っています。このままアプリケーションを終了するとそれらのデータは失われますが、本当に終了してよろしいですか？</value>
+  </data>
   <data name="Form_Main_Title" xml:space="preserve">
     <value>パスワードマネージャ</value>
   </data>

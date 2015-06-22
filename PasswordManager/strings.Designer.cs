@@ -152,6 +152,24 @@ namespace PasswordManager {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Are you sure to close?.
+        /// </summary>
+        internal static string Form_ClosingWithUnsavedData_Caption {
+            get {
+                return ResourceManager.GetString("Form_ClosingWithUnsavedData_Caption", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do you want to close the application for sure?　There remains unsaved data which might be lost if you close the application now..
+        /// </summary>
+        internal static string Form_ClosingWithUnsavedData_Text {
+            get {
+                return ResourceManager.GetString("Form_ClosingWithUnsavedData_Text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to New folder.
         /// </summary>
         internal static string Form_ContextMenu_AddContainer {

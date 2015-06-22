@@ -94,6 +94,9 @@ namespace PasswordManager
 
             // General keyboard shortcut events
             this.KeyDown += FormMain_KeyDown;
+
+            // General events
+            this.FormClosing += FormMain_FormClosing;
         }
         #endregion
 
@@ -1215,6 +1218,29 @@ namespace PasswordManager
             {
                 this.OverwriteFile();
                 return;
+            }
+        }
+        #endregion
+
+        #region General
+        /// <summary>
+        /// When the main form is on closing, if unsaved data exists, ask user whether cancel closing application.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        void FormMain_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (this.UnsavedDataExists)
+            {
+                // Ask user whether the app can be closed for sure.
+                DialogResult result = MessageBox.Show(strings.Form_ClosingWithUnsavedData_Text, strings.Form_ClosingWithUnsavedData_Caption, MessageBoxButtons.OKCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2);
+
+                // If user cancels, tell the app not to close the application.
+                if (result != DialogResult.OK)
+                {
+                    e.Cancel = true;
+                    return;
+                }
             }
         }
         #endregion
