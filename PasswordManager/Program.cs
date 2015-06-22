@@ -13,6 +13,14 @@ namespace PasswordManager
         [STAThread]
         static void Main()
         {
+            var password = Utility.GetHash("test");
+            var data = new byte[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+
+            var encryptedData = Utility.Encrypt(data, password);
+            var decryptedData = Utility.Decrypt(encryptedData, password);
+
+            return;
+            //
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new FormMain());

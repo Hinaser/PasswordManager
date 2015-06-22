@@ -163,14 +163,13 @@ namespace PasswordManager
                     }
 
                     MemoryStream encryptedData = new MemoryStream();
-                    MemoryStream decryptedData = new MemoryStream();
                     BinaryFormatter formatter = new BinaryFormatter();
 
                     encryptedData = Utility.GetMemoryStream(reader);
                     encryptedData.Position = 0;
                     // Do decryption against loaded MemoryStream
-                    // something ...
-                    Utility.CopyStream(encryptedData, decryptedData);
+                    byte[] decryptedBytes = Utility.Decrypt(encryptedData.ToArray(), masterPasswordHash);
+                    MemoryStream decryptedData = new MemoryStream(decryptedBytes);
                     decryptedData.Position = 0;
 
                     // Get filtered data
@@ -193,7 +192,6 @@ namespace PasswordManager
             }
 
             MemoryStream decryptedData = new MemoryStream();
-            MemoryStream encryptedData = new MemoryStream();
             BinaryFormatter formatter = new BinaryFormatter();
 
             // Apply data filters
@@ -204,8 +202,9 @@ namespace PasswordManager
             decryptedData.Position = 0;
 
             // Do encryption here
-            // .....
-            Utility.CopyStream(decryptedData, encryptedData);
+            byte[] encryptedBytes = Utility.Encrypt(decryptedData.ToArray(), masterPasswordHash);
+            MemoryStream encryptedData = new MemoryStream(encryptedBytes);
+            encryptedData.Position = 0;
 
             // Construct header
             PasswordHeader header = new PasswordHeader();

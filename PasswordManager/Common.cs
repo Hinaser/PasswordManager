@@ -31,7 +31,7 @@ namespace PasswordManager
         public static int RootContainerID = 0;
         public static string RootContainerLabel = "All";
         public static string NewUnnamedContainerLabel = "New folder";
-        public static HashAlgorithm Hash = new SHA512Managed();
+        public static HashAlgorithm Hash = new SHA256Managed();
         public static int HeaderTokenSize = DateTime.Now.ToString(CultureInfo.InvariantCulture).ToCharArray().Length;
         public static int BitsPerAByte = 8;
         public static int CaptionMaxLength = 128;
@@ -63,6 +63,17 @@ namespace PasswordManager
         public static int StatusStripFilePathMaxLength = 40;
         public static int StatusStripPasswordLabelMaxLength = 10;
         public static string DefaultFileExt = ".dat";
+        public static SymmetricAlgorithm GetCryptAlgorithm(byte[] key)
+        {
+            return new RijndaelManaged
+            {
+                Key = key,
+                Mode = CipherMode.CBC,
+                BlockSize = 128,
+                KeySize = 256,
+                Padding = PaddingMode.PKCS7
+            };
+        }
     }
 
     public static class Utility
@@ -344,6 +355,83 @@ namespace PasswordManager
                 .Append(head.ToString())
                 .Append(replacer)
                 .ToString(); ;
+        }
+
+        /// <summary>
+        /// Get encrypted MemoryStream using Rijndael(AES) 256it
+        /// </summary>
+        /// <param name="m">MemoryStream to encrypt</param>
+        /// <param name="key">Key</param>
+        /// <returns></returns>
+        public static byte[] Encrypt(byte[] data, byte[] key)
+        {
+            if (data == null || key == null)
+            {
+                throw new ArgumentNullException();
+            }
+
+            SymmetricAlgorithm algorithm = InternalApplicationConfig.GetCryptAlgorithm(key);
+
+            if (algorithm.KeySize / 8 != key.Length)
+            {
+                throw new ArgumentException();
+            }
+
+            ICryptoTransform encryptor = algorithm.CreateEncryptor();
+
+            return Utility.PerformCrypt(encryptor, data);
+        }
+
+        /// <summary>
+        /// Get decrypted MemoryStream using Rijndael(AES) 256it
+        /// </summary>
+        /// <param name="m">MemoryStream to decrypt</param>
+        /// <param name="iv">Initializing vector</param>
+        /// <param name="key">Key</param>
+        /// <returns></returns>
+        public static byte[] Decrypt(byte[] data, byte[] key)
+        {
+            if (data == null || key == null)
+            {
+                throw new ArgumentNullException();
+            }
+
+            SymmetricAlgorithm algorithm = InternalApplicationConfig.GetCryptAlgorithm(key);
+
+            if (algorithm.KeySize/8 != key.Length)
+            {
+                throw new ArgumentException();
+            }
+
+            ICryptoTransform decryptor = algorithm.CreateDecryptor();
+
+            return Utility.PerformCrypt(decryptor, data);
+        }
+
+        /// <summary>
+        /// Encrypt or Decrypt passwd memorystream
+        /// </summary>
+        /// <param name="transform"></param>
+        /// <param name="m"></param>
+        /// <param name="key"></param>
+        /// <returns></returns>
+        public static byte[] PerformCrypt(ICryptoTransform transform, byte[] data)
+        {
+            if (transform == null || data == null)
+            {
+                throw new ArgumentNullException();
+            }
+
+            using (MemoryStream ms = new MemoryStream())
+            {
+                using (CryptoStream cs = new CryptoStream(ms, transform, CryptoStreamMode.Write))
+                {
+                    cs.Write(data, 0, data.Length);
+                    cs.FlushFinalBlock();
+
+                    return ms.ToArray();
+                }
+            }
         }
     }
 
