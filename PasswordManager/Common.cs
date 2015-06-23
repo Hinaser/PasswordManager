@@ -25,7 +25,6 @@ namespace PasswordManager
         public static string LocaleEnUS = "en-US";
         public static string LocaleJaJP = "ja-JP";
         public static string DefaultLocale = LocaleEnUS;
-        public static Dictionary<int, string> Locale = new Dictionary<int, string>();
         public static string DefaultPasswordFilePath = Environment.CurrentDirectory + @"\password.dat";
         public static string DefaultMasterPassword = "";
         public static string DefaultSalt = "salt";
@@ -63,17 +62,9 @@ namespace PasswordManager
         public static int StatusStripFilePathMaxLength = 40;
         public static int StatusStripPasswordLabelMaxLength = 10;
         public static string DefaultFileExt = ".dat";
-        public static SymmetricAlgorithm GetCryptAlgorithm(byte[] key, byte[] iv)
-        {
-            return new RijndaelManaged
-            {
-                Mode = CipherMode.CBC,
-                Padding = PaddingMode.PKCS7,
-                BlockSize = 128,
-                Key = key,
-                IV = iv
-            };
-        }
+        public static CipherMode CipherMode = CipherMode.CBC;
+        public static PaddingMode PaddingMode = PaddingMode.PKCS7;
+        public static int CryptBlockSize = 128;
         public static int Rfc2898DeriveBytesIterationCount = 3000;
     }
 
@@ -262,6 +253,24 @@ namespace PasswordManager
         }
 
         /// <summary>
+        /// Get crypt algorithm
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="iv"></param>
+        /// <returns></returns>
+        public static SymmetricAlgorithm GetCryptAlgorithm(byte[] key, byte[] iv)
+        {
+            return new RijndaelManaged
+            {
+                Mode = LocalConfig.CipherMode,
+                Padding = LocalConfig.PaddingMode,
+                BlockSize = LocalConfig.CryptBlockSize,
+                Key = key,
+                IV = iv
+            };
+        }
+
+        /// <summary>
         /// Get shortened text for specified text and maximum length.
         /// Right edge text will be replaced by short word (replacer).
         /// </summary>
@@ -311,7 +320,7 @@ namespace PasswordManager
                 throw new ArgumentNullException();
             }
 
-            SymmetricAlgorithm algorithm = LocalConfig.GetCryptAlgorithm(key, iv);
+            SymmetricAlgorithm algorithm = Utility.GetCryptAlgorithm(key, iv);
             ICryptoTransform encryptor = algorithm.CreateEncryptor();
 
             return Utility.PerformCrypt(encryptor, data);
@@ -331,7 +340,7 @@ namespace PasswordManager
                 throw new ArgumentNullException();
             }
 
-            SymmetricAlgorithm algorithm = LocalConfig.GetCryptAlgorithm(key, iv);
+            SymmetricAlgorithm algorithm = Utility.GetCryptAlgorithm(key, iv);
             ICryptoTransform decryptor = algorithm.CreateDecryptor();
 
             return Utility.PerformCrypt(decryptor, data);
