@@ -20,7 +20,7 @@ using System.Globalization;
 
 namespace PasswordManager
 {
-    public class InternalApplicationConfig
+    public class LocalConfig
     {
         public static string LocaleEnUS = "en-US";
         public static string LocaleJaJP = "ja-JP";
@@ -28,12 +28,12 @@ namespace PasswordManager
         public static Dictionary<int, string> Locale = new Dictionary<int, string>();
         public static string DefaultPasswordFilePath = Environment.CurrentDirectory + @"\password.dat";
         public static string DefaultMasterPassword = "";
+        public static string DefaultSalt = "salt";
         public static int RootContainerID = 0;
         public static string RootContainerLabel = "All";
         public static string NewUnnamedContainerLabel = "New folder";
-        public static HashAlgorithm Hash = new SHA256Managed();
-        public static int HeaderTokenSize = DateTime.Now.ToString(CultureInfo.InvariantCulture).ToCharArray().Length;
-        public static int BitsPerAByte = 8;
+        public static int HeaderTokenSize = 16; // in bytes
+        public static int MasterPasswordHashedKeySize = 32; // in bytes. Must be either 16/24/32.
         public static int CaptionMaxLength = 128;
         public static int IDMaxLength = 128;
         public static decimal PasswordMinLength = 1;
@@ -63,17 +63,18 @@ namespace PasswordManager
         public static int StatusStripFilePathMaxLength = 40;
         public static int StatusStripPasswordLabelMaxLength = 10;
         public static string DefaultFileExt = ".dat";
-        public static SymmetricAlgorithm GetCryptAlgorithm(byte[] key)
+        public static SymmetricAlgorithm GetCryptAlgorithm(byte[] key, byte[] iv)
         {
             return new RijndaelManaged
             {
-                Key = key,
                 Mode = CipherMode.CBC,
+                Padding = PaddingMode.PKCS7,
                 BlockSize = 128,
-                KeySize = 256,
-                Padding = PaddingMode.PKCS7
+                Key = key,
+                IV = iv
             };
         }
+        public static int Rfc2898DeriveBytesIterationCount = 3000;
     }
 
     public static class Utility
@@ -131,68 +132,6 @@ namespace PasswordManager
             }
 
             return ms;
-        }
-
-        /// <summary>
-        /// Combine 2 hash value
-        /// </summary>
-        /// <param name="h1"></param>
-        /// <param name="h2"></param>
-        /// <returns></returns>
-        public static byte[] GetHashCombined(byte[] h1, byte[] h2)
-        {
-            if (h1.Length != h2.Length)
-            {
-                throw new ArgumentException();
-            }
-
-            byte[] ret = new byte[h1.Length];
-            for (int i = 0; i < h1.Length; i++)
-            {
-                ret[i] = (byte)((int)h1[i]*3 ^ (int)h2[i]);
-            }
-
-            return ret;
-        }
-
-        /// <summary>
-        /// Get hash value as byte array
-        /// </summary>
-        /// <param name="d"></param>
-        /// <returns></returns>
-        public static byte[] GetHash(char[] c)
-        {
-            if (c == null || c.Length < 1)
-            {
-                c = new char[] { '\0' };
-            }
-
-            return InternalApplicationConfig.Hash.ComputeHash(Encoding.Unicode.GetBytes(c));
-        }
-
-        /// <summary>
-        /// Get hash value as byte array
-        /// </summary>
-        /// <param name="b"></param>
-        /// <returns></returns>
-        public static byte[] GetHash(string b)
-        {
-            if (b == null)
-            {
-                b = String.Empty;
-            }
-
-            return Utility.GetHash(b.ToCharArray());
-        }
-
-        /// <summary>
-        /// Get hash value as byte array for string
-        /// </summary>
-        /// <param name="s"></param>
-        /// <returns></returns>
-        public static byte[] GetHash(byte[] b)
-        {
-            return InternalApplicationConfig.Hash.ComputeHash(b);
         }
 
         /// <summary>
@@ -270,7 +209,8 @@ namespace PasswordManager
         }
 
         /// <summary>
-        /// Get shortened text for specified text and maximum length. Midst text will be replaced by short word (replacer).
+        /// Get shortened text for specified text and maximum length.
+        /// Midst text will be replaced by short word (replacer).
         /// </summary>
         /// <param name="text"></param>
         /// <param name="maxLen"></param>
@@ -322,7 +262,8 @@ namespace PasswordManager
         }
 
         /// <summary>
-        /// 
+        /// Get shortened text for specified text and maximum length.
+        /// Right edge text will be replaced by short word (replacer).
         /// </summary>
         /// <param name="text"></param>
         /// <param name="maxLen"></param>
@@ -363,20 +304,14 @@ namespace PasswordManager
         /// <param name="m">MemoryStream to encrypt</param>
         /// <param name="key">Key</param>
         /// <returns></returns>
-        public static byte[] Encrypt(byte[] data, byte[] key)
+        public static byte[] Encrypt(byte[] data, byte[] key, byte[] iv)
         {
-            if (data == null || key == null)
+            if (data == null || key == null || iv == null)
             {
                 throw new ArgumentNullException();
             }
 
-            SymmetricAlgorithm algorithm = InternalApplicationConfig.GetCryptAlgorithm(key);
-
-            if (algorithm.KeySize / 8 != key.Length)
-            {
-                throw new ArgumentException();
-            }
-
+            SymmetricAlgorithm algorithm = LocalConfig.GetCryptAlgorithm(key, iv);
             ICryptoTransform encryptor = algorithm.CreateEncryptor();
 
             return Utility.PerformCrypt(encryptor, data);
@@ -389,20 +324,14 @@ namespace PasswordManager
         /// <param name="iv">Initializing vector</param>
         /// <param name="key">Key</param>
         /// <returns></returns>
-        public static byte[] Decrypt(byte[] data, byte[] key)
+        public static byte[] Decrypt(byte[] data, byte[] key, byte[] iv)
         {
-            if (data == null || key == null)
+            if (data == null || key == null || iv == null)
             {
                 throw new ArgumentNullException();
             }
 
-            SymmetricAlgorithm algorithm = InternalApplicationConfig.GetCryptAlgorithm(key);
-
-            if (algorithm.KeySize/8 != key.Length)
-            {
-                throw new ArgumentException();
-            }
-
+            SymmetricAlgorithm algorithm = LocalConfig.GetCryptAlgorithm(key, iv);
             ICryptoTransform decryptor = algorithm.CreateDecryptor();
 
             return Utility.PerformCrypt(decryptor, data);
@@ -432,6 +361,79 @@ namespace PasswordManager
                     return ms.ToArray();
                 }
             }
+        }
+
+        /// <summary>
+        /// Get scrambled value with speficified byte length from data and salt.
+        /// </summary>
+        /// <param name="data"></param>
+        /// <param name="salt"></param>
+        /// <param name="byteCount"></param>
+        /// <returns></returns>
+        public static byte[] Scramble(byte[] data, byte[] salt, int byteCount)
+        {
+            Rfc2898DeriveBytes val = new Rfc2898DeriveBytes(data, salt, LocalConfig.Rfc2898DeriveBytesIterationCount);
+            return val.GetBytes(byteCount);
+        }
+
+        /// <summary>
+        /// Get scrambled value with speficified byte length from data and salt.
+        /// </summary>
+        /// <param name="data"></param>
+        /// <param name="salt"></param>
+        /// <param name="byteCount"></param>
+        /// <returns></returns>
+        public static byte[] Scramble(string data, string salt, int byteCount)
+        {
+            return Utility.Scramble(Encoding.UTF8.GetBytes(data), Utility.Get16bytesHash(salt), byteCount);
+        }
+
+        /// <summary>
+        /// Get hash from specified string
+        /// </summary>
+        /// <param name="s"></param>
+        /// <returns></returns>
+        public static byte[] Get16bytesHash(string s)
+        {
+            if (String.IsNullOrEmpty(s))
+            {
+                s = "0";
+            }
+
+            HashAlgorithm hash = new SHA256Managed();
+            byte[] b256 = hash.ComputeHash(Encoding.UTF8.GetBytes(s));
+            byte[] ret = new byte[128/8];
+
+            for (int i = 0; i < 128/8; i++)
+            {
+                ret[i] = (byte)(b256[i] ^ b256[i + 128/8]);
+            }
+
+            return ret;
+        }
+
+        /// <summary>
+        /// Get hash from specified datetime
+        /// </summary>
+        /// <param name="d"></param>
+        /// <returns></returns>
+        public static byte[] Get16BytesHash(DateTime d)
+        {
+            if (d == null)
+            {
+                d = DateTime.Now;
+            }
+
+            HashAlgorithm hash = new SHA256Managed();
+            byte[] b256 = hash.ComputeHash(Encoding.ASCII.GetBytes(d.Ticks.ToString()));
+            byte[] ret = new byte[128/8];
+
+            for (int i = 0; i < 128/8; i++)
+            {
+                ret[i] = (byte)(b256[i] ^ b256[i+128/8]);
+            }
+
+            return ret;
         }
     }
 

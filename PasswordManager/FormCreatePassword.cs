@@ -63,14 +63,14 @@ namespace PasswordManager
             this.checkBox_NewPassword_UseUpperCase.Checked = true;
             this.checkBox_NewPassword_UseNumerics.Checked = true;
             this.checkBox_NewPassword_UseSymbols.Checked = false;
-            this.textBox_NewPassword_Caption.MaxLength = InternalApplicationConfig.CaptionMaxLength;
-            this.textBox_NewPassword_ID.MaxLength = InternalApplicationConfig.IDMaxLength;
-            this.numericUpDown_NewPassword_Minchars.Minimum = InternalApplicationConfig.PasswordMinLength;
-            this.numericUpDown_NewPassword_Minchars.Maximum = InternalApplicationConfig.PasswordMaxLength;
-            this.numericUpDown_NewPassword_Maxchars.Minimum = InternalApplicationConfig.PasswordMinLength;
-            this.numericUpDown_NewPassword_Maxchars.Maximum = InternalApplicationConfig.PasswordMaxLength;
-            this.textBox_NewPassword_Password.MaxLength = InternalApplicationConfig.PasswordMaxLength.GetHashCode();
-            this.textBox_NewPassword_Memo.MaxLength = InternalApplicationConfig.DescriptionMaxLength;
+            this.textBox_NewPassword_Caption.MaxLength = LocalConfig.CaptionMaxLength;
+            this.textBox_NewPassword_ID.MaxLength = LocalConfig.IDMaxLength;
+            this.numericUpDown_NewPassword_Minchars.Minimum = LocalConfig.PasswordMinLength;
+            this.numericUpDown_NewPassword_Minchars.Maximum = LocalConfig.PasswordMaxLength;
+            this.numericUpDown_NewPassword_Maxchars.Minimum = LocalConfig.PasswordMinLength;
+            this.numericUpDown_NewPassword_Maxchars.Maximum = LocalConfig.PasswordMaxLength;
+            this.textBox_NewPassword_Password.MaxLength = LocalConfig.PasswordMaxLength.GetHashCode();
+            this.textBox_NewPassword_Memo.MaxLength = LocalConfig.DescriptionMaxLength;
             this.SetupLanguage();
         }
         #endregion
@@ -170,7 +170,7 @@ namespace PasswordManager
 
             // Check parameters
             // Check min-max characters value
-            if (this.numericUpDown_NewPassword_Minchars.Value < InternalApplicationConfig.PasswordMinLength
+            if (this.numericUpDown_NewPassword_Minchars.Value < LocalConfig.PasswordMinLength
                 || this.numericUpDown_NewPassword_Minchars.Value < Int32.MinValue)
             {
                 MessageBox.Show(strings.Form_NewPassword_ErrorMinTooSmall, strings.Form_NewPassword_ErrorDialogCaption, MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -178,7 +178,7 @@ namespace PasswordManager
                 this.button_NewPassword_GeneratePassword.Focus();
                 return;
             }
-            if (this.numericUpDown_NewPassword_Maxchars.Value > InternalApplicationConfig.PasswordMaxLength
+            if (this.numericUpDown_NewPassword_Maxchars.Value > LocalConfig.PasswordMaxLength
                 || this.numericUpDown_NewPassword_Maxchars.Value > Int32.MaxValue)
             {
                 MessageBox.Show(strings.Form_NewPassword_ErrorMaxTooLarge, strings.Form_NewPassword_ErrorDialogCaption, MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -271,28 +271,28 @@ namespace PasswordManager
 
             // Analyze password class and show on strength report text area
             PasswordTextClass c = FormCreatePassword.GetPasswordClass(t.Text);
-            this.richTextBox_NewPassword_Strength.AppendText(String.Format(InternalApplicationConfig.PasswordStrengthNoticeFormat, strings.General_NewPassword_Strength_TypePassClass, FormCreatePassword.GetPasswordClassText(c)));
+            this.richTextBox_NewPassword_Strength.AppendText(String.Format(LocalConfig.PasswordStrengthNoticeFormat, strings.General_NewPassword_Strength_TypePassClass, FormCreatePassword.GetPasswordClassText(c)));
 
             // Calculate password strength
             PasswordComplexityValidatorBase validator = new PasswordComplexityValidator();
             double adjustedPasswordLength = validator.GetAdjustedCharLength(this.richTextBox_NewPassword_Strength, t.Text, t.Text.Length, FormCreatePassword.AppendStrengthReport);
             double strength = FormCreatePassword.CalculatePasswordStrength(t.Text, adjustedPasswordLength);
-            this.richTextBox_NewPassword_Strength.AppendText(String.Format(InternalApplicationConfig.PasswordStrengthNoticeFormat, strings.General_NewPassword_Strength_TypeResult, Math.Round(strength, 2).ToString()));
+            this.richTextBox_NewPassword_Strength.AppendText(String.Format(LocalConfig.PasswordStrengthNoticeFormat, strings.General_NewPassword_Strength_TypeResult, Math.Round(strength, 2).ToString()));
 
             // When judged as a weak password
-            if (strength <= InternalApplicationConfig.MaxWeakPasswordStrength)
+            if (strength <= LocalConfig.MaxWeakPasswordStrength)
             {
                 this.label_NewPassword_Weak.BackColor = Color.Orange;
                 this.label_NewPassword_Weak.ForeColor = Color.Black;
             }
             // When judged as a normal password
-            else if (InternalApplicationConfig.MaxWeakPasswordStrength < strength && strength <= InternalApplicationConfig.MaxNormalPasswordStrength)
+            else if (LocalConfig.MaxWeakPasswordStrength < strength && strength <= LocalConfig.MaxNormalPasswordStrength)
             {
                 this.label_NewPassword_Normal.BackColor = Color.LightSeaGreen;
                 this.label_NewPassword_Normal.ForeColor = Color.Black;
             }
             // When judged as a strong password
-            else if (InternalApplicationConfig.MaxNormalPasswordStrength < strength)
+            else if (LocalConfig.MaxNormalPasswordStrength < strength)
             {
                 this.label_NewPassword_Secure.BackColor = Color.GreenYellow;
                 this.label_NewPassword_Secure.ForeColor = Color.Black;
@@ -556,13 +556,13 @@ namespace PasswordManager
             // Add text to form
             rich.AppendText(
                 String.Format(
-                InternalApplicationConfig.PasswordStrengthNoticeFormat,
+                LocalConfig.PasswordStrengthNoticeFormat,
                 header,
                 text));
 
             // Paint color
             rich.SelectionStart = selectionStart;
-            rich.SelectionLength = InternalApplicationConfig.PasswordStrengthNoticeHeaderSize;
+            rich.SelectionLength = LocalConfig.PasswordStrengthNoticeHeaderSize;
             rich.SelectionColor = headerColor;
 
             // Deselect in order not to remain color effect

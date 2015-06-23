@@ -281,7 +281,7 @@ namespace PasswordManager
             // Parse filter data
             int i = 0;
             for (string filterName = Utility.GetStringByZeroTarminatedChar(filteredData.Filter);
-                filterName != typeof(BaseFilter).ToString() && i < InternalApplicationConfig.MaxFilterCount;
+                filterName != typeof(BaseFilter).ToString() && i < LocalConfig.MaxFilterCount;
                 i++, filterName = Utility.GetStringByZeroTarminatedChar(filteredData.Filter))
             {
                 if (!IOFilterFactory.Instance.ContainsIOFilter(filterName))
@@ -303,7 +303,7 @@ namespace PasswordManager
                 // Get filter object
                 bodyStream[(i + 1) % 2].Position = 0;
                 BinaryReader reader = new BinaryReader(bodyStream[(i + 1) % 2]);
-                filteredData.Filter = reader.ReadChars(InternalApplicationConfig.FilterNameFixedLength);
+                filteredData.Filter = reader.ReadChars(LocalConfig.FilterNameFixedLength);
                 if (bodyStream[(i + 1) % 2].Length > Int32.MaxValue) throw new OverflowException(); // When byte length is larger than intergar max value, throw exception.
                 filteredData.data = reader.ReadBytes((int)bodyStream[(i + 1) % 2].Length);
                 // The line below is not nice but in .NET Framework 3.5, when BinaryReader is Closed(), its BaseStream will be also Closed() so the line below is given in order to preserve original base stream content.

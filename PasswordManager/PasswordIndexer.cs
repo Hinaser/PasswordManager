@@ -41,7 +41,7 @@ namespace PasswordManager
         /// </summary>
         private Dictionary<int, int> ContainerReverseIndexes = new Dictionary<int, int>();
 
-        public static readonly int RootContainerID = InternalApplicationConfig.RootContainerID;
+        public static readonly int RootContainerID = LocalConfig.RootContainerID;
         #endregion
 
         #region Constructor
@@ -50,8 +50,8 @@ namespace PasswordManager
         /// </summary>
         public PasswordIndexer()
         {
-            this.RecordIndexes.Add(InternalApplicationConfig.RootContainerID, new List<int>());
-            this.ContainerIndexes.Add(InternalApplicationConfig.RootContainerID, new List<int>());
+            this.RecordIndexes.Add(LocalConfig.RootContainerID, new List<int>());
+            this.ContainerIndexes.Add(LocalConfig.RootContainerID, new List<int>());
         }
         #endregion
 

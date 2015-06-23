@@ -198,7 +198,7 @@ namespace PasswordManager
         /// <returns></returns>
         protected double CheckUsingDangerouslyTypicalWord(string password, double charLength)
         {
-            foreach (string word in InternalApplicationConfig.DangerousPasswordList)
+            foreach (string word in LocalConfig.DangerousPasswordList)
             {
                 if (password == word)
                 {

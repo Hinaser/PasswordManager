@@ -34,7 +34,7 @@ namespace PasswordManager
     public class PasswordFile
     {
         #region Field
-        protected string Filepath = InternalApplicationConfig.DefaultPasswordFilePath;
+        protected string Filepath = LocalConfig.DefaultPasswordFilePath;
         List<string> FilterOrder = new List<string>();
         #endregion
 
@@ -119,10 +119,10 @@ namespace PasswordManager
                 using (BinaryReader reader = new BinaryReader(fs))
                 {
                     PasswordHeader header = new PasswordHeader();
-                    header.Token = reader.ReadChars(InternalApplicationConfig.HeaderTokenSize);
-                    header.CombinedMasterPasswordHash = reader.ReadBytes(InternalApplicationConfig.Hash.HashSize / InternalApplicationConfig.BitsPerAByte);
+                    header.Token = reader.ReadBytes(LocalConfig.HeaderTokenSize);
+                    header.CombinedMasterPasswordHash = reader.ReadBytes(LocalConfig.MasterPasswordHashedKeySize);
 
-                    return CompareHashes(header.CombinedMasterPasswordHash, Utility.GetHashCombined(challengingPasswordHash, Utility.GetHash(header.Token)));
+                    return CompareHashes(header.CombinedMasterPasswordHash, Utility.Scramble(challengingPasswordHash, header.Token, LocalConfig.MasterPasswordHashedKeySize));
                 }
             }
         }
@@ -134,7 +134,7 @@ namespace PasswordManager
         /// <exception cref="InvalidMasterPasswordException">Master password is invalid</exception>
         public virtual PasswordFileBody ReadPasswordFromFile(byte[] masterPasswordHash, PasswordFileBody defaultPasswordFileBody = null)
         {
-            if (masterPasswordHash.Length != InternalApplicationConfig.Hash.HashSize/InternalApplicationConfig.BitsPerAByte)
+            if (masterPasswordHash.Length != LocalConfig.MasterPasswordHashedKeySize)
             {
                 throw new ArgumentException();
             }
@@ -153,8 +153,8 @@ namespace PasswordManager
                 using (BinaryReader reader = new BinaryReader(fs))
                 {
                     PasswordHeader header = new PasswordHeader();
-                    header.Token = reader.ReadChars(InternalApplicationConfig.HeaderTokenSize);
-                    header.CombinedMasterPasswordHash = reader.ReadBytes(InternalApplicationConfig.Hash.HashSize / InternalApplicationConfig.BitsPerAByte);
+                    header.Token = reader.ReadBytes(LocalConfig.HeaderTokenSize);
+                    header.CombinedMasterPasswordHash = reader.ReadBytes(LocalConfig.MasterPasswordHashedKeySize);
 
                     // Check masterPasswordHash is valid
                     if (!CheckMasterPasswordHash(header.CombinedMasterPasswordHash, masterPasswordHash, header.Token))
@@ -168,7 +168,7 @@ namespace PasswordManager
                     encryptedData = Utility.GetMemoryStream(reader);
                     encryptedData.Position = 0;
                     // Do decryption against loaded MemoryStream
-                    byte[] decryptedBytes = Utility.Decrypt(encryptedData.ToArray(), masterPasswordHash);
+                    byte[] decryptedBytes = Utility.Decrypt(encryptedData.ToArray(), masterPasswordHash, header.Token);
                     MemoryStream decryptedData = new MemoryStream(decryptedBytes);
                     decryptedData.Position = 0;
 
@@ -201,15 +201,16 @@ namespace PasswordManager
             formatter.Serialize(decryptedData, filteredData);
             decryptedData.Position = 0;
 
+            // Get token
+            byte[] token = Utility.Get16BytesHash(DateTime.Now);
+
             // Do encryption here
-            byte[] encryptedBytes = Utility.Encrypt(decryptedData.ToArray(), masterPasswordHash);
-            MemoryStream encryptedData = new MemoryStream(encryptedBytes);
-            encryptedData.Position = 0;
+            byte[] encryptedBytes = Utility.Encrypt(decryptedData.ToArray(), masterPasswordHash, token);
 
             // Construct header
             PasswordHeader header = new PasswordHeader();
-            header.Token = DateTime.Now.ToString(CultureInfo.InvariantCulture).ToCharArray();
-            header.CombinedMasterPasswordHash = Utility.GetHashCombined(masterPasswordHash, Utility.GetHash(header.Token));
+            header.Token = token;
+            header.CombinedMasterPasswordHash = Utility.Scramble(masterPasswordHash, token, LocalConfig.MasterPasswordHashedKeySize);
 
             // Write filtered data to the file
             using (FileStream fs = new FileStream(this.Filepath, FileMode.Create, FileAccess.Write))
@@ -220,7 +221,7 @@ namespace PasswordManager
                     writer.Write(header.Token); // Write token
                     writer.Write(header.CombinedMasterPasswordHash); // Write hash
                     // Write Filtered data which has been encrypted
-                    writer.Write(encryptedData.ToArray());
+                    writer.Write(encryptedBytes);
                 }
             }
         }
@@ -263,9 +264,9 @@ namespace PasswordManager
         /// <param name="challengingMasterPasswordHash">Challenging password hash</param>
         /// <param name="token">Token value, which might be described in Password file header</param>
         /// <returns></returns>
-        public static bool CheckMasterPasswordHash(byte[] expectedCombinedHash, byte[] challengingMasterPasswordHash, char[] token)
+        public static bool CheckMasterPasswordHash(byte[] expectedCombinedHash, byte[] challengingMasterPasswordHash, byte[] token)
         {
-            return CompareHashes(expectedCombinedHash, Utility.GetHashCombined(challengingMasterPasswordHash, Utility.GetHash(token)));
+            return CompareHashes(expectedCombinedHash, Utility.Scramble(challengingMasterPasswordHash, token, LocalConfig.MasterPasswordHashedKeySize));
         }
 
         /// <summary>
@@ -299,8 +300,8 @@ namespace PasswordManager
     /// </summary>
     public class PasswordHeader
     {
-        public char[] Token = new char[InternalApplicationConfig.HeaderTokenSize];
-        public byte[] CombinedMasterPasswordHash = new byte[InternalApplicationConfig.Hash.HashSize / InternalApplicationConfig.BitsPerAByte];
+        public byte[] Token = new byte[LocalConfig.HeaderTokenSize];
+        public byte[] CombinedMasterPasswordHash = new byte[LocalConfig.MasterPasswordHashedKeySize];
     }
 
     /// <summary>
@@ -309,7 +310,7 @@ namespace PasswordManager
     [Serializable]
     public class FilteredData
     {
-        public char[] Filter = new char[InternalApplicationConfig.FilterNameFixedLength];
+        public char[] Filter = new char[LocalConfig.FilterNameFixedLength];
         public byte[] data;
     }
 

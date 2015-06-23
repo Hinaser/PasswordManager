@@ -107,16 +107,20 @@ namespace PasswordManager
         void Initialize()
         {
             // Apply language setting
-            this.SetupLanguage(InternalApplicationConfig.DefaultLocale);
+            this.SetupLanguage(LocalConfig.DefaultLocale);
 
             // Set default filter order
             this.FilterOrder.Add(typeof(DebugFilter).ToString());
 
             // Set default master password hash
-            this.MasterPasswordHash = Utility.GetHash(InternalApplicationConfig.DefaultMasterPassword.ToCharArray());
+            this.MasterPasswordHash = Utility.Scramble(
+                LocalConfig.DefaultMasterPassword,
+                LocalConfig.DefaultSalt,
+                LocalConfig.MasterPasswordHashedKeySize);
+
 
             // Try to open password file in the default location
-            if (File.Exists(InternalApplicationConfig.DefaultPasswordFilePath))
+            if (File.Exists(LocalConfig.DefaultPasswordFilePath))
             {
                 bool validPasswordEntered = false;
 
@@ -130,7 +134,7 @@ namespace PasswordManager
                 //       -> Stored master password hash is kept as default master password.
                 //            In this case, this app do not try to open password file but open new password manager instance on memory.
                 //            Then user can save the instance to new password file. (Existing password file shouldn't be overwritten.)
-                if (PasswordFile.ChallengeHashedMasterPassword(InternalApplicationConfig.DefaultPasswordFilePath, this.MasterPasswordHash))
+                if (PasswordFile.ChallengeHashedMasterPassword(LocalConfig.DefaultPasswordFilePath, this.MasterPasswordHash))
                 {
                     validPasswordEntered = true;
                 }
@@ -138,7 +142,7 @@ namespace PasswordManager
                 {
                     // Ask master password hash
                     // Input password will be sanitised after exiting this using statement by user-defined Dispose() method on FormInputMasterPassword class.
-                    using (FormInputMasterPassword form = new FormInputMasterPassword(PasswordFile.ChallengeHashedMasterPassword, InternalApplicationConfig.DefaultPasswordFilePath))
+                    using (FormInputMasterPassword form = new FormInputMasterPassword(PasswordFile.ChallengeHashedMasterPassword, LocalConfig.DefaultPasswordFilePath))
                     {
                         form.StartPosition = FormStartPosition.CenterScreen;
                         DialogResult result = form.ShowDialog();
@@ -162,11 +166,11 @@ namespace PasswordManager
                     try
                     {
                         // Try to parse specified password file
-                        PasswordFile f = new PasswordFile(InternalApplicationConfig.DefaultPasswordFilePath);
+                        PasswordFile f = new PasswordFile(LocalConfig.DefaultPasswordFilePath);
                         this.PasswordData = f.ReadPasswordFromFile(this.MasterPasswordHash);
 
                         // Set password file information
-                        this.CurrentPasswordFilePath = InternalApplicationConfig.DefaultPasswordFilePath;
+                        this.CurrentPasswordFilePath = LocalConfig.DefaultPasswordFilePath;
                     }
                     catch (InvalidMasterPasswordException)
                     {
@@ -420,7 +424,7 @@ namespace PasswordManager
             // If some of records were failed to move, show warning message
             if (failedRecordCaptions.Count > 1)
             {
-                string recordList = String.Join(InternalApplicationConfig.Separater1, failedRecordCaptions.ToArray());
+                string recordList = String.Join(LocalConfig.Separater1, failedRecordCaptions.ToArray());
                 string destContainerCaption = this.PasswordData.Indexer.GetContainerByID(this.PasswordData.Containers, destContainerID).GetLabel();
                 string warnText = String.Format(strings.General_MovePassword_Fail_Text, recordList, destContainerCaption);
                 MessageBox.Show(warnText, strings.General_MovePassword_Fail_Caption, MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -518,7 +522,7 @@ namespace PasswordManager
                     Clipboard.SetDataObject(record.GetCaption());
 
                     // Notify status bar
-                    string shortText = Utility.GetShorterTextRight(record.GetCaption(), InternalApplicationConfig.StatusStripPasswordLabelMaxLength);
+                    string shortText = Utility.GetShorterTextRight(record.GetCaption(), LocalConfig.StatusStripPasswordLabelMaxLength);
                     this.toolStripStatusLabel_ClipboardStatus.Text = String.Format(strings.General_Copy_Caption, shortText);
 
                     return;
@@ -530,7 +534,7 @@ namespace PasswordManager
                     Clipboard.SetDataObject(record.GetID());
 
                     // Notify status bar
-                    string shortText = Utility.GetShorterTextRight(record.GetCaption(), InternalApplicationConfig.StatusStripPasswordLabelMaxLength);
+                    string shortText = Utility.GetShorterTextRight(record.GetCaption(), LocalConfig.StatusStripPasswordLabelMaxLength);
                     this.toolStripStatusLabel_ClipboardStatus.Text = String.Format(strings.General_Copy_ID, shortText);
 
                     return;
@@ -542,7 +546,7 @@ namespace PasswordManager
                     Clipboard.SetDataObject(record.GetPassword());
 
                     // Notify status bar
-                    string shortText = Utility.GetShorterTextRight(record.GetCaption(), InternalApplicationConfig.StatusStripPasswordLabelMaxLength);
+                    string shortText = Utility.GetShorterTextRight(record.GetCaption(), LocalConfig.StatusStripPasswordLabelMaxLength);
                     this.toolStripStatusLabel_ClipboardStatus.Text = String.Format(strings.General_Copy_Password, shortText);
 
                     return;
@@ -607,7 +611,7 @@ namespace PasswordManager
         /// <param name="e"></param>
         void ToolStripMenuItem_Language_Japanese_Click(object sender, EventArgs e)
         {
-            this.SetupLanguage(InternalApplicationConfig.LocaleJaJP);
+            this.SetupLanguage(LocalConfig.LocaleJaJP);
         }
 
         /// <summary>
@@ -617,7 +621,7 @@ namespace PasswordManager
         /// <param name="e"></param>
         void ToolStripMenuItem_Language_English_Click(object sender, EventArgs e)
         {
-            this.SetupLanguage(InternalApplicationConfig.LocaleEnUS);
+            this.SetupLanguage(LocalConfig.LocaleEnUS);
         }
 
         /// <summary>
@@ -771,7 +775,7 @@ namespace PasswordManager
             }
 
             // Add a child container to current selected container
-            PasswordContainer container = new PasswordContainer(this.PasswordData.Indexer.GetUniqueContainerID(), InternalApplicationConfig.NewUnnamedContainerLabel);
+            PasswordContainer container = new PasswordContainer(this.PasswordData.Indexer.GetUniqueContainerID(), LocalConfig.NewUnnamedContainerLabel);
             this.PasswordData.Containers.Add(container);
             this.PasswordData.Indexer.AppendContainer(container.GetContainerID(), (int)this.CurrentTreeNode.Tag);
 
@@ -818,7 +822,7 @@ namespace PasswordManager
             int containerID = (int)targetNode.Tag;
 
             // If root folder is the target, exit with error message
-            if (containerID == InternalApplicationConfig.RootContainerID)
+            if (containerID == LocalConfig.RootContainerID)
             {
                 MessageBox.Show(strings.General_DeleteContainer_CannotDeleteRoot_Text, strings.General_DeleteContainer_CannotDeleteRoot_Caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
@@ -1017,9 +1021,9 @@ namespace PasswordManager
             this.BeginCheckUpdateStatus(container.GetRepresentingHash());
 
             // If label text is larger than max value, set back to previous label text and exit this method
-            if (e.Label.Length > InternalApplicationConfig.ContainerNameMax)
+            if (e.Label.Length > LocalConfig.ContainerNameMax)
             {
-                string text = String.Format(strings.General_EditLabel_GoOverMaxLength_Text, InternalApplicationConfig.ContainerNameMax, e.Label.Length);
+                string text = String.Format(strings.General_EditLabel_GoOverMaxLength_Text, LocalConfig.ContainerNameMax, e.Label.Length);
                 MessageBox.Show(text, strings.General_EditLabel_GoOverMaxLength_Caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
 
                 e.CancelEdit = true;
@@ -1327,8 +1331,8 @@ namespace PasswordManager
         public static TreeNode GetTreeViewNodeBuilt(ICollection<PasswordContainer> containers, PasswordIndexerBase indexer, ContextMenuStrip context)
         {
             // Setup root parent container
-            int rootContainerID = InternalApplicationConfig.RootContainerID;
-            TreeNode rootNode = new TreeNode(InternalApplicationConfig.RootContainerLabel);
+            int rootContainerID = LocalConfig.RootContainerID;
+            TreeNode rootNode = new TreeNode(LocalConfig.RootContainerLabel);
             rootNode.Tag = rootContainerID;
 
             // Execute recursive tree method
@@ -1382,7 +1386,7 @@ namespace PasswordManager
                 throw new ArgumentNullException();
             }
 
-            TreeNode node = new TreeNode(!String.IsNullOrEmpty(container.GetLabel()) ? container.GetLabel() : InternalApplicationConfig.NewUnnamedContainerLabel);
+            TreeNode node = new TreeNode(!String.IsNullOrEmpty(container.GetLabel()) ? container.GetLabel() : LocalConfig.NewUnnamedContainerLabel);
             node.Tag = container.GetContainerID();
             node.ContextMenuStrip = this.contextMenuStrip_TreeViewNode;
 
@@ -1481,8 +1485,8 @@ namespace PasswordManager
             // Setup save file dialog
             SaveFileDialog saveDialog = new SaveFileDialog();
             saveDialog.InitialDirectory = directory;
-            saveDialog.DefaultExt = InternalApplicationConfig.DefaultFileExt;
-            saveDialog.Filter = InternalApplicationConfig.OpeningPasswordFileFilter;
+            saveDialog.DefaultExt = LocalConfig.DefaultFileExt;
+            saveDialog.Filter = LocalConfig.OpeningPasswordFileFilter;
             saveDialog.FilterIndex = 1;
             saveDialog.OverwritePrompt = true;
 
@@ -1526,7 +1530,7 @@ namespace PasswordManager
             // Query target file path
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.InitialDirectory = Environment.CurrentDirectory;
-            openFileDialog.Filter = InternalApplicationConfig.OpeningPasswordFileFilter;
+            openFileDialog.Filter = LocalConfig.OpeningPasswordFileFilter;
             openFileDialog.FilterIndex = 1;
             if (openFileDialog.ShowDialog() != DialogResult.OK)
             {
@@ -1545,7 +1549,10 @@ namespace PasswordManager
             PasswordFile f = new PasswordFile(targetFilePath);
 
             // Initialize master password hash
-            byte[] passwordHash = Utility.GetHash(InternalApplicationConfig.DefaultMasterPassword);
+            byte[] passwordHash = Utility.Scramble(
+                LocalConfig.DefaultMasterPassword,
+                LocalConfig.DefaultSalt,
+                LocalConfig.MasterPasswordHashedKeySize);
 
             // Try default master password once.
             // When default master password is used to target password file,
@@ -1782,7 +1789,7 @@ namespace PasswordManager
             }
             else
             {
-                string shortPath = Utility.GetShorterTextMiddle(this.CurrentPasswordFilePath, InternalApplicationConfig.StatusStripFilePathMaxLength);
+                string shortPath = Utility.GetShorterTextMiddle(this.CurrentPasswordFilePath, LocalConfig.StatusStripFilePathMaxLength);
                 this.toolStripStatusLabel_FileOpened.Text = String.Format(strings.Form_StatusStrip_FileLoaded, shortPath);
                 this.toolStripStatusLabel_FileOpened.ToolTipText = this.CurrentPasswordFilePath;
             }
@@ -1793,7 +1800,7 @@ namespace PasswordManager
         /// </summary>
         public void SetFileSaveStatusLabel()
         {
-            string shortPath = Utility.GetShorterTextMiddle(this.CurrentPasswordFilePath, InternalApplicationConfig.StatusStripFilePathMaxLength);
+            string shortPath = Utility.GetShorterTextMiddle(this.CurrentPasswordFilePath, LocalConfig.StatusStripFilePathMaxLength);
             string text = String.Format(strings.Form_StatusStrip_FileSaved, shortPath);
 
             if (text == this.toolStripStatusLabel_FileOpened.Text)

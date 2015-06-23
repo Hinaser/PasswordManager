@@ -27,7 +27,7 @@ namespace PasswordManager
     {
         private PasswordHashChecker checker = null;
         private string PasswordFilePath;
-        private int SleepMiliSecond = InternalApplicationConfig.InitialWaitMiliSecondsWhenPasswordIsInvalid;
+        private int SleepMiliSecond = LocalConfig.InitialWaitMiliSecondsWhenPasswordIsInvalid;
         private int ElapsedMiliSecond = 0;
         private System.Windows.Forms.Timer timer = new System.Windows.Forms.Timer();
 
@@ -54,7 +54,7 @@ namespace PasswordManager
 
             this.checker = Func;
             this.PasswordFilePath = filePath;
-            this.timer.Interval = InternalApplicationConfig.RetryTickIntervalMiliSec;
+            this.timer.Interval = LocalConfig.RetryTickIntervalMiliSec;
             this.timer.Tick += timer_Tick;
         }
 
@@ -82,13 +82,13 @@ namespace PasswordManager
         {
             if (this.comboBox_InputMasterPassword_Language.Text == strings.Form_MenuItem_Language_English)
             {
-                this.SetupLanguage(InternalApplicationConfig.LocaleEnUS);
+                this.SetupLanguage(LocalConfig.LocaleEnUS);
                 return;
             }
 
             if (this.comboBox_InputMasterPassword_Language.Text == strings.Form_MenuItem_Language_Japanese)
             {
-                this.SetupLanguage(InternalApplicationConfig.LocaleJaJP);
+                this.SetupLanguage(LocalConfig.LocaleJaJP);
                 return;
             }
         }
@@ -129,7 +129,7 @@ namespace PasswordManager
         /// <param name="e"></param>
         void timer_Tick(object sender, EventArgs e)
         {
-            this.ElapsedMiliSecond += InternalApplicationConfig.RetryTickIntervalMiliSec;
+            this.ElapsedMiliSecond += LocalConfig.RetryTickIntervalMiliSec;
 
             // When time has not been elapsed enough, update button text and continue;
             if (this.ElapsedMiliSecond < this.SleepMiliSecond)
@@ -163,7 +163,7 @@ namespace PasswordManager
                 password = String.Empty;
             }
 
-            byte[] retVal = Utility.GetHash(password.ToCharArray());
+            byte[] retVal = Utility.Scramble(password, LocalConfig.DefaultSalt, LocalConfig.MasterPasswordHashedKeySize);
 
             return retVal;
         }
@@ -207,13 +207,13 @@ namespace PasswordManager
             this.button_InputMasterPassword_Cancel.Text = strings.Form_InputMasterPassword_Cancel;
             this.Text = strings.Form_InputMasterPassword_Title;
 
-            if (locale == InternalApplicationConfig.LocaleEnUS)
+            if (locale == LocalConfig.LocaleEnUS)
             {
                 this.comboBox_InputMasterPassword_Language.Text = strings.Form_MenuItem_Language_English;
                 return;
             }
 
-            if (locale == InternalApplicationConfig.LocaleJaJP)
+            if (locale == LocalConfig.LocaleJaJP)
             {
                 this.comboBox_InputMasterPassword_Language.Text = strings.Form_MenuItem_Language_Japanese;
                 return;

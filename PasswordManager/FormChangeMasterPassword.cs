@@ -88,28 +88,28 @@ namespace PasswordManager
             {
                 // Analyze password class and show on strength report text area
                 PasswordTextClass c = FormCreatePassword.GetPasswordClass(t.Text);
-                this.richTextBox_NewPassword_Strength.AppendText(String.Format(InternalApplicationConfig.PasswordStrengthNoticeFormat, strings.General_NewPassword_Strength_TypePassClass, FormCreatePassword.GetPasswordClassText(c)));
+                this.richTextBox_NewPassword_Strength.AppendText(String.Format(LocalConfig.PasswordStrengthNoticeFormat, strings.General_NewPassword_Strength_TypePassClass, FormCreatePassword.GetPasswordClassText(c)));
 
                 // Calculate password strength
                 PasswordComplexityValidatorBase validator = new PasswordComplexityValidator();
                 double adjustedPasswordLength = validator.GetAdjustedCharLength(this.richTextBox_NewPassword_Strength, t.Text, t.Text.Length, FormCreatePassword.AppendStrengthReport);
                 double strength = FormCreatePassword.CalculatePasswordStrength(t.Text, adjustedPasswordLength);
-                this.richTextBox_NewPassword_Strength.AppendText(String.Format(InternalApplicationConfig.PasswordStrengthNoticeFormat, strings.General_NewPassword_Strength_TypeResult, Math.Round(strength, 2).ToString()));
+                this.richTextBox_NewPassword_Strength.AppendText(String.Format(LocalConfig.PasswordStrengthNoticeFormat, strings.General_NewPassword_Strength_TypeResult, Math.Round(strength, 2).ToString()));
 
                 // When judged as a weak password
-                if (strength <= InternalApplicationConfig.MaxWeakPasswordStrength)
+                if (strength <= LocalConfig.MaxWeakPasswordStrength)
                 {
                     this.label_NewPassword_Weak.BackColor = Color.Orange;
                     this.label_NewPassword_Weak.ForeColor = Color.Black;
                 }
                 // When judged as a normal password
-                else if (InternalApplicationConfig.MaxWeakPasswordStrength < strength && strength <= InternalApplicationConfig.MaxNormalPasswordStrength)
+                else if (LocalConfig.MaxWeakPasswordStrength < strength && strength <= LocalConfig.MaxNormalPasswordStrength)
                 {
                     this.label_NewPassword_Normal.BackColor = Color.LightSeaGreen;
                     this.label_NewPassword_Normal.ForeColor = Color.Black;
                 }
                 // When judged as a strong password
-                else if (InternalApplicationConfig.MaxNormalPasswordStrength < strength)
+                else if (LocalConfig.MaxNormalPasswordStrength < strength)
                 {
                     this.label_NewPassword_Secure.BackColor = Color.GreenYellow;
                     this.label_NewPassword_Secure.ForeColor = Color.Black;
@@ -150,7 +150,9 @@ namespace PasswordManager
                 }
             }
 
-            this.MasterPasswordHash = Utility.GetHash(this.textBox_ChangeMasterPassword_1.Text);
+            string password = this.textBox_ChangeMasterPassword_1.Text;
+
+            this.MasterPasswordHash = Utility.Scramble(password, LocalConfig.DefaultSalt, LocalConfig.MasterPasswordHashedKeySize);
             this.SanitizeInputPassword();
             this.DialogResult = DialogResult.OK;
             this.Close();
