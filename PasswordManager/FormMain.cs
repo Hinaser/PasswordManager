@@ -107,7 +107,7 @@ namespace PasswordManager
         void Initialize()
         {
             // Apply language setting
-            this.SetupLanguage(LocalConfig.DefaultLocale);
+            this.SetupLanguage(Thread.CurrentThread.CurrentUICulture.Name);
 
             // Set default filter order
             this.FilterOrder.Add(typeof(DebugFilter).ToString());
