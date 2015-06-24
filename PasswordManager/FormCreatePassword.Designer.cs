@@ -32,6 +32,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormCreatePassword));
             this.textBox_NewPassword_Caption = new System.Windows.Forms.TextBox();
             this.label_NewPassword_Caption = new System.Windows.Forms.Label();
             this.label_NewPassword_ID = new System.Windows.Forms.Label();
@@ -84,6 +85,7 @@
             this.checkBox_NewPassword_UseSymbols = new System.Windows.Forms.CheckBox();
             this.checkBox_NewPassword_UseNumerics = new System.Windows.Forms.CheckBox();
             this.groupBox_NewPassword_Test = new System.Windows.Forms.GroupBox();
+            this.panel_NewPassword_Strength = new System.Windows.Forms.Panel();
             this.richTextBox_NewPassword_Strength = new System.Windows.Forms.RichTextBox();
             this.label_NewPassword_Secure = new System.Windows.Forms.Label();
             this.label_NewPassword_Normal = new System.Windows.Forms.Label();
@@ -92,7 +94,6 @@
             this.button_NewPassword_Cancel = new System.Windows.Forms.Button();
             this.textBox_NewPassword_Memo = new System.Windows.Forms.TextBox();
             this.label_NewPassword_Memo = new System.Windows.Forms.Label();
-            this.panel_NewPassword_Strength = new System.Windows.Forms.Panel();
             this.groupBox_NewPassword_Randomize.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_NewPassword_Maxchars)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_NewPassword_Minchars)).BeginInit();
@@ -709,6 +710,16 @@
             this.groupBox_NewPassword_Test.TabStop = false;
             this.groupBox_NewPassword_Test.Text = "Password strength test";
             // 
+            // panel_NewPassword_Strength
+            // 
+            this.panel_NewPassword_Strength.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel_NewPassword_Strength.Controls.Add(this.richTextBox_NewPassword_Strength);
+            this.panel_NewPassword_Strength.Location = new System.Drawing.Point(14, 40);
+            this.panel_NewPassword_Strength.Name = "panel_NewPassword_Strength";
+            this.panel_NewPassword_Strength.Padding = new System.Windows.Forms.Padding(5);
+            this.panel_NewPassword_Strength.Size = new System.Drawing.Size(241, 115);
+            this.panel_NewPassword_Strength.TabIndex = 3;
+            // 
             // richTextBox_NewPassword_Strength
             // 
             this.richTextBox_NewPassword_Strength.BorderStyle = System.Windows.Forms.BorderStyle.None;
@@ -800,16 +811,6 @@
             this.label_NewPassword_Memo.TabIndex = 11;
             this.label_NewPassword_Memo.Text = "Memo";
             // 
-            // panel_NewPassword_Strength
-            // 
-            this.panel_NewPassword_Strength.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panel_NewPassword_Strength.Controls.Add(this.richTextBox_NewPassword_Strength);
-            this.panel_NewPassword_Strength.Location = new System.Drawing.Point(14, 40);
-            this.panel_NewPassword_Strength.Name = "panel_NewPassword_Strength";
-            this.panel_NewPassword_Strength.Padding = new System.Windows.Forms.Padding(5);
-            this.panel_NewPassword_Strength.Size = new System.Drawing.Size(241, 115);
-            this.panel_NewPassword_Strength.TabIndex = 3;
-            // 
             // FormCreatePassword
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -827,6 +828,7 @@
             this.Controls.Add(this.label_NewPassword_ID);
             this.Controls.Add(this.label_NewPassword_Caption);
             this.Controls.Add(this.textBox_NewPassword_Caption);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "FormCreatePassword";
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
             this.Text = "Create New Password";

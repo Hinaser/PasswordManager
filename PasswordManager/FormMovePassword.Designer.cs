@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormMovePassword));
             this.panel_MovePassword_TreeView = new System.Windows.Forms.Panel();
             this.treeView_MovePassword_Folders = new System.Windows.Forms.TreeView();
             this.panel_MovePassword_Button = new System.Windows.Forms.Panel();
@@ -94,6 +95,7 @@
             this.ClientSize = new System.Drawing.Size(246, 293);
             this.Controls.Add(this.panel_MovePassword_TreeView);
             this.Controls.Add(this.panel_MovePassword_Button);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MinimumSize = new System.Drawing.Size(230, 270);
             this.Name = "FormMovePassword";
             this.Text = "Select folder";

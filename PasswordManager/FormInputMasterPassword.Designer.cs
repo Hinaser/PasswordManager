@@ -32,6 +32,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormInputMasterPassword));
             this.textBox_InputMasterPassword = new System.Windows.Forms.TextBox();
             this.button_InputMasterPassword_OK = new System.Windows.Forms.Button();
             this.button_InputMasterPassword_Cancel = new System.Windows.Forms.Button();
@@ -96,6 +97,7 @@
             this.Controls.Add(this.button_InputMasterPassword_Cancel);
             this.Controls.Add(this.button_InputMasterPassword_OK);
             this.Controls.Add(this.textBox_InputMasterPassword);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximumSize = new System.Drawing.Size(323, 187);
             this.MinimumSize = new System.Drawing.Size(323, 187);
             this.Name = "FormInputMasterPassword";
