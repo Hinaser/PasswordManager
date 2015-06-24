@@ -71,6 +71,9 @@ namespace PasswordManager
             // Setup control events
             this.comboBox_InputMasterPassword_Language.SelectedIndexChanged += comboBox_InputMasterPassword_Language_SelectedValueChanged;
             this.button_InputMasterPassword_OK.Click += button_InputMasterPassword_OK_Click;
+
+            // Setup language
+            this.SetupLanguage(Thread.CurrentThread.CurrentUICulture.Name);
         }
 
         /// <summary>
