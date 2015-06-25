@@ -84,6 +84,7 @@ namespace PasswordManager
             this.ToolStripMenuItem_File_SaveAs.Click += ToolStripMenuItem_File_SaveAs_Click;
             this.ToolStripMenuItem_File_Save.Click += ToolStripMenuItem_File_Save_Click;
             this.ToolStripMenuItem_File_Exit.Click += ToolStripMenuItem_File_Exit_Click;
+            this.ToolStripMenuItem_about.Click += ToolStripMenuItem_about_Click;
 
             // To change edit menu showing items, judging by last focused control(TreeView or ListView)
             this.ToolStripMenuItem_Edit.MouseDown += ToolStripMenuItem_Edit_MouseDown;
@@ -759,6 +760,18 @@ namespace PasswordManager
         void ToolStripMenuItem_File_Exit_Click(object sender, EventArgs e)
         {
             this.TryToCloseApplication(); // Try to close application cleanly.
+        }
+
+        /// <summary>
+        /// Show about dialog box
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        void ToolStripMenuItem_about_Click(object sender, EventArgs e)
+        {
+            FormAbout form = new FormAbout();
+            form.SetDescription(strings.General_About_Description);
+            form.ShowDialog();
         }
         #endregion
 

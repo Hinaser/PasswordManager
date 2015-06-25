@@ -728,6 +728,15 @@ namespace PasswordManager {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Description aaaaaaaaaaa..
+        /// </summary>
+        internal static string General_About_Description {
+            get {
+                return ResourceManager.GetString("General_About_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Copied Caption {0}.
         /// </summary>
         internal static string General_Copy_Caption {

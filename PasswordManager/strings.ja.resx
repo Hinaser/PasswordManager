@@ -506,4 +506,7 @@
   <data name="Form_MenuItem_Help" xml:space="preserve">
     <value>ヘルプ</value>
   </data>
+  <data name="General_About_Description" xml:space="preserve">
+    <value>ああああ</value>
+  </data>
 </root>

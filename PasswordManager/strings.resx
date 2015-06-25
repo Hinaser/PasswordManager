@@ -340,6 +340,9 @@ NOTE: New master password will be applied when file is saved.</value>
   <data name="Form_UpdatePassword_Title" xml:space="preserve">
     <value>Update password</value>
   </data>
+  <data name="General_About_Description" xml:space="preserve">
+    <value>Description aaaaaaaaaaa.</value>
+  </data>
   <data name="General_Copy_Caption" xml:space="preserve">
     <value>Copied Caption {0}</value>
   </data>
