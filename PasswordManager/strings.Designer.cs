@@ -395,6 +395,15 @@ namespace PasswordManager {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Help.
+        /// </summary>
+        internal static string Form_MenuItem_Help {
+            get {
+                return ResourceManager.GetString("Form_MenuItem_Help", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Language.
         /// </summary>
         internal static string Form_MenuItem_Language {

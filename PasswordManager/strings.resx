@@ -229,6 +229,9 @@ NOTE: New master password will be applied when file is saved.</value>
   <data name="Form_MenuItem_File_SaveAs" xml:space="preserve">
     <value>Save As...</value>
   </data>
+  <data name="Form_MenuItem_Help" xml:space="preserve">
+    <value>Help</value>
+  </data>
   <data name="Form_MenuItem_Language" xml:space="preserve">
     <value>Language</value>
   </data>

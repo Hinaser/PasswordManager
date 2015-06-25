@@ -503,4 +503,7 @@
   <data name="General_Notice_Modified" xml:space="preserve">
     <value> (未保存のデータあり)</value>
   </data>
+  <data name="Form_MenuItem_Help" xml:space="preserve">
+    <value>ヘルプ</value>
+  </data>
 </root>

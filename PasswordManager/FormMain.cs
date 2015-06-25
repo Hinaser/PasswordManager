@@ -1806,6 +1806,7 @@ namespace PasswordManager
             Thread.CurrentThread.CurrentUICulture = CultureInfo.GetCultureInfo(locale);
 
             this.Text = this.UnsavedDataExists ? strings.Form_Main_Title + strings.General_Notice_Modified : strings.Form_Main_Title;
+            this.ToolStripMenuItem_help.Text = strings.Form_MenuItem_Help;
             this.ToolStripMenuItem_about.Text = strings.Form_MenuItem_About;
             this.ToolStripMenuItem_option.Text = strings.Form_MenuItem_Option;
             this.toolStripStatusLabel_ClipboardStatus.Text = strings.Status_Ready;

@@ -63,7 +63,7 @@
             this.ToolStripMenuItem_Language_English = new System.Windows.Forms.ToolStripMenuItem();
             this.ToolStripMenuItem_Language_Japanese = new System.Windows.Forms.ToolStripMenuItem();
             this.ToolStripMenuItem_ChangeMasterPassword = new System.Windows.Forms.ToolStripMenuItem();
-            this.ToolStripMenuItem_about = new System.Windows.Forms.ToolStripMenuItem();
+            this.ToolStripMenuItem_help = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStrip_Main = new System.Windows.Forms.ToolStrip();
             this.toolStripButton_Open = new System.Windows.Forms.ToolStripButton();
             this.toolStripButton_Save = new System.Windows.Forms.ToolStripButton();
@@ -78,6 +78,7 @@
             this.ToolStripMenuItem_ListViewItem_Move = new System.Windows.Forms.ToolStripMenuItem();
             this.ToolStripMenuItem_ListViewItem_Delete = new System.Windows.Forms.ToolStripMenuItem();
             this.imageList_Folder = new System.Windows.Forms.ImageList(this.components);
+            this.ToolStripMenuItem_about = new System.Windows.Forms.ToolStripMenuItem();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
@@ -242,7 +243,7 @@
             this.ToolStripMenuItem_File,
             this.ToolStripMenuItem_Edit,
             this.ToolStripMenuItem_option,
-            this.ToolStripMenuItem_about});
+            this.ToolStripMenuItem_help});
             this.menuStrip_Main.Location = new System.Drawing.Point(0, 0);
             this.menuStrip_Main.Name = "menuStrip_Main";
             this.menuStrip_Main.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
@@ -363,11 +364,13 @@
             this.ToolStripMenuItem_ChangeMasterPassword.Size = new System.Drawing.Size(220, 22);
             this.ToolStripMenuItem_ChangeMasterPassword.Text = "Change Master Password";
             // 
-            // ToolStripMenuItem_about
+            // ToolStripMenuItem_help
             // 
-            this.ToolStripMenuItem_about.Name = "ToolStripMenuItem_about";
-            this.ToolStripMenuItem_about.Size = new System.Drawing.Size(53, 20);
-            this.ToolStripMenuItem_about.Text = "About";
+            this.ToolStripMenuItem_help.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.ToolStripMenuItem_about});
+            this.ToolStripMenuItem_help.Name = "ToolStripMenuItem_help";
+            this.ToolStripMenuItem_help.Size = new System.Drawing.Size(45, 20);
+            this.ToolStripMenuItem_help.Text = "Help";
             // 
             // toolStrip_Main
             // 
@@ -486,6 +489,12 @@
             this.imageList_Folder.Images.SetKeyName(0, "FolderClosing");
             this.imageList_Folder.Images.SetKeyName(1, "FolderOpening");
             // 
+            // ToolStripMenuItem_about
+            // 
+            this.ToolStripMenuItem_about.Name = "ToolStripMenuItem_about";
+            this.ToolStripMenuItem_about.Size = new System.Drawing.Size(152, 22);
+            this.ToolStripMenuItem_about.Text = "About";
+            // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -535,7 +544,7 @@
         private System.Windows.Forms.ToolStripButton toolStripButton_Open;
         private System.Windows.Forms.StatusStrip statusStrip_Main;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel_ClipboardStatus;
-        private System.Windows.Forms.ToolStripMenuItem ToolStripMenuItem_about;
+        private System.Windows.Forms.ToolStripMenuItem ToolStripMenuItem_help;
         private System.Windows.Forms.ColumnHeader columnHeader_caption;
         private System.Windows.Forms.ColumnHeader columnHeader_ID;
         private System.Windows.Forms.ColumnHeader columnHeader_password;
@@ -572,6 +581,7 @@
         private System.Windows.Forms.ToolStripMenuItem ToolStripMenuItem_File_SaveAs;
         private System.Windows.Forms.ToolStripMenuItem ToolStripMenuItem_File_Exit;
         private System.Windows.Forms.ImageList imageList_Folder;
+        private System.Windows.Forms.ToolStripMenuItem ToolStripMenuItem_about;
 
 
 
