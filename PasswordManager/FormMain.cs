@@ -114,7 +114,7 @@ namespace PasswordManager
             this.SetupLanguage(Thread.CurrentThread.CurrentUICulture.Name);
 
             // Set default filter order
-            this.FilterOrder.Add(typeof(DebugFilter).ToString());
+            //this.FilterOrder.Add(typeof(DebugFilter).ToString());
 
             // Set default master password hash
             this.MasterPasswordHash = Utility.Scramble(
