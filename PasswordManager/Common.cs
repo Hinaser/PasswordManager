@@ -66,6 +66,7 @@ namespace PasswordManager
         public static PaddingMode PaddingMode = PaddingMode.PKCS7;
         public static int CryptBlockSize = 128;
         public static int Rfc2898DeriveBytesIterationCount = 3000;
+        public enum FolderState { CLOSING = 0, OPENNING = 1 };
     }
 
     public static class Utility

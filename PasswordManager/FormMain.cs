@@ -59,6 +59,8 @@ namespace PasswordManager
             this.treeView_Folders.DragEnter += treeView_Folders_DragEnter;
             this.treeView_Folders.DragDrop += treeView_Folders_DragDrop;
             this.treeView_Folders.DragOver += treeView_Folders_DragOver;
+            this.treeView_Folders.AfterExpand += treeView_Folders_AfterExpand;
+            this.treeView_Folders.AfterCollapse += treeView_Folders_AfterCollapse;
             // Tooltip menu botton event
             this.toolStripButton_Open.Click += toolStripButton_Open_Click;
             this.toolStripButton_Save.Click += toolStripButton_Save_Click;
@@ -934,6 +936,18 @@ namespace PasswordManager
             int containerID = (int)e.Node.Tag;
             this.CurrentTreeNode = e.Node;
 
+            // Set folder image icon
+            if (this.CurrentTreeNode.IsExpanded)
+            {
+                this.CurrentTreeNode.ImageIndex = (int)LocalConfig.FolderState.OPENNING;
+                this.CurrentTreeNode.SelectedImageIndex = (int)LocalConfig.FolderState.OPENNING;
+            }
+            else
+            {
+                this.CurrentTreeNode.ImageIndex = (int)LocalConfig.FolderState.CLOSING;
+                this.CurrentTreeNode.SelectedImageIndex = (int)LocalConfig.FolderState.CLOSING;
+            }
+
             // Initialize listview/textbox control
             this.listView_PasswordItems.Items.Clear();
             this.textBox_ItemDescription.Text = String.Empty;
@@ -1145,6 +1159,23 @@ namespace PasswordManager
             {
                 if (e.Effect == DragDropEffects.Move)
                 {
+                    // Preserve src parent node
+                    TreeNode srcParent = srcNode.Parent;
+
+                    // Change folder status image
+                    if (srcParent != null && srcParent.Nodes.Count == 1)
+                    {
+                        srcParent.ImageIndex = (int)LocalConfig.FolderState.CLOSING;
+                        srcParent.SelectedImageIndex = (int)LocalConfig.FolderState.CLOSING;
+
+                        // Even when child nodes are all moved to other, isExpanded property remains true.
+                        // Collapse() does not work if node does not have any child node.
+                        // So, if doing Collapse() method after last child node of parent node is moved to another node,
+                        // isExpanded property of parent node does not change and remains as "true".
+                        // This is a bit complicated movement..
+                        srcParent.Collapse(true);
+                    }
+
                     srcNode.Remove();
                     this.PasswordData.Indexer.ReleaseContainer((int)srcNode.Tag);
 
@@ -1199,6 +1230,28 @@ namespace PasswordManager
             this.treeView_Folders_AfterSelect(null, tvea);
 
             return;
+        }
+
+        /// <summary>
+        /// Set collapsing folder image when treeview item is collapsed.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        void treeView_Folders_AfterCollapse(object sender, TreeViewEventArgs e)
+        {
+            e.Node.ImageIndex = (int)LocalConfig.FolderState.CLOSING;
+            e.Node.SelectedImageIndex = (int)LocalConfig.FolderState.CLOSING;
+        }
+
+        /// <summary>
+        /// Set expanding folder image when treeview item is expanded.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        void treeView_Folders_AfterExpand(object sender, TreeViewEventArgs e)
+        {
+            e.Node.ImageIndex = (int)LocalConfig.FolderState.OPENNING;
+            e.Node.SelectedImageIndex = (int)LocalConfig.FolderState.OPENNING;
         }
         #endregion
 
@@ -1314,6 +1367,11 @@ namespace PasswordManager
             // Remove all children from folder
             this.treeView_Folders.Nodes.Clear();
 
+            // Attach image list
+            this.treeView_Folders.ImageList = this.imageList_Folder;
+            this.treeView_Folders.ImageIndex = (int)LocalConfig.FolderState.CLOSING;
+            this.treeView_Folders.SelectedImageIndex = (int)LocalConfig.FolderState.CLOSING;
+
             // Construct container tree
             TreeNode node = GetTreeViewNodeBuilt(containers, indexer, this.contextMenuStrip_TreeViewNode);
             this.treeView_Folders.Nodes.Add(node);
@@ -1341,6 +1399,10 @@ namespace PasswordManager
             // Attach context menu strip
             rootNode.ContextMenuStrip = context;
 
+            // Attach folder image
+            rootNode.ImageIndex = (int)LocalConfig.FolderState.CLOSING;
+            rootNode.SelectedImageIndex = (int)LocalConfig.FolderState.CLOSING;
+
             return rootNode;
         }
 
@@ -1367,6 +1429,8 @@ namespace PasswordManager
                 TreeNode node = new TreeNode(c.GetLabel());
                 node.Tag = childContainerID; // Store identification information
                 node.ContextMenuStrip = context; // Attach context menu strip
+                node.ImageIndex = (int)LocalConfig.FolderState.CLOSING;
+                node.SelectedImageIndex = (int)LocalConfig.FolderState.CLOSING;
 
                 parentNode.Nodes.Add(node); // Add the current node to parent node
 
@@ -1389,6 +1453,8 @@ namespace PasswordManager
             TreeNode node = new TreeNode(!String.IsNullOrEmpty(container.GetLabel()) ? container.GetLabel() : LocalConfig.NewUnnamedContainerLabel);
             node.Tag = container.GetContainerID();
             node.ContextMenuStrip = this.contextMenuStrip_TreeViewNode;
+            node.ImageIndex = (int)LocalConfig.FolderState.CLOSING;
+            node.SelectedImageIndex = (int)LocalConfig.FolderState.CLOSING;
 
             parentNode.Nodes.Add(node);
 

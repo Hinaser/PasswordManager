@@ -77,6 +77,7 @@
             this.ToolStripMenuItem_ListViewItem_Edit = new System.Windows.Forms.ToolStripMenuItem();
             this.ToolStripMenuItem_ListViewItem_Move = new System.Windows.Forms.ToolStripMenuItem();
             this.ToolStripMenuItem_ListViewItem_Delete = new System.Windows.Forms.ToolStripMenuItem();
+            this.imageList_Folder = new System.Windows.Forms.ImageList(this.components);
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
@@ -478,6 +479,13 @@
             this.ToolStripMenuItem_ListViewItem_Delete.Size = new System.Drawing.Size(112, 22);
             this.ToolStripMenuItem_ListViewItem_Delete.Text = "Delete";
             // 
+            // imageList_Folder
+            // 
+            this.imageList_Folder.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageList_Folder.ImageStream")));
+            this.imageList_Folder.TransparentColor = System.Drawing.Color.Transparent;
+            this.imageList_Folder.Images.SetKeyName(0, "FolderClosing");
+            this.imageList_Folder.Images.SetKeyName(1, "FolderOpening");
+            // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -563,6 +571,7 @@
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel_FileOpened;
         private System.Windows.Forms.ToolStripMenuItem ToolStripMenuItem_File_SaveAs;
         private System.Windows.Forms.ToolStripMenuItem ToolStripMenuItem_File_Exit;
+        private System.Windows.Forms.ImageList imageList_Folder;
 
 
 
