@@ -64,6 +64,7 @@
             this.ToolStripMenuItem_Language_Japanese = new System.Windows.Forms.ToolStripMenuItem();
             this.ToolStripMenuItem_ChangeMasterPassword = new System.Windows.Forms.ToolStripMenuItem();
             this.ToolStripMenuItem_help = new System.Windows.Forms.ToolStripMenuItem();
+            this.ToolStripMenuItem_about = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStrip_Main = new System.Windows.Forms.ToolStrip();
             this.toolStripButton_Open = new System.Windows.Forms.ToolStripButton();
             this.toolStripButton_Save = new System.Windows.Forms.ToolStripButton();
@@ -78,7 +79,7 @@
             this.ToolStripMenuItem_ListViewItem_Move = new System.Windows.Forms.ToolStripMenuItem();
             this.ToolStripMenuItem_ListViewItem_Delete = new System.Windows.Forms.ToolStripMenuItem();
             this.imageList_Folder = new System.Windows.Forms.ImageList(this.components);
-            this.ToolStripMenuItem_about = new System.Windows.Forms.ToolStripMenuItem();
+            this.ToolStripMenuItem_File_New = new System.Windows.Forms.ToolStripMenuItem();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
@@ -254,6 +255,7 @@
             // ToolStripMenuItem_File
             // 
             this.ToolStripMenuItem_File.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.ToolStripMenuItem_File_New,
             this.ToolStripMenuItem_File_Open,
             this.ToolStripMenuItem_File_Save,
             this.ToolStripMenuItem_File_SaveAs,
@@ -265,25 +267,25 @@
             // ToolStripMenuItem_File_Open
             // 
             this.ToolStripMenuItem_File_Open.Name = "ToolStripMenuItem_File_Open";
-            this.ToolStripMenuItem_File_Open.Size = new System.Drawing.Size(133, 22);
+            this.ToolStripMenuItem_File_Open.Size = new System.Drawing.Size(152, 22);
             this.ToolStripMenuItem_File_Open.Text = "Open";
             // 
             // ToolStripMenuItem_File_Save
             // 
             this.ToolStripMenuItem_File_Save.Name = "ToolStripMenuItem_File_Save";
-            this.ToolStripMenuItem_File_Save.Size = new System.Drawing.Size(133, 22);
+            this.ToolStripMenuItem_File_Save.Size = new System.Drawing.Size(152, 22);
             this.ToolStripMenuItem_File_Save.Text = "Save";
             // 
             // ToolStripMenuItem_File_SaveAs
             // 
             this.ToolStripMenuItem_File_SaveAs.Name = "ToolStripMenuItem_File_SaveAs";
-            this.ToolStripMenuItem_File_SaveAs.Size = new System.Drawing.Size(133, 22);
+            this.ToolStripMenuItem_File_SaveAs.Size = new System.Drawing.Size(152, 22);
             this.ToolStripMenuItem_File_SaveAs.Text = "Save As...";
             // 
             // ToolStripMenuItem_File_Exit
             // 
             this.ToolStripMenuItem_File_Exit.Name = "ToolStripMenuItem_File_Exit";
-            this.ToolStripMenuItem_File_Exit.Size = new System.Drawing.Size(133, 22);
+            this.ToolStripMenuItem_File_Exit.Size = new System.Drawing.Size(152, 22);
             this.ToolStripMenuItem_File_Exit.Text = "Exit";
             // 
             // ToolStripMenuItem_Edit
@@ -371,6 +373,12 @@
             this.ToolStripMenuItem_help.Name = "ToolStripMenuItem_help";
             this.ToolStripMenuItem_help.Size = new System.Drawing.Size(45, 20);
             this.ToolStripMenuItem_help.Text = "Help";
+            // 
+            // ToolStripMenuItem_about
+            // 
+            this.ToolStripMenuItem_about.Name = "ToolStripMenuItem_about";
+            this.ToolStripMenuItem_about.Size = new System.Drawing.Size(152, 22);
+            this.ToolStripMenuItem_about.Text = "About";
             // 
             // toolStrip_Main
             // 
@@ -489,11 +497,11 @@
             this.imageList_Folder.Images.SetKeyName(0, "FolderClosing");
             this.imageList_Folder.Images.SetKeyName(1, "FolderOpening");
             // 
-            // ToolStripMenuItem_about
+            // ToolStripMenuItem_File_New
             // 
-            this.ToolStripMenuItem_about.Name = "ToolStripMenuItem_about";
-            this.ToolStripMenuItem_about.Size = new System.Drawing.Size(152, 22);
-            this.ToolStripMenuItem_about.Text = "About";
+            this.ToolStripMenuItem_File_New.Name = "ToolStripMenuItem_File_New";
+            this.ToolStripMenuItem_File_New.Size = new System.Drawing.Size(152, 22);
+            this.ToolStripMenuItem_File_New.Text = "New";
             // 
             // FormMain
             // 
@@ -582,6 +590,7 @@
         private System.Windows.Forms.ToolStripMenuItem ToolStripMenuItem_File_Exit;
         private System.Windows.Forms.ImageList imageList_Folder;
         private System.Windows.Forms.ToolStripMenuItem ToolStripMenuItem_about;
+        private System.Windows.Forms.ToolStripMenuItem ToolStripMenuItem_File_New;
 
 
 

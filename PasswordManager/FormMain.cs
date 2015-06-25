@@ -80,6 +80,7 @@ namespace PasswordManager
             this.ToolStripMenuItem_Language_English.Click += ToolStripMenuItem_Language_English_Click;
             this.ToolStripMenuItem_Language_Japanese.Click += ToolStripMenuItem_Language_Japanese_Click;
             this.ToolStripMenuItem_ChangeMasterPassword.Click += ToolStripMenuItem_ChangeMasterPassword_Click;
+            this.ToolStripMenuItem_File_New.Click += ToolStripMenuItem_File_New_Click;
             this.ToolStripMenuItem_File_Open.Click += ToolStripMenuItem_File_Open_Click;
             this.ToolStripMenuItem_File_SaveAs.Click += ToolStripMenuItem_File_SaveAs_Click;
             this.ToolStripMenuItem_File_Save.Click += ToolStripMenuItem_File_Save_Click;
@@ -723,6 +724,21 @@ namespace PasswordManager
         }
 
         /// <summary>
+        /// Close current file and initialize password data objects
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        void ToolStripMenuItem_File_New_Click(object sender, EventArgs e)
+        {
+            // If unsaved data exists, prompt to your whether unsaved data can be discard to proceed.
+            if (!this.ConfirmWhetherUnsavedDataCanBeDiscarded())
+            {
+                return;
+            }
+
+        }
+
+        /// <summary>
         /// Open and load password file
         /// </summary>
         /// <param name="sender"></param>
@@ -1300,17 +1316,9 @@ namespace PasswordManager
         /// <param name="e"></param>
         void FormMain_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if (this.UnsavedDataExists)
+            if (!this.ConfirmWhetherUnsavedDataCanBeDiscarded())
             {
-                // Ask user whether the app can be closed for sure.
-                DialogResult result = MessageBox.Show(strings.Form_ClosingWithUnsavedData_Text, strings.Form_ClosingWithUnsavedData_Caption, MessageBoxButtons.OKCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2);
-
-                // If user cancels, tell the app not to close the application.
-                if (result != DialogResult.OK)
-                {
-                    e.Cancel = true;
-                    return;
-                }
+                e.Cancel = true;
             }
         }
         #endregion
@@ -1808,6 +1816,27 @@ namespace PasswordManager
             this.Text = strings.Form_Main_Title + strings.General_Notice_Modified;
             this.UnsavedDataExists = true;
         }
+
+        /// <summary>
+        /// Confirm user whether unsaved data can be discarded to make process go forward.
+        /// </summary>
+        /// <returns>True if user agreed to go anyway. False if user want to cancel operation.</returns>
+        private bool ConfirmWhetherUnsavedDataCanBeDiscarded()
+        {
+            if (this.UnsavedDataExists)
+            {
+                // Ask user whether the app can be closed for sure.
+                DialogResult result = MessageBox.Show(strings.Form_ClosingWithUnsavedData_Text, strings.Form_ClosingWithUnsavedData_Caption, MessageBoxButtons.OKCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2);
+
+                // If user cancels, tell the app not to close the application.
+                if (result != DialogResult.OK)
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
         #endregion
 
         #region Language setup
@@ -1838,6 +1867,7 @@ namespace PasswordManager
             this.ToolStripMenuItem_DeleteFolder.Text = strings.Form_ContextMenu_DeleteContainer;
             this.ToolStripMenuItem_AddPassword.Text = strings.Form_ContextMenu_AddPassword;
             this.ToolStripMenuItem_File.Text = strings.Form_MenuItem_File;
+            this.ToolStripMenuItem_File_New.Text = strings.Form_MenuItem_File_New;
             this.ToolStripMenuItem_File_Open.Text = strings.Form_MenuItem_File_Open;
             this.ToolStripMenuItem_File_Save.Text = strings.Form_MenuItem_File_Save;
             this.ToolStripMenuItem_File_SaveAs.Text = strings.Form_MenuItem_File_SaveAs;

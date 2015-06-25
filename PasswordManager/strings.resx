@@ -220,6 +220,9 @@ NOTE: New master password will be applied when file is saved.</value>
   <data name="Form_MenuItem_File_Exit" xml:space="preserve">
     <value>Exit</value>
   </data>
+  <data name="Form_MenuItem_File_New" xml:space="preserve">
+    <value>New</value>
+  </data>
   <data name="Form_MenuItem_File_Open" xml:space="preserve">
     <value>Open</value>
   </data>

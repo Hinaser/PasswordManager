@@ -368,6 +368,15 @@ namespace PasswordManager {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to New.
+        /// </summary>
+        internal static string Form_MenuItem_File_New {
+            get {
+                return ResourceManager.GetString("Form_MenuItem_File_New", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Open.
         /// </summary>
         internal static string Form_MenuItem_File_Open {
