@@ -1610,6 +1610,7 @@ namespace PasswordManager
             // Setup save file dialog
             SaveFileDialog saveDialog = new SaveFileDialog();
             saveDialog.InitialDirectory = directory;
+            saveDialog.FileName = LocalConfig.DefaultPasswordFileName;
             saveDialog.DefaultExt = LocalConfig.DefaultFileExt;
             saveDialog.Filter = LocalConfig.OpeningPasswordFileFilter;
             saveDialog.FilterIndex = 1;

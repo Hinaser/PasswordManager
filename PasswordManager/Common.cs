@@ -25,7 +25,8 @@ namespace PasswordManager
         public static string LocaleEnUS = "en-US";
         public static string LocaleJaJP = "ja-JP";
         public static string DefaultLocale = LocaleEnUS;
-        public static string DefaultPasswordFilePath = Environment.CurrentDirectory + @"\password.dat";
+        public static string DefaultPasswordFileName = @"password.dat";
+        public static string DefaultPasswordFilePath = Environment.CurrentDirectory + Path.DirectorySeparatorChar + DefaultPasswordFileName;
         public static string DefaultMasterPassword = "";
         public static string DefaultSalt = "salt";
         public static int RootContainerID = 0;
