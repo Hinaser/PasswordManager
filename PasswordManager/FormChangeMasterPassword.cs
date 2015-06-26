@@ -229,6 +229,9 @@ namespace PasswordManager
             this.button_ChangeMasterPassword_OK.Text = strings.Form_ChangeMasterPassword_OK;
             this.button_ChangeMasterPassword_Cancel.Text = strings.Form_ChangeMasterPassword_Cancel;
             this.groupBox_NewPassword_Test.Text = strings.Form_NewPassword_StrengthTest;
+            this.label_NewPassword_Weak.Text = strings.Form_NewPassword_PasswdWeak;
+            this.label_NewPassword_Normal.Text = strings.Form_NewPassword_PasswdNormal;
+            this.label_NewPassword_Secure.Text = strings.Form_NewPassword_PasswdSecure;
         }
     }
 }
