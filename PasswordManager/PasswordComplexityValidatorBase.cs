@@ -184,6 +184,9 @@ namespace PasswordManager
         UseLowerUpperSymbol,
         UseLowerNumberSymbol,
         UseUpperNumberSymbol,
-        UseLowerUpperNumberSymbol
+        UseLowerUpperNumberSymbol,
+        Use2bytesUTF8Char,
+        Use3bytesUTF8Char,
+        Use4bytesUTF8Char,
     }
 }

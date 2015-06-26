@@ -492,6 +492,15 @@ Your input: {1} characters</value>
   <data name="General_NewPassword_Strength_US" xml:space="preserve">
     <value>Combination of upper case / symbol</value>
   </data>
+  <data name="General_NewPassword_Strength_UTF8_2Bytes" xml:space="preserve">
+    <value>Containing 2 bytes UTF-8 character</value>
+  </data>
+  <data name="General_NewPassword_Strength_UTF8_3Bytes" xml:space="preserve">
+    <value>Containing 3 bytes UTF-8 character</value>
+  </data>
+  <data name="General_NewPassword_Strength_UTF8_4Bytes" xml:space="preserve">
+    <value>Containing 4 bytes UTF-8 character</value>
+  </data>
   <data name="General_Notice_Modified" xml:space="preserve">
     <value> (Unsaved data exists)</value>
   </data>

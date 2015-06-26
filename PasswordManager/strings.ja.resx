@@ -512,4 +512,13 @@
   <data name="General_About_Description" xml:space="preserve">
     <value>ああああ</value>
   </data>
+  <data name="General_NewPassword_Strength_UTF8_2Bytes" xml:space="preserve">
+    <value>2バイトUTF-8文字の使用</value>
+  </data>
+  <data name="General_NewPassword_Strength_UTF8_3Bytes" xml:space="preserve">
+    <value>3バイトUTF-8文字の使用</value>
+  </data>
+  <data name="General_NewPassword_Strength_UTF8_4Bytes" xml:space="preserve">
+    <value>4バイトUTF-8文字の使用</value>
+  </data>
 </root>

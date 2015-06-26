@@ -442,6 +442,11 @@ namespace PasswordManager
             if ((new Regex(String.Format("^[{0}{1}{2}]+$", upper, number, symbol))).IsMatch(password)) return PasswordTextClass.UseUpperNumberSymbol;
             if ((new Regex(String.Format("^[{0}{1}{2}{3}]+$", lower, upper, number, symbol))).IsMatch(password)) return PasswordTextClass.UseLowerUpperNumberSymbol;
 
+            // If non-ASCII character exists
+            if ((new Regex(@"[\u10000-\u10FFFF]")).IsMatch(password)) return PasswordTextClass.Use4bytesUTF8Char; // 4 bytes characters in UTF8
+            if ((new Regex(@"[\u0800-\uFFFF]")).IsMatch(password)) return PasswordTextClass.Use3bytesUTF8Char; // 3 bytes characters in UTF8
+            if ((new Regex(@"[\u0080-\u07FF]")).IsMatch(password)) return PasswordTextClass.Use2bytesUTF8Char; // 2 bytes characters in UTF8
+
             return PasswordTextClass.Unknown;
         }
 
@@ -484,6 +489,12 @@ namespace PasswordManager
                     return strings.General_NewPassword_Strength_UNS;
                 case PasswordTextClass.UseLowerUpperNumberSymbol:
                     return strings.General_NewPassword_Strength_LUNS;
+                case PasswordTextClass.Use4bytesUTF8Char:
+                    return strings.General_NewPassword_Strength_UTF8_4Bytes;
+                case PasswordTextClass.Use3bytesUTF8Char:
+                    return strings.General_NewPassword_Strength_UTF8_3Bytes;
+                case PasswordTextClass.Use2bytesUTF8Char:
+                    return strings.General_NewPassword_Strength_UTF8_2Bytes;
                 default:
                     break;
             }
@@ -502,6 +513,9 @@ namespace PasswordManager
             int uppers = Utility.ALPHABET.Length;
             int numerics = Utility.Numeric.Length;
             int symbols = Utility.Symbol.Length;
+            int utf8_2bytes = 1920; // \u0080-\u07FF
+            int utf8_3bytes = 63488; // \u0800-\uFFFF
+            int utf8_4bytes = 1048576; // \u10000-\u10FFFF
 
             switch (c)
             {
@@ -535,6 +549,12 @@ namespace PasswordManager
                     return uppers + numerics + symbols;
                 case PasswordTextClass.UseLowerUpperNumberSymbol:
                     return lowers + uppers + numerics + symbols;
+                case PasswordTextClass.Use4bytesUTF8Char:
+                    return utf8_4bytes;
+                case PasswordTextClass.Use3bytesUTF8Char:
+                    return utf8_3bytes;
+                case PasswordTextClass.Use2bytesUTF8Char:
+                    return utf8_2bytes;
                 default:
                     break;
             }

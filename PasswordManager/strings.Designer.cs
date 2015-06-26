@@ -1174,6 +1174,33 @@ namespace PasswordManager {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Containing 2 bytes UTF-8 character.
+        /// </summary>
+        internal static string General_NewPassword_Strength_UTF8_2Bytes {
+            get {
+                return ResourceManager.GetString("General_NewPassword_Strength_UTF8_2Bytes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Containing 3 bytes UTF-8 character.
+        /// </summary>
+        internal static string General_NewPassword_Strength_UTF8_3Bytes {
+            get {
+                return ResourceManager.GetString("General_NewPassword_Strength_UTF8_3Bytes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Containing 4 bytes UTF-8 character.
+        /// </summary>
+        internal static string General_NewPassword_Strength_UTF8_4Bytes {
+            get {
+                return ResourceManager.GetString("General_NewPassword_Strength_UTF8_4Bytes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to  (Unsaved data exists).
         /// </summary>
         internal static string General_Notice_Modified {
