@@ -40,7 +40,7 @@ namespace PasswordManager
             InitializeComponent();
 
             // Initialize form element
-            this.Initialize();
+            this.Initialize(true);
 
             // ListView event
             this.listView_PasswordItems.SizeChanged += listView_PasswordItems_SizeChanged;
@@ -108,89 +108,46 @@ namespace PasswordManager
         /// <summary>
         /// Initialize form element
         /// </summary>
-        void Initialize()
+        void Initialize(bool openDefaultPasswordFile = false)
         {
-            // Apply language setting
-            this.SetupLanguage(Thread.CurrentThread.CurrentUICulture.Name);
-
             // Set default filter order
             //this.FilterOrder.Add(typeof(DebugFilter).ToString());
 
             // Set default master password hash
-            this.MasterPasswordHash = Utility.Scramble(
+            byte[] defaultMasterPasswordHash = Utility.Scramble(
                 LocalConfig.DefaultMasterPassword,
                 LocalConfig.DefaultSalt,
                 LocalConfig.MasterPasswordHashedKeySize);
 
-
-            // Try to open password file in the default location
-            if (File.Exists(LocalConfig.DefaultPasswordFilePath))
+            // Sanitize sensitive data
+            if (this.PasswordData != null)
             {
-                bool validPasswordEntered = false;
-
-                // When the password file can be opened by default password, go without prompting masterpassword to user.
-                // Expected possible cases are as follows:
-                //   - Default master password is OK
-                //       -> Keep using default master password  as a master password.
-                //   - User input master password is OK
-                //       -> Stored master password hash will be replaced by user input password.
-                //   - User gives up to enter master password
-                //       -> Stored master password hash is kept as default master password.
-                //            In this case, this app do not try to open password file but open new password manager instance on memory.
-                //            Then user can save the instance to new password file. (Existing password file shouldn't be overwritten.)
-                if (PasswordFile.ChallengeHashedMasterPassword(LocalConfig.DefaultPasswordFilePath, this.MasterPasswordHash))
+                this.PasswordData.Dispose();
+            }
+            if (this.MasterPasswordHash != null && this.MasterPasswordHash.Length > 0)
+            {
+                for (int i = 0; i < this.MasterPasswordHash.Length; i++)
                 {
-                    validPasswordEntered = true;
-                }
-                else
-                {
-                    // Ask master password hash
-                    // Input password will be sanitised after exiting this using statement by user-defined Dispose() method on FormInputMasterPassword class.
-                    using (FormInputMasterPassword form = new FormInputMasterPassword(PasswordFile.ChallengeHashedMasterPassword, LocalConfig.DefaultPasswordFilePath))
-                    {
-                        form.StartPosition = FormStartPosition.CenterScreen;
-                        DialogResult result = form.ShowDialog();
-
-                        // Only when valid master password has been entered, master password of class member field will be updated.
-                        if (result == DialogResult.OK)
-                        {
-                            this.MasterPasswordHash = form.GetMasterPasswordHash();
-                            validPasswordEntered = true;
-                        }
-                        // Master password of class member field remains default password.
-                        else
-                        {
-                            validPasswordEntered = false;
-                        }
-                    }
-                }
-
-                if (validPasswordEntered)
-                {
-                    try
-                    {
-                        // Try to parse specified password file
-                        PasswordFile f = new PasswordFile(LocalConfig.DefaultPasswordFilePath);
-                        this.PasswordData = f.ReadPasswordFromFile(this.MasterPasswordHash);
-
-                        // Set password file information
-                        this.CurrentPasswordFilePath = LocalConfig.DefaultPasswordFilePath;
-                    }
-                    catch (InvalidMasterPasswordException)
-                    {
-                        MessageBox.Show(strings.General_InvalidMasterPassword_Text, strings.General_InvalidMasterPassword_Caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    }
-                    catch (NoCorrespondingFilterFoundException e)
-                    {
-                        string msgText = String.Format(strings.General_ParseFilterFailed_Text, e.Message);
-                        MessageBox.Show(msgText, strings.General_ParseFilterFailed_Caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    }
-                    catch
-                    {
-                        ;
-                    }
+                    this.MasterPasswordHash[i] = 0;
                 }
             }
+
+            // Reset field variables
+            this.PasswordData = new PasswordFileBody();
+            this.CurrentTreeNode = null;
+            this.FilterOrder = new List<string>();
+            this.MasterPasswordHash = defaultMasterPasswordHash;
+            this.CurrentPasswordFilePath = String.Empty;
+            this.UnsavedDataExists = false;
+
+            // Try to open password file at default file location
+            if (openDefaultPasswordFile)
+            {
+                this.OpenDefaultPasswordFile(defaultMasterPasswordHash);
+            }
+
+            // Apply language setting
+            this.SetupLanguage(Thread.CurrentThread.CurrentUICulture.Name);
 
             this.InitializeTreeStructure(this.PasswordData.Containers, this.PasswordData.Indexer);
             this.treeView_Folders.Invalidate();
@@ -736,6 +693,8 @@ namespace PasswordManager
                 return;
             }
 
+            // Initialize password information
+            this.Initialize(false);
         }
 
         /// <summary>
@@ -1520,6 +1479,85 @@ namespace PasswordManager
 
             int recordID = (int)lvi.Tag;
             return this.PasswordData.Indexer.GetRecordByID(this.PasswordData.Records, recordID);
+        }
+
+        /// <summary>
+        /// Try to open password file at default location
+        /// </summary>
+        private bool OpenDefaultPasswordFile(byte[] defaultMasterPasswordHash)
+        {
+            byte[] masterPasswordHash = defaultMasterPasswordHash;
+
+            // Try to open password file in the default location
+            if (File.Exists(LocalConfig.DefaultPasswordFilePath))
+            {
+                bool validPasswordEntered = false;
+
+                // When the password file can be opened by default password, go without prompting masterpassword to user.
+                // Expected possible cases are as follows:
+                //   - Default master password is OK
+                //       -> Keep using default master password  as a master password.
+                //   - User input master password is OK
+                //       -> Stored master password hash will be replaced by user input password.
+                //   - User gives up to enter master password
+                //       -> Stored master password hash is kept as default master password.
+                //            In this case, this app do not try to open password file but open new password manager instance on memory.
+                //            Then user can save the instance to new password file. (Existing password file shouldn't be overwritten.)
+                if (PasswordFile.ChallengeHashedMasterPassword(LocalConfig.DefaultPasswordFilePath, masterPasswordHash))
+                {
+                    validPasswordEntered = true;
+                }
+                else
+                {
+                    // Ask master password hash
+                    // Input password will be sanitised after exiting this using statement by user-defined Dispose() method on FormInputMasterPassword class.
+                    using (FormInputMasterPassword form = new FormInputMasterPassword(PasswordFile.ChallengeHashedMasterPassword, LocalConfig.DefaultPasswordFilePath))
+                    {
+                        form.StartPosition = FormStartPosition.CenterScreen;
+                        DialogResult result = form.ShowDialog();
+
+                        // Only when valid master password has been entered, master password of class member field will be updated.
+                        if (result == DialogResult.OK)
+                        {
+                            masterPasswordHash = form.GetMasterPasswordHash();
+                            validPasswordEntered = true;
+                        }
+                        // Master password of class member field remains default password.
+                        else
+                        {
+                            validPasswordEntered = false;
+                        }
+                    }
+                }
+
+                if (validPasswordEntered)
+                {
+                    try
+                    {
+                        // Try to parse specified password file
+                        PasswordFile f = new PasswordFile(LocalConfig.DefaultPasswordFilePath);
+                        this.PasswordData = f.ReadPasswordFromFile(masterPasswordHash);
+
+                        // Set password file information
+                        this.CurrentPasswordFilePath = LocalConfig.DefaultPasswordFilePath;
+                        this.MasterPasswordHash = masterPasswordHash;
+
+                        return true;
+                    }
+                    catch (InvalidMasterPasswordException)
+                    {
+                        MessageBox.Show(strings.General_InvalidMasterPassword_Text, strings.General_InvalidMasterPassword_Caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                    catch (NoCorrespondingFilterFoundException e)
+                    {
+                        string msgText = String.Format(strings.General_ParseFilterFailed_Text, e.Message);
+                        MessageBox.Show(msgText, strings.General_ParseFilterFailed_Caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                    catch { }
+                }
+            }
+
+            return false;
         }
 
         /// <summary>
