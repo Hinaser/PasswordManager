@@ -168,6 +168,9 @@ namespace PasswordManager
             // Disable Generate button for a moment
             this.button_NewPassword_GeneratePassword.Enabled = false;
 
+            // The line below is to avoid description text box being flashing when clicking GeneratePassword button
+            this.textBox_NewPassword_Memo.DeselectAll();
+
             // Check parameters
             // Check min-max characters value
             if (this.numericUpDown_NewPassword_Minchars.Value < LocalConfig.PasswordMinLength
