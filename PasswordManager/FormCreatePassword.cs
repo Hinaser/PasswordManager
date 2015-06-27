@@ -201,13 +201,14 @@ namespace PasswordManager
             char[] password = new char[passwordLength];
             char[] passwordPool = this.GeneratePasswordCharacterPool();
 
-            // Randome seed
-            int seed = this.Location.X * this.Location.Y;
+            // Random seed
+            int seed = Environment.TickCount ^ (int)DateTime.Now.Ticks;
 
             // Pick up random characters from password pool
             for (int i = 0; i < password.Length; i++)
             {
                 password[i] = passwordPool[GetRandomInt(passwordPool.Length - 1, seed)];
+                seed = Environment.TickCount ^ (int)DateTime.Now.Ticks;
             }
 
             this.textBox_NewPassword_Password.Text = new String(password);
@@ -360,7 +361,7 @@ namespace PasswordManager
             }
 
             System.Threading.Thread.Sleep(1 + Math.Abs(seed) % 10);
-            Random rand = new Random((int)(DateTime.Now.Ticks & 0x0000FFFF));
+            Random rand = new Random(Environment.TickCount ^ (int)DateTime.Now.Ticks);
             return rand.Next() % (max + 1);
         }
 
