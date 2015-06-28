@@ -138,6 +138,7 @@
             this.textBoxDescription.TabIndex = 23;
             this.textBoxDescription.TabStop = false;
             this.textBoxDescription.Text = "Description";
+            this.textBoxDescription.WordWrap = false;
             // 
             // okButton
             // 
