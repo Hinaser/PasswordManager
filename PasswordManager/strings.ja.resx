@@ -190,7 +190,7 @@
     <value>最小文字数</value>
   </data>
   <data name="Form_NewPassword_OK" xml:space="preserve">
-    <value>保存</value>
+    <value>保存(&amp;S)</value>
   </data>
   <data name="Form_NewPassword_PasswdNormal" xml:space="preserve">
     <value>普通</value>

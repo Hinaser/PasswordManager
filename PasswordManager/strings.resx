@@ -284,7 +284,7 @@ NOTE: New master password will be applied when file is saved.</value>
     <value>Min chars</value>
   </data>
   <data name="Form_NewPassword_OK" xml:space="preserve">
-    <value>Save</value>
+    <value>Save(&amp;S)</value>
   </data>
   <data name="Form_NewPassword_PasswdNormal" xml:space="preserve">
     <value>Normal</value>
