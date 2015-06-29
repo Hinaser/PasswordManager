@@ -158,6 +158,8 @@ namespace PasswordManager
             // Apply language setting
             this.SetupLanguage(Thread.CurrentThread.CurrentUICulture.Name);
 
+            this.listView_PasswordItems.Items.Clear();
+            this.textBox_ItemDescription.Clear();
             this.InitializeTreeStructure(this.PasswordData.Containers, this.PasswordData.Indexer);
             this.treeView_Folders.Invalidate();
             this.listView_PasswordItems.Invalidate();
