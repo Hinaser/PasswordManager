@@ -522,7 +522,8 @@ Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
-limitations under the License.</value>
+limitations under the License.
+</value>
   </data>
   <data name="General_NewPassword_Strength_UTF8_2Bytes" xml:space="preserve">
     <value>2バイトUTF-8文字の使用</value>
