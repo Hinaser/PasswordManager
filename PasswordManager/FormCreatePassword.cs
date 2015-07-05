@@ -214,13 +214,13 @@ namespace PasswordManager
             char[] passwordPool = this.GeneratePasswordCharacterPool();
 
             // Random seed
-            int seed = Environment.TickCount ^ (int)DateTime.Now.Ticks;
+            int seed = FormCreatePassword.GetRandomIntFromTime();
 
             // Pick up random characters from password pool
             for (int i = 0; i < password.Length; i++)
             {
                 password[i] = passwordPool[GetRandomInt(passwordPool.Length - 1, seed)];
-                seed = Environment.TickCount ^ (int)DateTime.Now.Ticks;
+                seed = FormCreatePassword.GetRandomIntFromTime();
             }
 
             this.textBox_NewPassword_Password.Text = new String(password);
@@ -361,6 +361,23 @@ namespace PasswordManager
         }
 
         /// <summary>
+        /// Generate random 32bit integer value from combination of OS uptime and current time.
+        /// </summary>
+        /// <returns></returns>
+        public static int GetRandomIntFromTime()
+        {
+            int uptimeTick = Environment.TickCount;
+            int currentTick = (int)DateTime.Now.Ticks;
+
+            // Convert byte order
+            byte[] tmp = BitConverter.GetBytes(currentTick);
+            Array.Reverse(tmp);
+            currentTick = BitConverter.ToInt32(tmp, 0);
+
+            return uptimeTick ^ currentTick;
+        }
+
+        /// <summary>
         /// Get randomized integer between 0 and specified max value
         /// </summary>
         /// <param name="max"></param>
@@ -373,7 +390,7 @@ namespace PasswordManager
             }
 
             System.Threading.Thread.Sleep(1 + Math.Abs(seed) % 10);
-            Random rand = new Random(Environment.TickCount ^ (int)DateTime.Now.Ticks);
+            Random rand = new Random(FormCreatePassword.GetRandomIntFromTime());
             return rand.Next() % (max + 1);
         }
 
