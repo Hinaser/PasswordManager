@@ -1,30 +1,27 @@
 # PasswordManager
-This project creates password management tool for Windows platform. The tool enables you to pickup id/password easily and store private data with security.
+A password management tool for Windows platform. The tool enables you to pickup id/password easily and store private data with security.
 
-# Pre-Requisition
+# Prerequisite
 .NET Framework 3.5 or higher on Windows platform.  
-(.NET Framework 3.5 is installed Windows7 by default)  
+(.NET Framework 3.5 is installed on Windows7 by default)  
 
 # Feature
 This app will provide you features as follows:  
 
 * Basic
- - Add/Modify/Delete passwords
- - Passwords can be stored in custom folder tree structure
- - Save passwords to encrypted file
+ - Add/Modify/Delete passwords and folders.
 * Accessibility
- - Look around your private password easily by a combination of tree/list style data structure
- - Copy id/password to clipboard by double-click for easy pasting to other input form
- - Manage Folder/Sub folder for password container. Move password to any folder you want.
+ - Combination of tree/list style data structure.
+ - Double click a password item to copy id/password into clipboard.
 * Security
- - Save those password data into private file encrypted by AES crypt algorithm.
  - Validate password strength by strength score originally defined for this application.
+ - Lock password information by a master password.
+ - Password file is encrypted by AES crypt algorithm if master password is set.
 * Portability
- - Application itself is seperated to encrypted password file. So you can import/export password data easily. You can also easily make backups by copying the file.
+ - Application itself is seperated from encrypted password file. So you can import/export password data easily. You can also easily make backups by copying the file.
 
 # Remark
-When you start this app it will prompt you a master password, which is the most important and must-be-private string to protect your secret.  
-So please pay much attention to choose the password string so as not to be expected easily by other people.
+This application does not use Windows registry.
 
 # License
 This software is licensed under Apache License 2.0.  
