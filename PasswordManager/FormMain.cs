@@ -869,7 +869,7 @@ namespace PasswordManager
         void ToolStripMenuItem_AddPassword_Click(object sender, EventArgs e)
         {
             // Do nothing if no tree nodes are selected
-            if (this.CurrentTreeNode.Tag == null || this.CurrentTreeNode.Tag == null)
+            if (this.CurrentTreeNode == null || this.CurrentTreeNode.Tag == null)
             {
                 return;
             }
@@ -1366,6 +1366,9 @@ namespace PasswordManager
             // Construct container tree
             TreeNode node = GetTreeViewNodeBuilt(containers, indexer, this.contextMenuStrip_TreeViewNode);
             this.treeView_Folders.Nodes.Add(node);
+
+            // Select root node
+            this.treeView_Folders.SelectedNode = node;
 
             // Expand firt level node
             node.Expand();
