@@ -28,7 +28,7 @@ This software is licensed under Apache License 2.0.
 See detail in http://www.apache.org/licenses/LICENSE-2.0  
  or abstract version of the license terms below.
 
-Copyright 2015 Yunoske
+Copyright 2015 Hinaser
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

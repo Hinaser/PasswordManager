@@ -737,7 +737,7 @@ namespace PasswordManager {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Copyright 2015 Yunoske
+        ///   Looks up a localized string similar to Copyright 2015 Hinaser
         ///
         ///Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
         ///you may not use this file except in compliance with the License.

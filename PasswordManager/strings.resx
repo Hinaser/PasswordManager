@@ -344,7 +344,7 @@ NOTE: New master password will be applied when file is saved.</value>
     <value>Update password</value>
   </data>
   <data name="General_About_Description" xml:space="preserve">
-    <value>Copyright 2015 Yunoske
+    <value>Copyright 2015 Hinaser
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
